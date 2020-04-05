@@ -15,11 +15,18 @@ Because the original model was meant solely to look at change in genetic diversi
 #### Directory contents
 
 *sim_evolve_allele_spec_brs.R* - holds main simulation functions and some auxiliary analysis functions
+
 *test_allele_spec_brs.R* - runs 1000 simulations for one allele frequency; exports outputs
+
 *example_evolve_allele_spec.R* - useful example script for running through one simulation instance, plus code, and also running through summaries of the 1000 sims run above
+
 *server_calc_sima_a.R* - script run on server for calculating additive genetic variance in 1000k trials
+
 *analyze_geno_change.R* - script for analyzing genotypic change in 1000 simulation runs (crudely)
+
 *eg_1k_n0_20.csv* - summary statistics for 1000 simulation runs
+
 *allelic_all_sigma_a.csv* - summary genetic variance for 1000 simulation runs
+
 *notes_2020-03-18.md* - meeting notes from initial analysis of model
 
