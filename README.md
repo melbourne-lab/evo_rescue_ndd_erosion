@@ -11,3 +11,12 @@ To investigate this I have constructed an allele-specific model of evolving popu
 Current repo structure
 
 - `init_model` directory containing files from initial versions of model constructed in March, 2020
+- `base_model_source` directory containing files to source to run most up-to-date simulation
+
+### Major updates
+
+##### April 8, 2020
+
+Found an error in the original script (`init_model`) in Mendelian segregation. Remedied this by creating `base_model_source` folder with a new script, `sim_functions.R`, for executing the simulations. This new folder also has a script to run on server for generating 1000 trials (at one parameter combo).
+
+When updating the model, I also made some minor changes (change column names) and added phenotype column `z_i`. Note that this model doesn't have density dependence yet.
