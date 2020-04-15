@@ -20,3 +20,7 @@ Current repo structure
 Found an error in the original script (`init_model`) in Mendelian segregation. Remedied this by creating `base_model_source` folder with a new script, `sim_functions.R`, for executing the simulations. This new folder also has a script to run on server for generating 1000 trials (at one parameter combo).
 
 When updating the model, I also made some minor changes (change column names) and added phenotype column `z_i`. Note that this model doesn't have density dependence yet.
+
+##### April 15, 2020
+
+Made a new folder, `analyze_model`, for analysis. In here so far I have some work trying to figure out how allele frequencies change over time and some work looking at how variables (e.g., mean genotype, population size, fixation probabilities) scale with m (the number of loci).
