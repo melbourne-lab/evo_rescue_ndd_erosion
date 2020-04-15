@@ -10,6 +10,8 @@ library(tidyr)
 
 rm(list = ls())
 
+setwd('analyze_model/m_scaling/')
+
 ##### New data (1000 trials per m)
 
 # Read in data
