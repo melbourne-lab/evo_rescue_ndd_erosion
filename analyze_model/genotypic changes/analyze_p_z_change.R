@@ -59,8 +59,7 @@ for (tt in ts[-1]) {
   wA = exp(-(d - 1/sqrt(m))^2 / (2*w^2))
   w0 = exp(-d^2 / (2*w^2))
   wa = exp(-(d + 1/sqrt(m))^2 / (2*w^2))
-  #Np = p * (wA*p*(p+1) + w0*q*(2*p+1) + wa * q^2)
-  Np = wA*(2*p^4 + 3*p^3*q + p^2*q^2) + w0*(3*p^3*q + 4*p^2*q^2 + p*q^3) + wa*(p^2*q^2 + p*q^3) 
+  Np = p * (wA*p*(p+1) + w0*q*(2*p+1) + wa * q^2) # this is correct... just numerical error
   N  = 2 * (p^2 * wA + 2*p*q*w0 + q^2 * wa)
   pt[tt] = Np / N
   dt[tt] = dt[1] - sqrt(m) * (pt[tt] - (1 - pt[tt]))
@@ -80,7 +79,7 @@ dt %>% log() %>% diff() %>% exp() %>% plot(type = 'l')
 #### Now compare with simulation results
 
 # Read in simulation results
-egk = read.csv('eg_1k_n0_20.csv')
+egk = read.csv('analyze_model/eg_1k_n0_20.csv')
 
 head(egk)
 
