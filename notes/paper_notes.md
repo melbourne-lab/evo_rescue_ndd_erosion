@@ -76,3 +76,44 @@
 
 Come back to this paper later. This is going in some directions beyond what we need right now.
 
+### Osmond and de Mazancourt, 2013. How competition affects evolutionary rescue. Phil Trans R Soc B 368: 20120085.
+
+##### Competition
+- Reduces population abundance (extinction more likely)
+- But, also increase selective pressure, increase rate of evolution (refs herein)
+- What is the influence of competition (intra and interspecific) on rescue?
+
+##### One species model
+- Asexual population: density- and frequency-dependent growth
+- Continuous traits? Continuous time
+- Growth of # individuals w/ a trait is logistic
+	- features per capita intrinsic growth rate
+	- carrying capacity for each trait is a defined by gaussian
+- Intraspecific competition: same trait value compete most strongly
+- Mutation is rare, s/t demography is at equilibrium, evolution is slow
+- Population initialized at constant trait value, perfectly adapted, reaching optimal carrying capacity
+	- environment changes, carrying capacity changes
+- N_c is extinction threshold
+- for a given N_c, get an expression for expected time (t_R) to surpass N_c
+	- t_R increases with increasing environmental change and N_c
+	- unimodial w/r/t environmental tolerance (sigma_K)/selection strength
+		- tol too high, and population is never at extinction risk
+		- tol too low and population immediately extinct
+- One term in here is the analogue to the rate of change in the trait value from G&H
+	- in O&dM model, evolution stops with absence of mutations
+
+##### Discussion
+- Competition which increases the strength of selection may speed up adaptation... where is this coming from? Ref Schluter et al., 1985.
+- Refs: "intraspecfic competition often has relatively little impact on selectiv pressures" (refs)
+- Impacts of NDD:
+	- Boulding and Hay: populations stay small, where NDD doesn't act.
+	- Chevin and Lande: NDD *makes* populations small, where extinction is more likely
+- This model assumes "evolution is slow, and hence, on the time-scale of evolution, populations are always at carrying capacity"
+	- this paper is different from our study b/c we're interested in *rapid adaptation* and the stochasticity is important
+	- "we assume greater abundances lead to faster evolution because they lead to greater mutational inputs" - population size is important for mutation
+	- "intrinsic growth rate is therefore irrelevant for evolutionary rescue in our mode" (due to the demographic equilibrium)
+		- this is evolutionary rescue under K-selection rather than r-selection
+
+So... this paper is all about how mutations drive rescue and how that interacts with density dependence. Model is fundamentally different because populations are assumed to be at carrying capacity for most of the time... but then how to explain Fig. 2? Not sure.
+
+
