@@ -53,4 +53,26 @@
 	- also calculate V_A(W) somehow... but how?
 	- take home of this is that V_A(W) can increase when the selection regime changes
 
+### Ronce, Shaw, Rousset, and Shaw. Is inbreeding depression lower in maladapted populations? A quantitative genetics model. Evolution, 63(7): 2009.
+
+##### How do ecological scenarios and influence inbreeding depression?
+- A widely-accepted model of inbreeding: two alleles, one is unconditionally deleterious, at least partially recessive
+	- see Charlesworth and Charlesworth, 1999
+	- Acc'd to this model, inbreding should purge deleterious aleles
+- These models directly link genotype to fitness, no traits, unlike qGen
+- This paper looks at inbreeding w/ stabilizing selection on quantitative traits
+	- see Lande and Schemske, 1985, for something simpler
+
+##### Model
+- trait, z, has additive action of n loci, diploid, panmictic
+	- z = mu + sum_i=1^n (am_i + af_i) + e
+	- am_i, af_i are allelic effects in herited from parents, mu is mean
+- trait under Gaussian selection
+- I = 1 - (\bar{W}_s) / (\bar{W}_r)
+	- I = inbreeding depression
+	- selfing versus random mating fitesses (selfing: self is parents?)
+- Analytic model follows Lande, 1976
+	- here, an expression for inbreeding depression! interesting
+
+Come back to this paper later. This is going in some directions beyond what we need right now.
 
