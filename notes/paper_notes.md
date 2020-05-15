@@ -116,4 +116,52 @@ Come back to this paper later. This is going in some directions beyond what we n
 
 So... this paper is all about how mutations drive rescue and how that interacts with density dependence. Model is fundamentally different because populations are assumed to be at carrying capacity for most of the time... but then how to explain Fig. 2? Not sure.
 
+### Vinton, A.C., and Vasseur, D.A. Evolutionary rescue is determined by differntial selection on demographic rates and density dependence. bioRxiv preprint.
+
+##### Evolutionary rescue
+- Four factors influencing potential for rescue (Bell and Gonzalez, 2009)
+	- Initial population size (N_0)
+	- Genetic variability (standing variation and mutations)
+	- genetic variability due to dispersal (interesting...)
+	- extent/severity of environmental change
+	- (n.b., three of these are in G&H's equations)
+
+##### Demography
+- Models typically only focus on $r$, ignore separate births nad deaths
+- e.g., Holt, 1990: populations with high birth and death vs. low birth and death
+	- these have the same $r$, but different rates of turnover, mutation, etc.
+
+##### Model
+- Continuous time, ndividual-based logistic growth
+- N' / n = b(gamma0, gamma1) - d(gamma0, gamma1) where
+	- gamma0: density independent contributions
+	- gamma1: density dependent contributions
+	- b(), d() depend on rates, carrying capacity K
+	- carrying capacity assumes all individuals well adapted
+- environmental effect: mu_0(t,f), varies sinusoidally over t
+	- e_mu = abs(mu - mu_0) is a measure of maladaptation
+- Birth and death models:
+	- Case 1a: environment alters b(), density independent modification
+	- Case 1b: environment alters b(), density dependent modification
+	- i.e., the degree to which b() is lowered does/does not depend on environment
+	- Case 2a, 2b: density modifies d(), density independent/dependent
+	- Density dependence: only see decreases/increases in rates when pop'n size is large
+		- e.g., little maladaptation at size one
+- Stochastic implementation via the Gillespie algorithm as birth/death process
+	- good description of Gillespie here!
+	- includes mutation, randomly drawn from U(-0.3,0.3), added to parential trait
+
+##### Results
+- r is differece of birth and death, but stochasticity is determined by sum (?)
+	- i.e., variance is due to the sum of variances in birth and death?
+	- refs herein
+- death models have higher demographic stochasticity
+	- there's a reason here but I don't understand it.
+- due to model construction, density dependence means *less* variable population size
+	- (by construction this means you maintain maladapted individuals at low size)
+	- notably, this is is relative to a DI-*effect* on rates, not on DI itself
+	- this is a case with phenotype x growth rate interaction
+- increasing persistence time with a faster-changing environment?
+
+(didn't quite finish, but worth re-reading)
 
