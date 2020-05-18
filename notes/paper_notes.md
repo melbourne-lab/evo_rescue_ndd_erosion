@@ -165,3 +165,44 @@ So... this paper is all about how mutations drive rescue and how that interacts 
 
 (didn't quite finish, but worth re-reading)
 
+### Ferriere, R., and Legendre, S. 2013. Eco-evolutionary feedbacks, adaptive dynamcs and evolutionary rescue theory. RTSB 368: 20120081.
+
+##### Framing
+- The "optimization principle"
+	- evolution should optimize phenotype by maximizing fitness
+- Two approaches to evolutionary rescue
+	- Pop gen modeling: how do mutations reduce extinction risk
+	- Quantitative genetics: how does a population track a moving optimum
+	- Differences:
+		- Environmental change (abrupt vs. gradual)
+		- Threat (demographic defecit vs. risk of defecit)
+		- Rescue pathway (achieving demographic balance vs. avoiding imablance) (?)
+- Haldane outlined that adaptation doesn't necessarily always improve population performance
+
+##### Frequency dependence and the optimization principle
+- Frequency dependence means departures from optimization
+- Frequency dependence does not occur iff the trait effects fitness in a 1D monotonic way
+- Realistic eco-evo feedbacks are expected to rely on freq. dependence
+- "Even when the adaptive process does optimize, phenotypic evolution maximizes the population's intrinsic growth rate [...] or size [...] only if the eco-evolutionary feedback loop posseses special features regarding how density dependence effects transmissions in the life cycle, and how traits influence invasion fitness" refs
+- "And in the rare cases where adaptive evolution gradually tends to improve population viability, one cannot exclude that the process ends with the population's sudden demise" refs
+
+##### Adaptive dynamics framework
+- Three ingredients:
+	- Descrption of an individual phenotype (e.g., quant gen)
+	- Relates the traits to population properties (e.g., growth rate)
+	- model of trait inheritance
+	- n.b. we have all three
+- "Evolutionary singularity" - phenotype for which local fitness gradient vanishes
+	- a fixed point...? described as being stable or unstable
+- Pop gen and Q-gen models ignore how population changes can vary selection pressures acting on heritable variation
+	- the adaptive dynamics closed-loop framework suggests that only under "exceptional circumstances" is pop'n size/viability maximized at an attractor
+- "evolutionary trapping" - an evolutionary attractor in the unviable region
+	- eolutionary suicide: trait substitution driven by mutation and selection in a constant environment pushes a population to inviability
+	- in short, populations can tank their own viability through evolution (inbreeding an example?)
+- Examples of trapping
+	- altruism...?, dispersal behaviors, etc.
+	- (none of these look relevant to our fitnesses)
+
+Beginning of this paper is useful for the framing insisting that including population's effects on selection itself is important; G&H model, e.g., does not include the fact that population size may influence the adaptation itself (fixation or stochasticity). But most of this paper is talking about "threats of evolution itself" on population viability (see: conclusions) but this isn't what we want unless our model becomes much more complicated (e.g., including a dispersal-competition trade off).
+
+
