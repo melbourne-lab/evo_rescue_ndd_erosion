@@ -124,6 +124,13 @@ m1.preds %>%
 # yes that looks gaussian to me...
 # but we know it has to be at zero on both ends...
 
+gg.m1 +
+  geom_point(aes(x = p, y = ((pp2 - p) / ((1-p))) , alpha = factor(gen))) +
+  scale_alpha_manual(values = c(0, 1)) +
+#  coord_fixed() +
+  theme_bw()
+
+
 ### Next, try this with m = 2.
 
 param2 = data.frame(end.time = 2,
@@ -206,21 +213,13 @@ gg.m2 +
 # (or something like p*(1-p)... but not quite?)
 # this function maxes out at p approx 1/3
 
+gg.m2 +
+  geom_point(aes(x = p, y = (pp2 - p) / ((1 - p)), alpha = factor(gen))) +
+  scale_alpha_manual(values = c(0, 1)) +
+  theme_bw()
+
 ### Well... what happens with m = 3?
 # Expect variance to increase but will the peak residual also increase?
-
-param3 = data.frame(end.time = 2,
-                    init.row = 1e4,
-                    n.loci = 3, 
-                    n.pop0 = 20,
-                    w.max = 2, 
-                    theta = 2, 
-                    wfitn = sqrt(1 / 0.14 / 2),
-                    sig.e = 0)
-
-n.trials = 2000
-
-### Run simulation 
 
 lisz3 = vector(mode = 'list', length = n.trials)
 
@@ -271,3 +270,76 @@ gg.m3 +
 # I bet this asymptotically approaches p = 1/2.
 # But still... what the heck.
 
+gg.m3 +
+  geom_point(aes(x = p, y = (pp2 - p)/((1-p)), alpha = factor(gen))) +
+  scale_alpha_manual(values = c(0, 1)) +
+  theme_bw()
+
+### Try wth a larger number (m = 100)
+parami = data.frame(end.time = 2,
+                    init.row = 1e4,
+                    n.loci = 100, 
+                    n.pop0 = 20,
+                    w.max = 2, 
+                    theta = 2, 
+                    wfitn = sqrt(1 / 0.14 / 2),
+                    sig.e = 0)
+
+n.trials = 2000
+
+### Run simulation 
+
+liszi = vector(mode = 'list', length = n.trials)
+
+set.seed(811990)
+
+for (trial in 1:n.trials) {
+  liszi[[trial]] = sim(
+    a = c(-1/2, 1/2),
+    params = parami
+  )  
+  print(trial)
+}
+
+# Put all trials in one (even largerer!) object.
+mi = unroller(liszi)
+
+mi.pvz = mi %>%
+  select(-c(g_i, w_i, r_i, fem)) %>%
+  gather(key = all.copy, value = gval, -c(i, z_i, gen, trial)) %>%
+  mutate(locus = gsub('^[ab]', '', all.copy)) %>%
+  group_by(trial, gen, locus) %>%
+  summarise(p = mean(gval > 0),
+            z = mean(z_i)) %>%
+  group_by(trial, gen) %>%
+  mutate(v = sum(2 * p * (1-p) / parami$n.loci))
+
+head(mi.pvz)
+
+mi.preds = mi.pvz %>%
+  mutate(m = parami$n.loci,
+         w = parami$wfitn,
+         d = parami$theta - z,
+         q = 1 - p,
+         w_A = exp(-(d - 1/sqrt(m))^2 / (2*w^2)),
+         w_0 = exp(-d^2 / (2*w^2)),
+         w_a = exp(-(d + 1/sqrt(m))^2 / (2*w^2)),
+         N_p = p * (w_A*p*(p+1) + w_0*q*(2*p+1) + w_a * q^2),
+         N   = 2 * (p^2 * w_A + 2*p*q*w_0 + q^2 * w_a),
+         pp2 = ifelse(gen > 1, N_p / N, p))
+
+write.csv(mi.preds %>% filter(as.numeric(locus) < 21),
+          row.names = FALSE,
+          file = 'm_100_locus_1-20_gen2.csv')
+
+gg.mi = mi.preds %>% filter(as.numeric(locus) < 25) %>% ggplot()
+
+gg.mi +
+  geom_point(aes(x = p, y = pp2 - p, alpha = factor(gen), colour = v)) +
+  scale_alpha_manual(values = c(0, 1)) +
+  theme_bw()
+
+gg.mi +
+  geom_point(aes(x = p, y = (pp2 - p)/(p*(1-p)), alpha = factor(gen))) +
+  scale_alpha_manual(values = c(0, 1)) +
+  theme_bw()
