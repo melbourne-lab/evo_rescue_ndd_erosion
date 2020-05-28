@@ -205,4 +205,62 @@ So... this paper is all about how mutations drive rescue and how that interacts 
 
 Beginning of this paper is useful for the framing insisting that including population's effects on selection itself is important; G&H model, e.g., does not include the fact that population size may influence the adaptation itself (fixation or stochasticity). But most of this paper is talking about "threats of evolution itself" on population viability (see: conclusions) but this isn't what we want unless our model becomes much more complicated (e.g., including a dispersal-competition trade off).
 
+### Kopp and Matuszewski, 2013. Rapid evolution of quantitative traits: theoretical perspectives. Evolutionary Applications.
 
+Some good info: *"Haldanes"* - a proposed measure of rate of phenotypic change; one phenotypic standard deviation per generation. There is some empirical evidence that evolutionary rates above 0.1 haldanes are not uncommon (references herein).
+
+##### Overview of genetic models
+- Environmental change: can be sudden (like our models), gradual unidirectional change, or random fluctuations of the optimum around a stationary optimum or linear trned.
+- Phenotypic variance: sigma2_g is genetic variance (e.g., additive genetic variance, like our models), sigma2_e, summed to get sigma2_p (phenotypic variance)
+	- heritbility is sigma2_g / sigma2_p
+	- Measure phenotypes in units of environmental variance - this allows sigma_e = 1.
+- The Lande equation (Lande, 1976) has delta zbar_t = sigma^2g \beta_t, where \beta_t is derivative in log fitness w/r/t zbar
+	- i.e., rate of phenotypic change is proportional to the variance and how much the (log) of fitness changes w/ pheno change
+	- divde both sides by sigma^2_g to get haldanes
+- Phenotypic plasticity is characterized as a reaction norm, i.e., how a phenotype changes with a given environmental variable
+	- if different genotypes produce different reaction norms, selection can act on plasticity
+	- typically models feature linear rxn norms w/ quantitative slopes and intercepts
+
+##### Overview of population dynamic models
+- typically N_{t+1} = \bar{w}_t N_t
+	- \bar{w}_t, mean fitness, reduced by *selection load* (distance from phenotypic optimum) and *standing load* due to phenotypic variance (n.b. this shows up in the G&H equations!)
+	- Note: population dynamics depends on relative fitness but evolutionary change depends on the fitness gradient/selection landscape
+
+##### Syntheses
+
+###### Sudden environmental change with one trait
+- Gomulkiewicz and Holt, 1995 case
+- Is evolution fast enough for change to occur to move a population out of the \bar{w} < 1 zone?
+
+###### Gradual environmental change with one trait
+- Lynch et al., Lynch and Lande, etc. studied cases where optimum increases at linear rate k
+- Adaptation is initially slow, leading to an increase in selection load, which increases the rate of adaptation until dynamic equilibrium is reached where phenotypic rate of change is proportional to k
+	- persistence depends on the selection load, which is proportional to k, so there is a critical k value which is the maximal rate of change a population can handle
+	- persistence requires positive growth at all times? A population which has "fallen behind" in the race w/ the optimum will have no chance to catch up.
+- critical k depends on additive genetic vriance and (square root of) the max. population growth rate
+	- fastest rate of adapatation for intermediate width of fitness function; extremes are bad due to the two types of selection load (this is interesting!)
+
+###### On additive genetic variance
+- All models assume it is true
+	- this approximately true on short timescales, but not on longer timescales
+- Before environmental change, populations may be assumed to be a mutation-selection-drift balance
+- Variance may increase in larger populations, as there are more individauls and therefore more mutations
+	- But this increase takes time and may come too late to be of use
+- (No mention of potential decreases as selection is occurring...)
+
+###### Fluctuating selection
+- Uncorrelated (white noise) fluctuations is akin to recurring sudden-change but won't create long-term patterns (other than increased extinction)
+	- generally produces higher selection loads b/c adaptations in one generation may not be helpful in the next
+- Autocorrelated fluctuations are more similar to a gradual-change scenario which a population can track
+
+###### Multiple correlated traits
+- Genetic correlations will bias the phenotypic response towards the leading eigenvector of the covariance matrix
+- Some effects here where a population may have permanently maladapted traits or trait combinations (flying kite effect)
+
+##### Max sustainable rates of evolution
+- Barrett and Hendry, 2012, conclude that most rates of change are below 0.1 haldanes (this is based in part on a metaanalysis)
+	- They include the warning that "many unrealistic assumptions, such as perpetual persistence under constant environmental change"
+	- likewise "critical rates for natural populations over time frames of conservation interest could be very different"
+- Detecting a difference of 0.1 sds between two populations requires a lot of samples...
+
+(Keep reading)
