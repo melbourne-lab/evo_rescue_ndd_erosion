@@ -263,4 +263,21 @@ Some good info: *"Haldanes"* - a proposed measure of rate of phenotypic change; 
 	- likewise "critical rates for natural populations over time frames of conservation interest could be very different"
 - Detecting a difference of 0.1 sds between two populations requires a lot of samples...
 
-(Keep reading)
+##### Adaptive potential
+- Check Gomulkiewicz and Houle (2009) - demographic constraints requiring critical amounts of genetic variance IOF rescue to occur
+- For multiple traits, the G matrix can have eigenvalue zero, in which case selection won't happen
+- Ploidy: advantages of diploidy may include heterozygote advantage (smaller phenotypic effects in heterozygotes)
+	- This heterozygote advantage would maintain polymorphism and increase standing variation available for adaptive potential
+- Theory suggests that more complex genetic architectures typically hinder evolvabilty as mutations are more likely to have negative pleiotropic effects
+	- modular genetc organization can help reduce "effective complexity"
+- More adaptive potential in populations in fluctuating environments
+	- more genetic variance due to pretesting in environment
+	- species may evolve plasticity and/or flexible architecture
+
+Some thoughts in here about *adaptation in space* too (incl. gene flow).
+
+##### Other species
+- Presence of competitors reduce population size (and therefore genetic variance and mutational input) decreasing adaptive potential
+
+*Conclusions* there's a great review in here of different theoretical results. It's worth keeping in mind shifting targets (theta) in mind for our models. The point about additive variance being constant on short time scales is worth pointing out, as it is what we are testing. 
+
