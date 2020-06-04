@@ -316,5 +316,15 @@ Some thoughts in here about *adaptation in space* too (incl. gene flow).
 	- The initial state of the population: \beta_0 and \nu_0 (resp. scaled squared degree of maladaptation and population distance to optimum phenotype)
 - Fig 5: the "time at high risk" (time below the threshold) increases linearly with maladaptation, but only changes slightly with initial density (b/c most of the change happens for N_c/N_0 approx. 0)
 
+##### Discussion
+- Interesting connection made here to colonizers in a new environment: a large, high max. growth, and/or well-adapted pool of propagules is more likely to have a successful colonization
+- One thing mentioned here which I (SN) had never thought of is that the max growth rate, perhaps intrinsic to a species? (or life history, at the very least a population) is something that also inhibits its growth
+- Another reason the expressions here are an upper bound: evolutionary forces may increase maladaptation (mutations, drift) or reduce genetic variance (drift)
+- For assisted migration, (1/t_E) is a rough guide for frequency of migration episodes (relevant to the drift)
 
+##### Points for discussion, future thought
+- This does make figuring out that "extinction threshold" via simulations more appealing (first step is to read Lande, 1993)
+- This has likely been done in some form, but, thinking about the trade off between selection load and standing load, there needs to be some sort of optimal rate correct? Does the optimal rate for population growth guarantee the highest probabilty of rescue/persistence?
+- One thing this model assumes is that the population dynamics and genetics operate independently. I think this may arise from the fact that the quantitative genetics model has infinitely many loci. But a finite-locus model I think will capture losses in genetic diversity more faithfully.
+- In an infinite-locus model, is there a functional form of g(N) which will give an analytically tractable expression for N_t?
 
