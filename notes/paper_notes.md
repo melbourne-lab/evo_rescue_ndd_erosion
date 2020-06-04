@@ -281,3 +281,40 @@ Some thoughts in here about *adaptation in space* too (incl. gene flow).
 
 *Conclusions* there's a great review in here of different theoretical results. It's worth keeping in mind shifting targets (theta) in mind for our models. The point about additive variance being constant on short time scales is worth pointing out, as it is what we are testing. 
 
+### Gomulkiewicz and Holt. 1995. When does evolution by natural selection prevent extinction? Evolution, 49: 201 - 207.
+
+##### Motivation
+- Pease et al., 1989, various work by Lynch, follow populations tracking a continuously moving environment; here look at a single, abrupt shift.
+- A feature of this model (SN - not sure how this is different from other models) is that populations may fall below a critical population size during which it is vulnerable to stochasticity-induced extinction
+- Prior works (Goodman, 1987, Lande, 1993) talk about extinction thresholds
+- Adapting to a novel environment as a race between two processes: demographic and evolutionary (see Maynard Smith 1989)
+
+##### Model
+- Simple population growth w/ per-capita growth rate \bar{W}_t
+- Evolutionary polygenic quantitiatve trait z
+	- Gaussian selection w/ strength w (wsq)
+	- Phenotypic variance P, mean d_t
+- In simplest case, N_t = N_0 \prod_{i=0}^{t-1} \bar{W}_i
+	- but, with density selection, N_{t+1} = N_t \bar{W}_t g_t(N_t)
+	- typically g_t(N_t) < 1, such that the density independent case establishes an upper bound on persistence capacity
+- In this model, phenotypes geometrically approach optimum at rate described by Lande, 1976
+	- From Lande, an expression of the mean fitness
+	- n.b. this equation features the selection load (the exponential term) and the standing load (the \hat{W}) term
+	- (interesting trade off... increasing your variation means your selection load decreases more quickly, but you have a lower ceiling due to standing load)
+- Analytical derivation of times where population size is equal to the extinction threshold
+	- can we get insight here from a non-constant g_t()?
+
+##### Analysis
+- Fig 3: initial conditions below the curve persist deterministically, while those above curve deterministically fall below N_c
+	- i.e., lower curve is, the larger the danger zone is
+- Fig 4: demonstrates that there is a threshold of initial maladaptation (\beta^*) below which an evolving population will not deterministically fall below the extinction threshold
+	- For larger degrees of adaptation, the difference between an evolving case and a non-evolving case are small (i.e., similar times to reach the extinction threshold)
+	- This may be the "near-threshold" effect of evolution - only close to a critical value does evolution influence the time to the threshold
+- Initial degree of maladaptation and initial population size (both properly scaled) determine time to threshold
+- What influences extinction risk in this model?
+	- Influences on evolutionary capacity: k and \hat{W} (resp. the rate of phenotypic change and the maximum fitness rate)
+	- The initial state of the population: \beta_0 and \nu_0 (resp. scaled squared degree of maladaptation and population distance to optimum phenotype)
+- Fig 5: the "time at high risk" (time below the threshold) increases linearly with maladaptation, but only changes slightly with initial density (b/c most of the change happens for N_c/N_0 approx. 0)
+
+
+
