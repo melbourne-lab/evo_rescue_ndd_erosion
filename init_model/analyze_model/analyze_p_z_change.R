@@ -10,7 +10,7 @@ library(tidyselect)
 ## Expression depends on p, d, w, m
 
 # Set w
-w = sqrt(1 / (2 * 0.14))
+w = sqrt(1 / 0.14 / 2)
 
 # Make a grid of values
 # and calculate change in allele frequency
@@ -45,7 +45,6 @@ ggplot(a) +
 # dt = distance from phenotypic optimum over time
 #   init at 2.6 (used in sims)
 m = 40
-wsq = 1 / 0.14
 ts = 1:15
 pt = 1:15
 dt = 1:15
@@ -57,9 +56,9 @@ for (tt in ts[-1]) {
   p = pt[tt-1]
   q = 1 - p
   d = dt[tt-1]
-  wA = exp(-(d - 1/sqrt(m))^2 / (wsq))
-  w0 = exp(-d^2 / (wsq))
-  wa = exp(-(d + 1/sqrt(m))^2 / (wsq))
+  wA = exp(-(d - 1/sqrt(m))^2 / (2*w^2))
+  w0 = exp(-d^2 / (2*w^2))
+  wa = exp(-(d + 1/sqrt(m))^2 / (2*w^2))
   Np = p * (wA*p*(p+1) + w0*q*(2*p+1) + wa * q^2)
   N  = 2 * (p^2 * wA + 2*p*q*w0 + q^2 * wa)
   pt[tt] = Np / N
@@ -80,7 +79,7 @@ dt %>% log() %>% diff() %>% exp() %>% plot(type = 'l')
 #### Now compare with simulation results
 
 # Read in simulation results
-egk = read.csv('init_model/eg_1k_n0_20.csv')
+egk = read.csv('eg_1k_n0_20.csv')
 
 head(egk)
 
@@ -88,14 +87,26 @@ head(egk)
 #   black = observed in data
 #   purple = predicted above
 ggplot(egk, aes(x = gen)) +
-  geom_line(aes(y = 2.6 - b.bar)) +
-  geom_ribbon(aes(ymin = 2.6 - (b.bar + 2 * sqrt(b.var / n.trials)),
-                  ymax = 2.6 - (b.bar - 2 * sqrt(b.var / n.trials))),
+  geom_line(aes(y = 2.6 - g.bar)) +
+  geom_ribbon(aes(ymin = 2.6 - (g.bar + 2 * sqrt(g.var / n.trials)),
+                  ymax = 2.6 - (g.bar - 2 * sqrt(g.var / n.trials))),
               alpha = 0.2) +
   geom_line(aes(x = ts, y = dt),
             data = data.frame(ts = ts, dt = dt),
             colour = 'purple') +
-  labs()
+  geom_point(aes(y = 2.6 - g.bar, colour = (n.trials / 1000))) +
+  scale_color_viridis_c(option = 'B')
+
+ggplot(egk %>% filter(gen < 4), aes(x = gen)) +
+  geom_line(aes(y = 2.6 - g.bar)) +
+  geom_ribbon(aes(ymin = 2.6 - (g.bar + 2 * sqrt(g.var / n.trials)),
+                  ymax = 2.6 - (g.bar - 2 * sqrt(g.var / n.trials))),
+              alpha = 0.2) +
+  geom_line(aes(x = ts, y = dt),
+            data = data.frame(ts = ts[1:3], dt = dt[1:3]),
+            colour = 'purple') +
+  geom_point(aes(y = 2.6 - g.bar, colour = (n.trials / 1000))) +
+  scale_color_viridis_c(option = 'B')
 
 # Genotypic change as modeled above is too fast.
 
