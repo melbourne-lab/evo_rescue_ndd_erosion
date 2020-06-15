@@ -34,7 +34,7 @@ for (trial in 1:n.trials) {
     params = data.frame(end.time = 2,
                         init.row = 1e2,
                         n.loci = mlist[trial]^2, 
-                        n.pop0 = 20,
+                        n.pop0 = 100,
                         w.max = 2, 
                         theta = theta, 
                         wfitn = wfitn,
@@ -49,22 +49,28 @@ for (m in 1:5) {
          unroller(liszt[(m-1)*(n.trials/5) + 1:(n.trials/5)]) %>%
            select(trial, names(.)[!grepl('trial', names(.))]) %>%
            select(-c(g_i, w_i, r_i, fem)) %>%
+           group_by(trial, gen) %>%
+           mutate(vz_t = var(z_i)) %>%
+           ungroup() %>%
            gather(key = loc.copy, value = val, 
-                  -c(trial, i, z_i, gen, n.loci)) %>%
+                  -c(trial, i, z_i, gen, n.loci, vz_t)) %>%
            mutate(loc = gsub('[ab]', '', loc.copy) %>% as.numeric()) %>%
            group_by(trial, gen, loc) %>%
            summarise(n_t = length(unique(i)),
                      p_j = mean(val > 0),
                      z_i = mean(z_i),
-                     n.loci = n.loci[1]) %>%
+                     n.loci = n.loci[1],
+                     vz_t = vz_t[1]) %>%
            group_by(trial, gen) %>%
            summarise(n_t = n_t[1],
                      z_t = mean(z_i),
                      v_t = sum(2 * p_j * (1-p_j) / n.loci),
-                     n_loci = n.loci[1]) %>%
+                     n_loci = n.loci[1],
+                     vz_t = vz_t[1]) %>%
            mutate(d_t = theta - z_t,
-                  lande_d_t = d_t * (wfitn^2 / (wfitn^2 + v_t))) %>%
-           select(trial, gen, n_t, z_t, v_t, d_t, lande_d_t, n_loci)
+                  lande_d_t = d_t * (wfitn^2 / (wfitn^2 + v_t)),
+                  land2_d_t = d_t * (wfitn^2 / (wfitn^2 + vz_t))) %>%
+           select(trial, gen, n_t, z_t, v_t, vz_t, d_t, lande_d_t, land2_d_t, n_loci)
   )
 }
 
