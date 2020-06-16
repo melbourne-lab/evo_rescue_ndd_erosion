@@ -208,7 +208,7 @@ var.k %>%
 # Well - for now just use these I suppose.
 
 write.csv(pop.k.s, na = '', row.names = FALSE,
-          file = 'simulations/prepare_simulations/outputs/eight_bottlenecked_popns.R')
+          file = 'simulations/prepare_simulations/outputs/eight_bottlenecked_popns.csv')
 
 # Check: Linkage disequilibrium.
 
