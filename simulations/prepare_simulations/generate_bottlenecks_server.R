@@ -55,7 +55,7 @@ set.seed(87795)
 for (trial in 1:n.trials) {
   liszt[[trial]] = sim(
     a = c(-1/2, 1/2),
-    params = data.frame(end.time = 8,
+    params = data.frame(end.time = 9,
                         init.row = 1e5,
                         n.loci = n.loci, 
                         n.pop0 = 2,
