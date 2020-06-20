@@ -23,7 +23,7 @@ dim.add = function(df, rows, addition) {
   return(df)
 }
 
-init.sim = function(a, params) {
+init.sim = function(a = c(1/2, -1/2), params) {
   # Inputs:
   # a - an array of length two (bi-allelic model)
   # each element is a contribution to the genotype
@@ -42,7 +42,9 @@ init.sim = function(a, params) {
   # standard deviation of the selection pressure
   sig.e = params$sig.e
   # standard dev. of environmental phenoytpic noise
-  
+  p.pos = ifelse('pos.p' %in% names(params), params$pos.p, 0.5)
+  # Initial frequency of the positive allele
+    
   
   # A character (string) array for handy indexing
   names.array = paste0(c('a', 'b'), rep(1:n.loci, each = 2))
@@ -63,7 +65,8 @@ init.sim = function(a, params) {
   #   - r_i: number of offspring for each individual
   #   Poisson distributed, with mean
   #   W_i = W_max * exp(-k * (z_i - theta)^2)
-  init.popn = matrix(sample(a, 2 * n.loci * n.pop0, replace = TRUE), 
+  init.popn = matrix(sample(a, prob = c(p.pos, 1 - p.pos),
+                            size = 2 * n.loci * n.pop0, replace = TRUE), 
                      nrow = n.pop0, 
                      ncol = 2 * n.loci) %>%
     data.frame() %>%
@@ -93,7 +96,27 @@ init.sim = function(a, params) {
 # 
 # # Looks good.
 
-propagate.sim = function(a, params, popn) {
+# # Trying a sim with a custom allele frequency:
+# 
+# pars = data.frame(n.loci = 20, n.pop0 = 40,
+#                   w.max = 1.2, theta = 2.6,
+#                   wfitn = sqrt(1 / 0.14),
+#                   sig.e = 0.5, pos.p = 0.5)
+# 
+# popn0 = init.sim(params = pars)
+# popn0
+# 
+# pars = data.frame(n.loci = 20, n.pop0 = 40,
+#                   w.max = 1.2, theta = 2.6,
+#                   wfitn = sqrt(1 / 0.14),
+#                   sig.e = 0.5, pos.p = 0.75)
+# 
+# popn0 = init.sim(params = pars)
+# popn0
+# popn0[, grep('^[ab]\\d', names(popn0), value = TRUE)] %>%
+#   apply(2, function(x) mean(x > 0))
+
+propagate.sim = function(a = c(1/2, -1/2), params, popn) {
   
   n.loci = params$n.loci
   # number of loci determining the genotype
@@ -214,7 +237,7 @@ propagate.sim = function(a, params, popn) {
 #               popn = popn0[2:3,])
 # # Good.
 
-sim = function(a, params, init.popn = NULL) {
+sim = function(a = c(1/2, -1/2), params, init.popn = NULL) {
   
   # Helpful global parameters.
   
@@ -291,7 +314,6 @@ unroller = function(sim.list) {
 #                         sig.e = 0.5)
 # )
 # 
-
 # Test to see if this works with inserted initial population.
 # set.seed(12121513)
 # 
