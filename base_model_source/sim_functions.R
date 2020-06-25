@@ -272,7 +272,10 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL) {
     pop0 = init.popn %>%
       mutate(z_i = rnorm(nrow(.), mean = g_i, sd = params$sig.e),
              w_i = params$w.max * exp(-(z_i - params$theta)^2 / (2*params$wfitn^2)),
-             r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i, 0)))
+             r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i, 0)),
+             i = 1:nrow(.),
+             gen = 1) %>%
+      select(i, g_i, z_i, w_i, r_i, fem, gen, all_of(names.array))
   } else {                   
     pop0 = init.sim(a, params) 
   }
