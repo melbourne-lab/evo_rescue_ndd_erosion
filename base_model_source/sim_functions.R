@@ -265,8 +265,17 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL) {
             set.names(names.array))
   
   # Initialize the population.
-  if (!is.null(init.popn)) { pop0 = init.popn
-  } else {                   pop0 = init.sim(a, params) }
+  if (!is.null(init.popn)) { 
+    # If the population is passed into the function (i.e., brought from an
+    # external environment), its trait value and fitness still need to be
+    # determined by information from this environment (the global variables).
+    pop0 = init.popn %>%
+      mutate(z_i = rnorm(nrow(.), mean = g_i, sd = params$sig.e),
+             w_i = params$w.max * exp(-(z_i - params$theta)^2 / (2*params$wfitn^2)),
+             r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i, 0)))
+  } else {                   
+    pop0 = init.sim(a, params) 
+  }
   
   all.pop = dim.add(df = all.pop, 
                     row = init.row,
@@ -323,7 +332,7 @@ unroller = function(sim.list) {
 #                         init.row = 1e4,
 #                         n.loci = 20,
 #                         w.max = 1.4,
-#                         theta = 1,
+#                         theta = 2,
 #                         wfitn = sqrt(1 / 0.14),
 #                         sig.e = 0.5),
 #     init.popn = popn0
