@@ -18,3 +18,10 @@ Why is the loss of variance at one locus (i.e., fixation) problematic? Overall p
 
 Was thinking about this earlier today. If we are trying to simulate all four of our experimental treatments, how can we simulate a population which is not evolving? The key here is that we want *only* demographic stochasticity, i.e., population size. My sense is that if we specify the initial allele frequencies (default is p = 0.5 for each locus) that for each generation, we should just randomly reassign the allele frequencies to match with the initial allele frequencies.
 
+#### Environmentally-induced phenotypic variance
+
+(June 24)
+
+A question. Thinking about how to incorporate bottlenecks into simulated populations. Perhaps this question has a trivial answer, or thinking about it here will inspire me. If we incorporate a poulation from an old environment into a new environment, does the phenotype from the old environment necessarily cary over? Or will there be a new trait value, determined in part with noise from the new environment? 
+
+
