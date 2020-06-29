@@ -23,7 +23,7 @@ neck.popns = read.csv('simulations/prepare_simulations/outputs/all_k_pops_min_ge
                       stringsAsFactors = FALSE)
 
 # Define number of trials per source populations
-trials.per = 3
+trials.per = 6
 
 pars = expand.grid(pop.id = unique(neck.popns$trial),
                      pop.trial = 1:trials.per,
@@ -143,13 +143,39 @@ all.n = rbind(
 
 all.n %>%
   ggplot() +
-  geom_ribbon(aes(x = gen, ymin = nbar - sqrt(nvar / 60), ymax = nbar + sqrt(nvar / 60),
-                  alpha = 0.2)) +
-  geom_line(aes(x = gen, y = n, group = trial, colour = extinct), size = 0.5) +
+  geom_ribbon(aes(x = gen, 
+                  ymin = nbar - 2*sqrt(nvar / nrow(pars)/2), 
+                  ymax = nbar + 2*sqrt(nvar / nrow(pars)/2),
+                  group = interaction(n.pop0, bottleneck)),
+              alpha = 0.5) +
+  geom_line(aes(x = gen, y = n, group = trial, colour = extinct), size = 0.15) +
   scale_color_manual(values = c('black', 'red')) +
   geom_line(aes(x = gen, y = nbar, group = n.pop0), size = 2) +
   geom_point(aes(x = gen, y = nbar, fill = pext), shape = 21, stroke = 1, size = 3) +
   scale_fill_gradient(high = 'black', low = 'red') +
   scale_y_log10() +
-  facet_wrap(factor(n.pop0) ~ bottleneck)
+  facet_wrap(factor(n.pop0) ~ bottleneck) +
+  guides(colour = 'none') +
+  theme(legend.position = 'bottom')
 
+all.n %>%
+  ggplot() +
+  geom_ribbon(aes(x = gen, 
+                  ymin = nbar - 2*sqrt(nvar / nrow(pars)/2), 
+                  ymax = nbar + 2*sqrt(nvar / nrow(pars)/2),
+                  group = interaction(n.pop0, bottleneck)),
+              alpha = 0.5) +
+  geom_line(aes(x = gen, y = n, group = trial, 
+                colour = extinct,
+                linetype = bottleneck), 
+            size = 0.15) +
+  scale_color_manual(values = c('black', 'red')) +
+  geom_line(aes(x = gen, y = nbar, 
+                group = interaction(n.pop0, bottleneck), 
+                linetype = bottleneck), size = 2) +
+  geom_point(aes(x = gen, y = nbar, fill = pext), shape = 21, stroke = 1, size = 3) +
+  scale_fill_gradient(high = 'black', low = 'red') +
+  scale_y_log10() +
+  facet_wrap(~ factor(n.pop0)) +
+  guides(colour = 'none') +
+  theme(legend.position = 'bottom')
