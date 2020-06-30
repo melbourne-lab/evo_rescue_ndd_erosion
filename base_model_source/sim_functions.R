@@ -130,7 +130,7 @@ popn0
 # hist(popn0$r_i)
 # hist(popna$r_i)
 
-propagate.sim = function(a = c(1/2, -1/2), params, popn) {
+propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
   
   n.loci = params$n.loci
   # number of loci determining the genotype
@@ -157,66 +157,76 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn) {
   #   - any offspring?
   if (any(popn$fem) & any(!popn$fem) & sum(popn$r_i[popn$fem])) {
     
-    offspring = cbind(
-      # Maternal data frame:
-      # Take the female rows in the data frame
-      # Remove unnecessary columns (don't need to be inherited)
-      # Rename columns to indicate alleles inhereted from mom
-      #   NOTE: r_i also included here because we will need it later
-      popn %>% 
-        filter(fem) %>% 
-        select(-c(i, g_i, w_i, z_i, fem, gen)) %>%
-        set.names(paste(ifelse(grepl('^[ab]\\d', names(.)), 'mom', ''),
-                        names(.), 
-                        sep = '_')),
-      # Paternal data frame
-      # Sample these to get mating pairs, i.e.,
-      #   draw from the pool of males once for each female
-      # Select the paternal alleles
-      # Rename columns to indicate alleles inhereited from dad
-      # NOTE: this assumes that each mom mates with only one dad
-      popn %>% 
-        sample_n(size = sum(fem), 
-                 weight = as.numeric(!fem) / sum(as.numeric(!fem)),
-                 replace = TRUE) %>%
-        select(all_of(names.array)) %>%
-        set.names(paste('dad', names(.), sep = '_'))
-    ) %>%
-      # For each mating pair, duplicate by the number of offspring
-      #   as determined by r_i
-      uncount(weight = `_r_i`) %>%
-      # Add a new column for unique ID of each individual
-      #   (note - we'll have to remove this later for silly reasons)
-      mutate(i = max(popn$i) + 1:nrow(.)) %>%
-      # Use some cleverness to segregate alleles:
-      #   create a row for each allele
-      gather(key = alls, value = val, -i) %>%
-      #   par.locus gives the parent from whom the locus will descend
-      mutate(par.locus = gsub('\\_[ab]', '', alls)) %>%
-      #   for each locus on each chromosome, pick exactly one parental allele
-      group_by(i, par.locus) %>%
-      sample_n(size = 1) %>%
-      # Remove the unnecessary "parent" column
-      select(-alls) %>%
-      ungroup() %>%
-      mutate(par.locus = gsub('^mom', 'a', par.locus),
-             par.locus = gsub('^dad', 'b', par.locus)) %>%
-      # Turn this data frame back into "wide" format
-      spread(key = par.locus, value = val) %>%
-      ungroup() %>%
-      # Now, calculate breeding value (genotype?), etc.
-      #   for each offspring
-      #   (note: to do this, we need to first remove the 'i' 
-      #   column in order to calculate g_i)
-      select(-i) %>%
-      mutate(g_i = apply(., 1, sum) / sqrt(n.loci),
-             i = max(popn$i) + 1:nrow(.),
-             fem = sample(c(TRUE, FALSE), size = nrow(.), replace = TRUE),
-             z_i = rnorm(nrow(.), mean = g_i, sd = sig.e),
-             w_i = w.max * exp(-(z_i - theta)^2 / (2*wfitn^2)),
-             r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i * exp(-alpha * nrow(.)), 0)),
-             gen = max(popn$gen) + 1) %>%
-      select(i, g_i, z_i, w_i, r_i, fem, gen, all_of(names.array))
+    if (evolve) {
+      
+      offspring = cbind(
+        # Maternal data frame:
+        # Take the female rows in the data frame
+        # Remove unnecessary columns (don't need to be inherited)
+        # Rename columns to indicate alleles inhereted from mom
+        #   NOTE: r_i also included here because we will need it later
+        popn %>% 
+          filter(fem) %>% 
+          select(-c(i, g_i, w_i, z_i, fem, gen)) %>%
+          set.names(paste(ifelse(grepl('^[ab]\\d', names(.)), 'mom', ''),
+                          names(.), 
+                          sep = '_')),
+        # Paternal data frame
+        # Sample these to get mating pairs, i.e.,
+        #   draw from the pool of males once for each female
+        # Select the paternal alleles
+        # Rename columns to indicate alleles inhereited from dad
+        # NOTE: this assumes that each mom mates with only one dad
+        popn %>% 
+          sample_n(size = sum(fem), 
+                   weight = as.numeric(!fem) / sum(as.numeric(!fem)),
+                   replace = TRUE) %>%
+          select(all_of(names.array)) %>%
+          set.names(paste('dad', names(.), sep = '_'))
+      ) %>%
+        # For each mating pair, duplicate by the number of offspring
+        #   as determined by r_i
+        uncount(weight = `_r_i`) %>%
+        # Add a new column for unique ID of each individual
+        #   (note - we'll have to remove this later for silly reasons)
+        mutate(i = max(popn$i) + 1:nrow(.)) %>%
+        # Use some cleverness to segregate alleles:
+        #   create a row for each allele
+        gather(key = alls, value = val, -i) %>%
+        #   par.locus gives the parent from whom the locus will descend
+        mutate(par.locus = gsub('\\_[ab]', '', alls)) %>%
+        #   for each locus on each chromosome, pick exactly one parental allele
+        group_by(i, par.locus) %>%
+        sample_n(size = 1) %>%
+        # Remove the unnecessary "parent" column
+        select(-alls) %>%
+        ungroup() %>%
+        mutate(par.locus = gsub('^mom', 'a', par.locus),
+               par.locus = gsub('^dad', 'b', par.locus)) %>%
+        # Turn this data frame back into "wide" format
+        spread(key = par.locus, value = val) %>%
+        ungroup() %>%
+        # Now, calculate breeding value (genotype?), etc.
+        #   for each offspring
+        #   (note: to do this, we need to first remove the 'i' 
+        #   column in order to calculate g_i)
+        select(-i) %>%
+        mutate(g_i = apply(., 1, sum) / sqrt(n.loci),
+               i = max(popn$i) + 1:nrow(.),
+               fem = sample(c(TRUE, FALSE), size = nrow(.), replace = TRUE),
+               z_i = rnorm(nrow(.), mean = g_i, sd = sig.e),
+               w_i = w.max * exp(-(z_i - theta)^2 / (2*wfitn^2)),
+               r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i * exp(-alpha * nrow(.)), 0)),
+               gen = max(popn$gen) + 1) %>%
+        select(i, g_i, z_i, w_i, r_i, fem, gen, all_of(names.array))
+    } else {
+      # If non-evolving, initialize the population again
+      # with size equal to the number of offspring as prescribed by
+      # the previous generation's r_i
+      offspring = init.sim(a = a, params = params %>% mutate(n.pop0 = sum(popn$r_i)))
+      print("this isn't working!!")
+      print("this population is still evolving for some reason!")
+    }
     
     return(offspring)
     
@@ -229,7 +239,7 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn) {
 
 ##### Testing:
 # # # Try it out.
-# propagate.sim(a = c(-1/2, 1/2), params = pars, popn = popn0)
+propagate.sim(a = c(-1/2, 1/2), params = pars, popn = popn0)
 # 
 # # Each of the following tests hit the 'if' loop
 # # These tests should return an empty data frame.
@@ -254,7 +264,7 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn) {
 #               popn = popn0[2:3,])
 # # Good.
 
-sim = function(a = c(1/2, -1/2), params, init.popn = NULL) {
+sim = function(a = c(1/2, -1/2), params, init.popn = NULL, evolve = TRUE) {
   
   # Helpful global parameters.
   
@@ -289,7 +299,7 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL) {
     pop0 = init.popn %>%
       mutate(z_i = rnorm(nrow(.), mean = g_i, sd = params$sig.e),
              w_i = params$w.max * exp(-(z_i - params$theta)^2 / (2*params$wfitn^2)),
-             r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i, 0)),
+             r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i * exp(-params$alpha * nrow(.)), 0)),
              i = 1:nrow(.),
              gen = 1) %>%
       select(i, g_i, z_i, w_i, r_i, fem, gen, all_of(names.array))
@@ -307,7 +317,8 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL) {
     if(nrow(prev.gen)) {
       pop = propagate.sim(a = a,
                           params = params,
-                          popn = prev.gen)
+                          popn = prev.gen,
+                          evolve = evolve)
       all.pop = dim.add(df = all.pop,
                         rows = init.row,
                         addition = pop)
@@ -331,17 +342,17 @@ unroller = function(sim.list) {
 # 
 # set.seed(12121513)
 # 
-# sim.test = sim(
-#     a = c(-1/2, 1/2),
-#     params = data.frame(end.time = 15,
-#                         init.row = 1e4,
-#                         n.loci = 20,
-#                         n.pop0 = 40,
-#                         w.max = 1.4,
-#                         theta = 1,
-#                         wfitn = sqrt(1 / 0.14),
-#                         sig.e = 0.5)
-# )
+sim.test = sim(
+    a = c(-1/2, 1/2),
+    params = data.frame(end.time = 15,
+                        init.row = 1e4,
+                        n.loci = 20,
+                        n.pop0 = 40,
+                        w.max = 1.4,
+                        theta = 1,
+                        wfitn = sqrt(1 / 0.14),
+                        sig.e = 0.5)
+)
 # 
 # Test to see if this works with inserted initial population.
 # set.seed(12121513)
@@ -385,7 +396,21 @@ unroller = function(sim.list) {
 #                         sig.e = 0.5,
 #                         alpha = 0.0035)
 # )
-# # Seems to work!
+# Seems to work!
+# With custom insert population and ndd
+# sim.test = sim(
+#   a = c(-1/2, 1/2),
+#   params = data.frame(end.time = 15,
+#                       init.row = 1e4,
+#                       n.loci = 20,
+#                       n.pop0 = 40,
+#                       w.max = 1.4,
+#                       theta = 1,
+#                       wfitn = sqrt(1 / 0.14),
+#                       sig.e = 0.5,
+#                       alpha = 0.0035),
+#   init.popn = popn0[1:20,]
+# )
 
 # # Examine output
 # sim.test
