@@ -44,6 +44,9 @@ init.sim = function(a = c(1/2, -1/2), params) {
   # standard dev. of environmental phenoytpic noise
   p.pos = ifelse('pos.p' %in% names(params), params$pos.p, 0.5)
   # Initial frequency of the positive allele
+  alpha = ifelse('alpha' %in% names(params), params$alpha, 0)
+  # strength of density dependence
+  # (set to zero if not provided)
     
   
   # A character (string) array for handy indexing
@@ -75,8 +78,8 @@ init.sim = function(a = c(1/2, -1/2), params) {
            i = 1:n.pop0,
            fem = sample(c(TRUE, FALSE), size = n.pop0, replace = TRUE),
            z_i = rnorm(n.pop0, mean = g_i, sd = sig.e),
-           w_i = w.max * exp(-(z_i - theta)^2 / (2*wfitn^2)),
-           r_i = rpois(n = n.pop0, lambda = ifelse(fem, 2 * w_i, 0)),
+           w_i = w.max * exp(-(z_i - theta)^2 / (2 * wfitn^2)),
+           r_i = rpois(n = n.pop0, lambda = ifelse(fem, 2 * w_i * exp(-alpha * n.pop0), 0)),
            gen = 1) %>%
     select(i, g_i, z_i, w_i, r_i, fem, gen, all_of(names.array))
   
@@ -86,13 +89,13 @@ init.sim = function(a = c(1/2, -1/2), params) {
 
 ##### Test of the above:
 # 
-# pars = data.frame(n.loci = 20, n.pop0 = 40,
-#                   w.max = 1.2, theta = 2.6,
-#                   wfitn = sqrt(1 / 0.14),
-#                   sig.e = 0.5)
-# 
-# popn0 = init.sim(a = c(-1/2, 1/2), params = pars)
-# popn0
+pars = data.frame(n.loci = 20, n.pop0 = 40,
+                  w.max = 1.2, theta = 2.6,
+                  wfitn = sqrt(1 / 0.14),
+                  sig.e = 0.5)
+
+popn0 = init.sim(a = c(-1/2, 1/2), params = pars)
+popn0
 # 
 # # Looks good.
 
@@ -115,6 +118,17 @@ init.sim = function(a = c(1/2, -1/2), params) {
 # popn0
 # popn0[, grep('^[ab]\\d', names(popn0), value = TRUE)] %>%
 #   apply(2, function(x) mean(x > 0))
+#
+# # Try one with density dependence
+# pars = data.frame(n.loci = 20, n.pop0 = 40,
+#                   w.max = 1.2, theta = 2.6,
+#                   wfitn = sqrt(1 / 0.14),
+#                   sig.e = 0.5, alpha = 0.0035)
+# 
+# popna = init.sim(a = c(-1/2, 1/2), params = pars)
+# popna
+# hist(popn0$r_i)
+# hist(popna$r_i)
 
 propagate.sim = function(a = c(1/2, -1/2), params, popn) {
   
@@ -130,6 +144,9 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn) {
   # standard deviation of the selection pressure
   sig.e = params$sig.e
   # standard dev. of environmental phenoytpic noise
+  alpha = ifelse('alpha' %in% names(params), params$alpha, 0)
+  # strength of density dependence
+  # (set to zero if not provided)
   
   # A character (string) array for handy indexing
   names.array = paste0(c('a', 'b'), rep(1:n.loci, each = 2))
@@ -197,7 +214,7 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn) {
              fem = sample(c(TRUE, FALSE), size = nrow(.), replace = TRUE),
              z_i = rnorm(nrow(.), mean = g_i, sd = sig.e),
              w_i = w.max * exp(-(z_i - theta)^2 / (2*wfitn^2)),
-             r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i, 0)),
+             r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i * exp(-alpha * nrow(.)), 0)),
              gen = max(popn$gen) + 1) %>%
       select(i, g_i, z_i, w_i, r_i, fem, gen, all_of(names.array))
     
@@ -352,6 +369,23 @@ unroller = function(sim.list) {
 #                       sig.e = 0.5),
 #   init.popn = popn0[1:20,]
 # )
+# 
+# # A test of non-zero alpha
+# set.seed(12121513)
+# 
+# sim.test = sim(
+#     a = c(-1/2, 1/2),
+#     params = data.frame(end.time = 15,
+#                         init.row = 1e4,
+#                         n.loci = 20,
+#                         n.pop0 = 40,
+#                         w.max = 1.4,
+#                         theta = 1,
+#                         wfitn = sqrt(1 / 0.14),
+#                         sig.e = 0.5,
+#                         alpha = 0.0035)
+# )
+# # Seems to work!
 
 # # Examine output
 # sim.test
