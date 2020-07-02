@@ -89,13 +89,13 @@ init.sim = function(a = c(1/2, -1/2), params) {
 
 ##### Test of the above:
 # 
-pars = data.frame(n.loci = 20, n.pop0 = 40,
-                  w.max = 1.2, theta = 2.6,
-                  wfitn = sqrt(1 / 0.14),
-                  sig.e = 0.5)
-
-popn0 = init.sim(a = c(-1/2, 1/2), params = pars)
-popn0
+# pars = data.frame(n.loci = 20, n.pop0 = 40,
+#                   w.max = 1.2, theta = 2.6,
+#                   wfitn = sqrt(1 / 0.14),
+#                   sig.e = 0.5)
+# 
+# popn0 = init.sim(a = c(-1/2, 1/2), params = pars)
+# popn0
 # 
 # # Looks good.
 
@@ -223,9 +223,8 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
       # If non-evolving, initialize the population again
       # with size equal to the number of offspring as prescribed by
       # the previous generation's r_i
-      offspring = init.sim(a = a, params = params %>% mutate(n.pop0 = sum(popn$r_i)))
-      print("this isn't working!!")
-      print("this population is still evolving for some reason!")
+      offspring = init.sim(a = a, params = params %>% mutate(n.pop0 = sum(popn$r_i))) %>%
+        mutate(gen = max(popn$gen) + 1)
     }
     
     return(offspring)
@@ -239,7 +238,7 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
 
 ##### Testing:
 # # # Try it out.
-propagate.sim(a = c(-1/2, 1/2), params = pars, popn = popn0)
+# propagate.sim(a = c(-1/2, 1/2), params = pars, popn = popn0, evolve = FALSE)
 # 
 # # Each of the following tests hit the 'if' loop
 # # These tests should return an empty data frame.
@@ -342,17 +341,17 @@ unroller = function(sim.list) {
 # 
 # set.seed(12121513)
 # 
-sim.test = sim(
-    a = c(-1/2, 1/2),
-    params = data.frame(end.time = 15,
-                        init.row = 1e4,
-                        n.loci = 20,
-                        n.pop0 = 40,
-                        w.max = 1.4,
-                        theta = 1,
-                        wfitn = sqrt(1 / 0.14),
-                        sig.e = 0.5)
-)
+# sim.test = sim(
+#     a = c(-1/2, 1/2),
+#     params = data.frame(end.time = 15,
+#                         init.row = 1e4,
+#                         n.loci = 20,
+#                         n.pop0 = 40,
+#                         w.max = 1.4,
+#                         theta = 1,
+#                         wfitn = sqrt(1 / 0.14),
+#                         sig.e = 0.5)
+# )
 # 
 # Test to see if this works with inserted initial population.
 # set.seed(12121513)
