@@ -1,3 +1,8 @@
+# Adapted from script 'generate_bottlenecked_popns.R'
+# Adapted and run by SN, July 6 2020
+
+##### Load packages, namespace, etc. 
+
 library(ggplot2)
 library(dplyr)
 library(tidyr)
@@ -5,11 +10,16 @@ library(tidyselect)
 
 rm(list = ls())
 
+setwd('~/demgen_allelic')
+
 source('base_model_source/sim_functions.R')
+
+# Initialize seed
+set.seed(87795)
 
 ##### Parameters
 
-n.trials = 500
+n.trials = 5000
 n.loci = 25
 theta = 0
 wfitn = sqrt(1 / 0.14 / 2)
@@ -20,172 +30,95 @@ wfitn = sqrt(1 / 0.14 / 2)
 # one individual in each sex. That way, we don't waste trials on populations
 # with two individuals of the same sex (who can not sustain a population).
 
-# To do this, initialize one large population. 
+# To do this, initialize one large population.
+# Then, manually reset the sex column.
+# This should still produce a genetically-representative population sample.
+pop.large = init.sim(a = c(1/2, -1/2),
+                     params = data.frame(init.row = 2 * n.trials,
+                                         n.loci = n.loci, 
+                                         # 2 individuals in each trial
+                                         n.pop0 = 2 * n.trials,
+                                         # Is used for calculating phenotypes and
+                                         # number of offspring.
+                                         w.max = 2, 
+                                         theta = theta, 
+                                         wfitn = wfitn,
+                                         sig.e = 0.5,
+                                         alpha = 0))
+
+# Now: reset sex
+# Resetting sex will also require resetting the number of offspring (r_i).
+pop.large = pop.large %>%
+  # Reset sex
+  mutate(fem = rep(c(TRUE, FALSE), times = n.trials)) %>%
+  # Recalculate fitness
+  # (NOTE: setting alpha = 0 for speed)
+  mutate(r_i = rpois(lambda = ifelse(fem, 2 * w_i, 0),
+                     n = nrow(.)))
+
+# Finally: set trial number
+pop.large$trial = rep(1:n.trials, each = 2)
 
 ##### Run simulations
 
 liszt = vector('list', n.trials)
 
-set.seed(87795)
+# Note: the seed was set above when initializing populations.
 
-for (trial in 1:n.trials) {
-  liszt[[trial]] = sim(
-    a = c(-1/2, 1/2),
-    params = data.frame(end.time = 8,
-                        init.row = 1e2,
-                        n.loci = n.loci, 
-                        n.pop0 = 2,
-                        w.max = 2, 
-                        theta = theta, 
-                        wfitn = wfitn,
-                        sig.e = 0)
-  )
-  print(trial)
-}
-
-all.trials = unroller(liszt)
-
-head(all.trials)
-
-init.pops = all.trials %>%
-  group_by(trial) %>%
-  filter(mean(fem[gen %in% 1]) == 0.5)
-
-length(unique(init.pops$trial))
-
-pop20s = init.pops %>%
-  group_by(trial, gen) %>%
-  mutate(n = n()) %>%
-  group_by(trial) %>%
-  filter(any(n > 20)) %>%
-  ungroup() %>%
-  select(-n)
-
-pop100s = init.pops %>%
-  group_by(trial, gen) %>%
-  mutate(n = n()) %>%
-  group_by(trial) %>%
-  filter(any(n > 100)) %>%
-  ungroup() %>%
-  select(-n)
-
-nrow(pop20s)
-length(unique(pop20s$trial))
-nrow(pop100s)
-length(unique(pop100s$trial))
-
-pop100s %>%
-  group_by(trial, gen) %>%
-  summarise(n = n()) %>%
-  group_by(trial) %>%
-  filter(n == max(n)) %>%
-  ungroup() %>%
-  select(n) %>% unlist() %>% hist()
-
-# One question that just occurred to me... does it matter when a population is selected? Should I sample from the first time step with >100 individuals, or all at the same timestep?
-
-var.t.20s = pop20s %>%
-  select(-c(g_i, z_i, w_i, r_i, fem)) %>%
-  gather(key = loc.copy, value = val, -c(trial, i, gen)) %>%
-  mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
-  group_by(trial, gen, locus) %>%
-  summarise(p = mean(val > 0),
-            n = length(unique(i))) %>%
-  group_by(trial, gen) %>%
-  summarise(var.t = sum(2 * p * (1 - p) / 25),
-            n.t = n[1])
-
-var.t.20s %>%
-  group_by(gen) %>%
-  mutate(vt.bar = mean(var.t)) %>%
-  ggplot() +
-  geom_segment(aes(x = 1, xend = 8, y = 0.48, yend = 0.48)) +
-  geom_line(aes(x = gen, y = var.t, group = trial)) +
-  geom_point(aes(x = gen, y = var.t, fill = log(n.t / 20)),
-             shape = 21, colour = 'black', stroke = 1) +
-  geom_line(aes(x = gen, y = vt.bar), linetype = 3,
-            colour = 'red', size = 3) +
-  scale_fill_gradient2(low = 'darkblue', mid = 'white', high = 'red') +
-  theme(panel.background = element_rect('white'))
-
-# Do the same but for the populations of size 100
-
-var.t.100s = pop100s %>%
-  select(-c(g_i, z_i, w_i, r_i, fem)) %>%
-  gather(key = loc.copy, value = val, -c(trial, i, gen)) %>%
-  mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
-  group_by(trial, gen, locus) %>%
-  summarise(p = mean(val > 0),
-            n = length(unique(i))) %>%
-  group_by(trial, gen) %>%
-  summarise(var.t = sum(2 * p * (1 - p) / 25),
-            n.t = n[1])
-
-var.t.100s %>%
-  group_by(gen) %>%
-  mutate(vt.bar = mean(var.t)) %>%
-  ggplot() +
-  geom_segment(aes(x = 1, xend = 8, y = 0.48, yend = 0.48)) +
-  geom_line(aes(x = gen, y = var.t, group = trial)) +
-  geom_point(aes(x = gen, y = var.t, fill = log(n.t / 100)),
-             shape = 21, colour = 'black', stroke = 1) +
-  geom_line(aes(x = gen, y = vt.bar), linetype = 3,
-            colour = 'red', size = 3) +
-  scale_fill_gradient2(low = 'darkblue', mid = 'white', high = 'red') +
-  theme(panel.background = element_rect('white'))
-
-nrow(pop20s)
-
-nrow(pop100s)
-
-## Looking at the proposal, it specifies having inbred population lines bred out to N = 1000 individuals. Try doing this here, adding an extra time step (will slow things down).
-
-##### Parameters
-
-n.trials = 500
-n.loci = 25
-theta = 0
-wfitn = sqrt(1 / 0.14 / 2)
-
-##### Run simulations
-
-liszt = vector('list', n.trials)
-
-set.seed(87795)
-
-for (trial in 1:n.trials) {
-  liszt[[trial]] = sim(
-    a = c(-1/2, 1/2),
+for (trial.no in 1:n.trials) {
+  liszt[[trial.no]] = sim(
+    a = c(1/2, -1/2),
     params = data.frame(end.time = 9,
-                        init.row = 1e2,
+                        init.row = 1e4,
                         n.loci = n.loci, 
-                        n.pop0 = 2,
                         w.max = 2, 
                         theta = theta, 
                         wfitn = wfitn,
-                        sig.e = 0)
+                        sig.e = 0.5,
+                        alpha = 0),
+    init.popn = pop.large %>%
+      filter(trial %in% trial.no) %>%
+      select(-trial),
+    evolve = TRUE
   )
-  print(trial)
+  print(trial.no)
 }
 
 all.trials = unroller(liszt)
 
-pop.k.s = all.trials %>%
+##### Do the filtering (get populations reaching size 1000)
+
+# Set threshold size above which to pick out populations.
+thresh = 1000
+
+# Pick out only the populations which reach size `thresh`
+all.k.pops = all.trials %>%
   group_by(trial, gen) %>%
   mutate(n = n()) %>%
   group_by(trial) %>%
-  filter(any(n > 1000)) %>%
+  filter(any(n > thresh)) %>%
   ungroup() %>%
   select(-n)
 
-length(unique(pop.k.s$trial))
-nrow(pop.k.s)
+# Write this to a file, noting in name that all generations are here.
+# (this could be useful for looking at loss of variance and the drift and
+# fixation process!)
+write.csv(all.k.pops, 'simulations/prepare_simulations/outputs/all_k_pops_all_gens.csv',
+          row.names = FALSE)
 
-pop.k.s %>%
+# A more space-efficient data frame: has only the first generation at the given
+# threshold size.
+all.k.pops %>%
   group_by(trial, gen) %>%
-  summarise(n = n())
+  mutate(n = n()) %>% group_by(trial) %>%
+  filter(gen == min(gen[n > thresh])) %>%
+  ungroup() %>%
+  select(-n) %>%
+  write.csv(file = 'simulations/prepare_simulations/outputs/all_k_pops_min_gen.csv',
+            row.names = FALSE)
 
-var.k = pop.k.s %>%
+# For fun: track the environmental variation over time.
+var.k = all.k.pops %>%
   select(-c(g_i, z_i, w_i, r_i, fem)) %>%
   gather(key = loc.copy, value = val, -c(trial, i, gen)) %>%
   mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
@@ -196,27 +129,5 @@ var.k = pop.k.s %>%
   summarise(var.t = sum(2 * p * (1 - p) / 25),
             n.t = n[1])
 
-var.k %>%
-  group_by(gen) %>%
-  mutate(vt.bar = mean(var.t)) %>%
-  ggplot() +
-  geom_segment(aes(x = 1, xend = 8, y = 0.48, yend = 0.48)) +
-  geom_line(aes(x = gen, y = var.t, group = trial)) +
-  geom_point(aes(x = gen, y = var.t, fill = n.t > 1000),
-             shape = 21, colour = 'black', stroke = 1) +
-  geom_line(aes(x = gen, y = vt.bar), linetype = 3,
-            colour = 'red', size = 3) +
-  #scale_fill_gradient2(low = 'darkblue', mid = 'white', high = 'red') +
-  scale_fill_manual(values = c('black', 'lightblue')) +
-  theme(panel.background = element_rect('white'))
-
-# With the seed provided, I have eight of these populations.
-
-
-# Well - for now just use these I suppose.
-
-write.csv(pop.k.s, na = '', row.names = FALSE,
-          file = 'simulations/prepare_simulations/outputs/eight_bottlenecked_popns.csv')
-
-# Check: Linkage disequilibrium.
-
+write.csv(var.k, 'simulations/prepare_simulations/outputs/all_k_pops_var_loss.csv',
+          row.names = FALSE)
