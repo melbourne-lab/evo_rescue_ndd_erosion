@@ -24,7 +24,7 @@ library(tidyselect)
 ### Load source materials
 
 # Working directory (for server)
-setwd('demgen_allelic')
+setwd('~/demgen_allelic')
 
 # Get simulation functions
 source('base_model_source/sim_functions.R')
