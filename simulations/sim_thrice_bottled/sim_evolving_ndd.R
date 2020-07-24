@@ -27,7 +27,7 @@ trials.per = 42
 
 pars = expand.grid(pop.id = unique(neck.popns$trial),
                    pop.trial = 1:trials.per,
-                   n.pop0 = c(20, 100)) %>%
+                   n.pop0 = c(20, 60)) %>%
   mutate(global.trial = 1:nrow(.),
          end.time = 15,
          init.row = 1e4,
