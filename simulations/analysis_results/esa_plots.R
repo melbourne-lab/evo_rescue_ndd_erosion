@@ -54,7 +54,10 @@ ggplot(alln, aes(x = gen)) +
   labs(x = 'Generation',
        y = 'Mean population size') +
   scale_y_log10(limits = c(9, 1180)) +
-  theme(panel.background = element_blank())
+  theme(panel.background = element_blank(),
+        legend.position = 'bottom') +
+  ggsave('~/Documents/Research/boulder/scott_rescue/esa_2020/popsize_fig.pdf',
+         width = 10, height = 5)
 
 ## Just density independent plot
 
@@ -93,7 +96,51 @@ ggplot(alln %>% filter(!ndd), aes(x = gen)) +
   labs(x = 'Generation',
        y = 'Mean population size') +
   scale_y_log10(limits = c(9, 1180)) +
-  theme(panel.background = element_blank())
+  theme(panel.background = element_blank(),
+        legend.position = 'bottom') +
+  ggsave('~/Documents/Research/boulder/scott_rescue/esa_2020/popsize_fig_black_only.pdf',
+         width = 10, height = 5)
+
+## Just density dependent plot with uniform/identity y-scaling
+ggplot(alln %>% filter(!ndd), aes(x = gen)) +
+  geom_segment(
+    aes(x = 1, xend = max(gen), y = n.pop0, yend = n.pop0),
+    linetype = 2,
+    colour = 'gray'
+  ) +
+  geom_line(
+    aes(y = nbar,
+        group = interaction(ndd, n.pop0, bottleneck),
+        colour = factor(ndd),
+        linetype = bottleneck)
+  ) +
+  geom_ribbon(
+    aes(ymin = nbar - 2 * sqrt(nvar / n.trials),
+        ymax = nbar + 2 * sqrt(nvar / n.trials),
+        group = interaction(ndd, n.pop0, bottleneck),
+        colour = factor(ndd),
+        fill = factor(ndd)),
+    alpha = 0.2,
+    size = 0.125
+  ) +
+  scale_color_manual(values = c('black', 'purple'),
+                     labels = c("Density\nindependent",
+                                "Density\ndependent"),
+                     name = "Growth form") +
+  scale_fill_manual(values = c('black', 'purple'),
+                    labels = c("Density\nindependent",
+                               "Density\ndependent"),
+                    name = "Growth form") +
+  scale_linetype(name = "Genetic variance",
+                 labels = c("High\n(no bottleneck)",
+                            "Low\n(bottlenecked)")) +
+  labs(x = 'Generation',
+       y = 'Mean population size') +
+  lims(y = c(9, 1180)) +
+  theme(panel.background = element_blank(),
+        legend.position = 'bottom') +
+  ggsave('~/Documents/Research/boulder/scott_rescue/esa_2020/popsize_fig_black_only_iy.pdf',
+         width = 10, height = 5)
 
 ##
 
