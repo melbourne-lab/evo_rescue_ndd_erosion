@@ -81,7 +81,8 @@ m1.preds = m1.pvz %>%
          w_a = exp(-(d + 1/sqrt(m))^2 / (2*w^2)),
          N_p = p * (w_A*p*(p+1) + w_0*q*(2*p+1) + w_a * q^2),
          N   = 2 * (p^2 * w_A + 2*p*q*w_0 + q^2 * w_a),
-         pp2 = ifelse(gen > 1, N_p / N, p))
+         pp2 = ifelse(gen > 1, N_p / N, p),
+         lz2 = params$theta - (d * ((w^2) / (w^2 + v))))
 # Has a lot of extra stuff, but:
 # pp2 is predicted p at time 2
 # (for time-step 1, just let it be pp2 = p.)
@@ -127,8 +128,23 @@ m1.preds %>%
 gg.m1 +
   geom_point(aes(x = p, y = ((pp2 - p) / ((1-p))) , alpha = factor(gen))) +
   scale_alpha_manual(values = c(0, 1)) +
-#  coord_fixed() +
   theme_bw()
+
+gg.m1 +
+  geom_point(aes(x = p, y = ((pp2 - p) / (p*(1-p)^2)) , alpha = factor(gen))) +
+  scale_alpha_manual(values = c(0, 1)) +
+  xlim(c(0, 1)) +
+  theme_bw()
+
+# Compare with Lande's expectations
+gg.m1 +
+  geom_segment(aes(x = min(lz2), xend = max(lz2), y = min(z), yend = max(z)),
+               size = 0.5, colour = 'red') +
+  geom_point(aes(x = lz2, y = z, alpha = factor(gen))) +
+  scale_alpha_manual(values = c(0, 1)) +
+  labs(x = "Lande's z", y = 'Observed z') + 
+  theme_bw()
+# So Lande's expression overestimates phenotypic change....
 
 
 ### Next, try this with m = 2.
@@ -183,7 +199,8 @@ m2.preds = m2.pvz %>%
          w_a = exp(-(d + 1/sqrt(m))^2 / (2*w^2)),
          N_p = p * (w_A*p*(p+1) + w_0*q*(2*p+1) + w_a * q^2),
          N   = 2 * (p^2 * w_A + 2*p*q*w_0 + q^2 * w_a),
-         pp2 = ifelse(gen > 1, N_p / N, p))
+         pp2 = ifelse(gen > 1, N_p / N, p),
+         lz2 = param2$theta - (d * ((w^2) / (w^2 + v))))
 
 head(m2.preds)
 
@@ -214,12 +231,33 @@ gg.m2 +
 # this function maxes out at p approx 1/3
 
 gg.m2 +
-  geom_point(aes(x = p, y = (pp2 - p) / ((1 - p)), alpha = factor(gen))) +
+  geom_point(aes(x = p, y = (pp2 - p) / (p*(1 - p)), alpha = factor(gen))) +
   scale_alpha_manual(values = c(0, 1)) +
+  theme_bw()
+
+# Compare with Lande's expectations
+m2.preds %>% 
+  filter(gen > 1) %>%
+  distinct(z, lz2, v) %>%
+  ggplot() +
+  geom_segment(aes(x = min(lz2), xend = max(lz2), y = min(z), yend = max(z)),
+               size = 0.5, colour = 'red') +
+  geom_point(aes(x = lz2, y = z,
+                 colour = sqrt(v))) +
+  labs(x = "Lande's z", y = 'Observed z') + 
   theme_bw()
 
 ### Well... what happens with m = 3?
 # Expect variance to increase but will the peak residual also increase?
+
+param3 = data.frame(end.time = 2,
+                    init.row = 1e4,
+                    n.loci = 3, 
+                    n.pop0 = 20,
+                    w.max = 2, 
+                    theta = 2, 
+                    wfitn = sqrt(1 / 0.14 / 2),
+                    sig.e = 0)
 
 lisz3 = vector(mode = 'list', length = n.trials)
 
@@ -258,21 +296,34 @@ m3.preds = m3.pvz %>%
          w_a = exp(-(d + 1/sqrt(m))^2 / (2*w^2)),
          N_p = p * (w_A*p*(p+1) + w_0*q*(2*p+1) + w_a * q^2),
          N   = 2 * (p^2 * w_A + 2*p*q*w_0 + q^2 * w_a),
-         pp2 = ifelse(gen > 1, N_p / N, p))
+         pp2 = ifelse(gen > 1, N_p / N, p),
+         lz2 = param3$theta - (d * ((w^2) / (w^2 + v))))
 
 gg.m3 = m3.preds %>% ggplot()
 
 gg.m3 +
   geom_point(aes(x = p, y = pp2 - p, alpha = factor(gen))) +
   scale_alpha_manual(values = c(0, 1)) +
+  xlim(c(0,1)) +
   theme_bw()
 # It does.
 # I bet this asymptotically approaches p = 1/2.
 # But still... what the heck.
 
 gg.m3 +
-  geom_point(aes(x = p, y = (pp2 - p)/((1-p)), alpha = factor(gen))) +
+  geom_point(aes(x = p, y = (pp2 - p)/(p*(1-p)), alpha = factor(gen))) +
   scale_alpha_manual(values = c(0, 1)) +
+  theme_bw()
+
+# Lande'z delta z
+m3.preds %>% 
+  filter(gen > 1) %>%
+  distinct(z, lz2, v) %>%
+  ggplot() +
+  geom_point(aes(x = lz2, y = z, colour = sqrt(v))) +
+  geom_segment(aes(x = min(lz2), xend = max(lz2), y = min(z), yend = max(z)),
+               size = 0.5, colour = 'red') +
+  labs(x = "Lande's z", y = 'Observed z') + 
   theme_bw()
 
 ### Try wth a larger number (m = 100)
@@ -332,14 +383,112 @@ write.csv(mi.preds %>% filter(as.numeric(locus) < 21),
           row.names = FALSE,
           file = 'm_100_locus_1-20_gen2.csv')
 
-gg.mi = mi.preds %>% filter(as.numeric(locus) < 25) %>% ggplot()
+mi.20 = read.csv('m_100_locus_1-20_gen2.csv')
+
+gg.mi = mi.20 %>% ggplot()
 
 gg.mi +
-  geom_point(aes(x = p, y = pp2 - p, alpha = factor(gen), colour = v)) +
+  geom_segment(aes(x = 0, xend = 1, y = 0, yend = 1),
+               size = 0.5, colour = 'red') +
+  geom_point(aes(x = p, y = pp2, alpha = factor(gen))) +
   scale_alpha_manual(values = c(0, 1)) +
   theme_bw()
 
 gg.mi +
-  geom_point(aes(x = p, y = (pp2 - p)/(p*(1-p)), alpha = factor(gen))) +
+  geom_point(aes(x = p, y = pp2 - p, alpha = factor(gen), colour = z)) +
   scale_alpha_manual(values = c(0, 1)) +
   theme_bw()
+
+gg.mi +
+  geom_point(aes(x = p, y = (pp2 - p)/(p*(1-p)), 
+                 alpha = factor(gen))) +
+  scale_alpha_manual(values = c(0, 1)) +
+  theme_bw()
+
+##### Try with a realistic somewhat-large m (m = 25)
+
+### Try wth a larger number (m = 100)
+param25 = data.frame(end.time = 2,
+                     init.row = 1e4,
+                     n.loci = 25, 
+                     n.pop0 = 20,
+                     w.max = 2, 
+                     theta = 2, 
+                     wfitn = sqrt(1 / 0.14 / 2),
+                     sig.e = 0)
+
+n.trials = 2000
+
+### Run simulation 
+
+lisz25 = vector(mode = 'list', length = n.trials)
+
+set.seed(411800)
+
+for (trial in 1:n.trials) {
+  lisz25[[trial]] = sim(
+    a = c(-1/2, 1/2),
+    params = param25
+  )  
+  print(trial)
+}
+
+# Put all trials in one (even largerer!) object.
+m25 = unroller(lisz25)
+
+m25.pvz = m25 %>%
+  select(-c(g_i, w_i, r_i, fem)) %>%
+  gather(key = all.copy, value = gval, -c(i, z_i, gen, trial)) %>%
+  mutate(locus = gsub('^[ab]', '', all.copy)) %>%
+  group_by(trial, gen, locus) %>%
+  summarise(p = mean(gval > 0),
+            z = mean(z_i)) %>%
+  group_by(trial, gen) %>%
+  mutate(v = sum(2 * p * (1-p) / param25$n.loci))
+
+head(m25.pvz)
+
+m25.preds = m25.pvz %>%
+  mutate(m = param25$n.loci,
+         w = param25$wfitn,
+         d = param25$theta - z,
+         q = 1 - p,
+         w_A = exp(-(d - 1/sqrt(m))^2 / (2*w^2)),
+         w_0 = exp(-d^2 / (2*w^2)),
+         w_a = exp(-(d + 1/sqrt(m))^2 / (2*w^2)),
+         N_p = p * (w_A*p*(p+1) + w_0*q*(2*p+1) + w_a * q^2),
+         N   = 2 * (p^2 * w_A + 2*p*q*w_0 + q^2 * w_a),
+         pp2 = ifelse(gen > 1, N_p / N, p),
+         lz2 = param25$theta - (d * ((w^2) / (w^2 + v))))
+
+gg.m25 = m25.preds %>% ggplot()
+
+gg.m25 +
+  geom_segment(aes(x = 0, xend = 1, y = 0, yend = 1),
+               size = 0.5, colour = 'red') +
+  geom_point(aes(x = p, y = pp2, alpha = factor(gen))) +
+  scale_alpha_manual(values = c(0, 1)) +
+  theme_bw()
+
+gg.m25 +
+  geom_point(aes(x = p, y = pp2 - p, alpha = factor(gen), colour = z)) +
+  scale_alpha_manual(values = c(0, 1)) +
+  theme_bw()
+
+gg.m25 +
+  geom_point(aes(x = p, y = (pp2 - p)/(p*(1-p)), 
+                 alpha = factor(gen))) +
+  scale_alpha_manual(values = c(0, 1)) +
+  theme_bw()
+
+m25.preds %>% 
+  filter(gen > 1) %>%
+  distinct(z, lz2, v) %>%
+  ggplot() +
+  geom_point(aes(x = lz2, y = z, colour = sqrt(v))) +
+  geom_segment(aes(x = min(lz2), xend = max(lz2), y = min(z), yend = max(z)),
+               size = 0.5, colour = 'red') +
+  labs(x = "Lande's z", y = 'Observed z') + 
+  theme_bw()
+
+# Seems like this predicts Lande'z change in phenotypes pretty well actually!
