@@ -237,13 +237,13 @@ ggplot(allgene, aes(x = gen)) +
         fill = interaction(ndd, n.pop0)),
     alpha = 0.2
   ) +
-  scale_colour_manual(values = c('gray33', 'mediumpurple', 'black', 'purple'),
+  scale_colour_manual(values = c('gray11', 'plum', 'black', 'purple'),
                       labels = c("Density independent, initially small",
                                  "Density dependent, initially small",
                                  "Density independent, initially large",
                                  "Density dependent, initially small"),
                       name = "Treatment") +
-  scale_fill_manual(values = c('gray33', 'mediumpurple', 'black', 'purple'),
+  scale_fill_manual(values = c('gray11', 'plum', 'black', 'purple'),
                     labels = c("Density independent, initially small",
                                "Density dependent, initially small",
                                "Density independent, initially large",
@@ -252,10 +252,11 @@ ggplot(allgene, aes(x = gen)) +
   guides(color = guide_legend(ncol = 2, byrow = TRUE)) +
   labs(x = "Generation", y = "Genetic variance") +
   theme(panel.background = element_blank(),
-        legend.position = 'bottom')
+        legend.position = 'bottom') +
+  ggsave('~/Documents/Research/boulder/scott_rescue/esa_2020/genvar_fig.pdf',
+         width = 10, height = 5)
 
 ## Only high-variation plot
-
 ggplot(allgene %>% filter(!bottleneck), aes(x = gen)) +
   geom_line(
     aes(y = vbar,
@@ -269,13 +270,13 @@ ggplot(allgene %>% filter(!bottleneck), aes(x = gen)) +
         fill = interaction(ndd, n.pop0)),
     alpha = 0.2
   ) +
-  scale_colour_manual(values = c('gray33', 'mediumpurple', 'black', 'purple'),
+  scale_colour_manual(values = c('gray11', 'plum1', 'black', 'purple'),
                       labels = c("Density independent, initially small",
                                  "Density dependent, initially small",
                                  "Density independent, initially large",
                                  "Density dependent, initially small"),
                       name = "Treatment") +
-  scale_fill_manual(values = c('gray33', 'mediumpurple', 'black', 'purple'),
+  scale_fill_manual(values = c('gray11', 'plum1', 'black', 'purple'),
                     labels = c("Density independent, initially small",
                                "Density dependent, initially small",
                                "Density independent, initially large",
@@ -285,7 +286,9 @@ ggplot(allgene %>% filter(!bottleneck), aes(x = gen)) +
   labs(x = "Generation", y = "Genetic variance") +
   lims(y = c(0.25, 0.50)) +
   theme(panel.background = element_blank(),
-        legend.position = 'bottom')
+        legend.position = 'bottom') +
+  ggsave('~/Documents/Research/boulder/scott_rescue/esa_2020/genvar_fig_highvar_only.pdf',
+         width = 10, height = 5)
 
 # Density independent only
 ggplot(allgene %>% filter(!bottleneck & !ndd), aes(x = gen)) +
@@ -301,11 +304,11 @@ ggplot(allgene %>% filter(!bottleneck & !ndd), aes(x = gen)) +
         fill = interaction(ndd, n.pop0)),
     alpha = 0.2
   ) +
-  scale_colour_manual(values = c('gray33', 'black'),
+  scale_colour_manual(values = c('gray11', 'black'),
                       labels = c("Density independent, initially small",
                                  "Density independent, initially large"),
                       name = "Treatment") +
-  scale_fill_manual(values = c('gray33', 'black'),
+  scale_fill_manual(values = c('gray11', 'black'),
                     labels = c("Density independent, initially small",
                     "Density independent, initially large"),
                     name = "Treatment") +
@@ -313,4 +316,6 @@ ggplot(allgene %>% filter(!bottleneck & !ndd), aes(x = gen)) +
   guides(color = guide_legend(ncol = 1)) +
   lims(y = c(0.25, 0.50)) +
   theme(panel.background = element_blank(),
-        legend.position = 'bottom')
+        legend.position = 'bottom') +
+  ggsave('~/Documents/Research/boulder/scott_rescue/esa_2020/genvar_fig_highvar_black_only.pdf',
+       width = 10, height = 5)
