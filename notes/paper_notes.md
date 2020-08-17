@@ -379,3 +379,32 @@ They highlight feedback loops and the extinction vortex here. This removes some 
 
 The importance of initial genetic variation is highlighted here. Using mean + 2sd is a good idea. One thing it makes me think is that there's some confounding with the bottleneck - initial population in bottlenecks whereas all trials are independent in the non-bottlenecked populations.
 
+### Lyberger et al. 2020. Evolution in response to extreme events: good or bad? bioRxiv preprint.
+
+##### Framing
+- Pulse versus push disturbances (instant vs. sustained)
+- This paper: look at how severity and duration of pulse events (?) influences population size and extinction risk
+
+##### Model
+- Individual based
+- Gaussian fitness defined identically to ours
+- Rndom mating pairs, poisson number of ofspring with mean $\Lambda$
+- Habitat with at most $K$ individuals, randomly sampling $K$ to survive
+- Quantitative genetics population: infinite loci, normal draw with segregational variance (constant) but genotypic variance does change
+- Extreme event of length $\tau$; increasing optimum trait value (linearly? instantaneously?)
+- Analytical work - recursion relationship for genotypic change and change in genotypic variation
+- Analytically found a genetic variance that should be approached regardless of trait or environmental dynamics
+- Also some branching theory work to show extinction risk
+
+##### Results
+- For one generation changes, heritability doesn't effect population size, but phenotypic variation does
+	- high variation has smaller population size for low-severity event (standing load) but higher size for high-severity event
+	- "High phenotypic variance therefore reduces both mean fitness within a generation and the variance in fitness across generations - a form of short-term bet-hedging [...] The negative impact of load is more apparent in the case of a mild event, when the population remains near the fitness peak and variation means that more individuals are spread further from the peak."
+- Heritability influences recovery: heritability dampens growth rate in subsequent generations because high heritability means maladaptation when the environment returns to normal
+- Higher phenotypic variation means lower extinction risk (more individuals survive an extreme event)
+- For fixed severity, Heritability lowers extinction risk as the duration of events increases
+- Calculating lag load and its contributions oer time: cumulative long-term lag load expression a function of "evolvability", squared severty of event
+	- as duration increases, lag load as a function of heritability goes from positive (duration low) to negative (duration high)
+
+Very interesting paper, thankfully quite different from ours. Idea here is that *if the environment returns to its pre-disturbance state* on a short timescale, heritability leads to maladaptation. This is mentioned in the discussion, but this is a question of environmental autocorrelation. The classic rescue model is essentially very high autocorrelation, this in a sense is kind of low (at least in one direction - a ratio of transition probs is high/low). This paper demonstrates how helpful heritability is in these. Thinking about it for two seconds, heritability will of course be helpful overall if the autocorrelation his high!
+
