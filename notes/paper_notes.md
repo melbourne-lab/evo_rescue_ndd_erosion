@@ -328,3 +328,54 @@ Some thoughts in here about *adaptation in space* too (incl. gene flow).
 - One thing this model assumes is that the population dynamics and genetics operate independently. I think this may arise from the fact that the quantitative genetics model has infinitely many loci. But a finite-locus model I think will capture losses in genetic diversity more faithfully.
 - In an infinite-locus model, is there a functional form of g(N) which will give an analytically tractable expression for N_t?
 
+### Barfield and Holt, 2016. Evolutionary rescue in novel environments: towards improving predictability. Evolutionary Ecology Research, 17: 771  786.
+
+##### Framing
+- Good description of rescue in first paras
+- "Whether evolutionary rescue happens or not depends upon both demographic and genetic factors (Gomulkiewcz and Houle, 2009)
+- "Not all selective processes enhance overall population fitness" e.g., strong frequency dependence, drift, stochasticity when populations are smaller, variable amount of genetic variation
+	- "This raises challenging questions of how predictable evolutionary rescue might be"
+- Genetic architectures, including "polygenic models where may loci contribute..." (H&G 2004, Holt et al. 2005, Knight et al. 2008, Gienpp et al., 2013)
+- This paper: compares original G&H95 to a heuristic model w/ changing heritability (see Lande and Barrowclough, 1987 and Ellstrand and Elam, 1993)
+
+##### Novel model
+- Small populations are expected to lose genetic variation (drift and inbreeding) and also by reduced heritability [n.b. connection here not clear or explicit]
+- G&H modified such that h^2 = h^2_{max} N / (N + N_{0.5})
+	- N_{0.5} is population size where heritability is half of max (h^2_{max})
+	- Fig. 1 shows that with increasing N_{0.5}, lower depth, longer to depth
+	- [n.b. this means that heritability can recover? mutations?]
+- Fig. 2: extinct populations - heritability, maladaptation, etc. still track over time...? (I suppose "extinct" simply means below an extinction threshold)
+- "even though fitness always increases, it is possible for it to be unable to reach 1 in the limit, if the slowdown in evolution is sufficiently rapid [...]. In this case, the population size asymptotically approaches 0. This model illustrates one possible cause of the 'extinction vortex' identified by Gilpin and Soule (1986)'
+- Varying initial population size also has dramatic effect: lower size increases extinction risk
+	- "This model thus reveals a kind of bi-stability - initially small populations decline inexorably towards extinction, whereas larger populations with the sae population parameters eventually rebound in numbers and persist" (see Figs. 3, 4)
+- "This model should be viewed as a heuristic exercise, since the relationship between population size and genetic variation is unlikely to be as tightly bound as we have assumed."
+
+##### Novel IBM
+- Based on Burger and Lynch (1995); see Holt et al., 2003
+- $n$ diploid loci, randomly segregated w/ no dominance or epistasis
+	- mutations at rate $n\mu$ (add gaussian RV to allele)
+	- alleles take any real value...?
+- demography: hermpaphroditic, stochastc mate choice, deterministic number of offspring ($f$)
+
+###### Analysis of IBM
+- Is genetics at the time of environmental change important?
+	- Initialized 100 populations, simulated for 1000 generations, then used these in a changed environment
+	- Compared probability of persistence with a null distribution to see if initial genetics had influence on probability of persistence
+	- It did (i.e., initial genetic makeup influences persistence risk)
+- Genetic mean and genetic variance of starting population: significantly influences persistence probabilities but low R2
+	- n.b. initial mean was consistent, low variation
+	- mean + 2*sd (upper tail of the genetic distribution) was significant, R2 approx 68%
+- Extinction risk over time: most extinctions occurred in initial stages of simulations
+- Figs. 9, 10 shows pop. size and heritability over time for extant (>100 time steps) and extinct (surviving to time step 25 but not to 100)
+	- This is good - shows average trajectory of each
+	- Heritability - this doesn't look right at all. Why does heritability increase in extant populations? Mutations? They say it's "complex"...
+	- "Therefore, failure of evolutionary rescue could occur in part because sometmes heritability does drop at low population size"
+	- "nitially, however, in contrast to what was assumed in the determnstic model, heritability actually rises after the environmental change, even though population size is declining. A likely reason for this is that there were alleles segregating at low frequency in the pre-disturbance environment that now become advantageous in the new envronment. As their frequency rises, there can be a transient increase in genetic variance, as since it takes a while for previously favored alleles to be selected out of the population. But then genetic variance declines again as the newly favoured alleles increase towards fixation (without getting there) in the new environment."
+- "The bottom-line of the individual-based model is that evolutionary rescue becomes more predictable if one includes information about several aspects of the entire distribution of genotypic values, not just the mean or variance."
+
+This paper presents a two models that are quite similar to ours. The first model has a heuristic (non-mechanistic) heritability but is otherwise deterministic. The second is an IBM with a couple of sources of stochasticity and a finite number of loci. The second genetics in this model are smilar to ours, except in this model the alleles take on any real value rather than ours. Ours might have more analytic tractabilty, although we don't exploit it. We also can explore genetic aspects of this model a little bit more (fixations). Notably, the genetic model here features mutations, which allow heritability to increase.
+
+They highlight feedback loops and the extinction vortex here. This removes some of the novelty from our models. Shoot. Although, we can still mention that NDD increases extinction risk by steepening the vortex. There are some similar results for us to think about and compare with (e.g., mutations happening during the first several timesteps).
+
+The importance of initial genetic variation is highlighted here. Using mean + 2sd is a good idea. One thing it makes me think is that there's some confounding with the bottleneck - initial population in bottlenecks whereas all trials are independent in the non-bottlenecked populations.
+
