@@ -43,6 +43,10 @@ Running in a different part of parameter space may also cause th lines to conver
 
 A thing to consider: if we up the extinction probability (as suggested above) we further confound any differences induced by low population variation. 
 
+**Update August 20** Trying to run trials with a large initial population size actually will erase diferences the model is trying to show. Large initial population size means populations will not be as small at their lowest points, meaning the deterioration will be small. One solution is perhaps to decrease the genetic distance (initial load, d_0).  
+
+Another problem is that our mean population change deviates substantially from the G&H estimates and I am not sure why. Obviously the model is dfferent, but that difference is apparently huge. Specifically in the high variation models, genotypic change is much slower than what is predicted in the models. It also has a strange shape - not very geometric looking in the first several timesteps. I checked the estimates going in to the Lande/G&H expression and I am pretty sure they are correct. What gives?
+
 ### True sampling variation
 
 Not a novel insight, but the bottlenecked trials are not independent of each other (big effect of population line). This should increase the sampling variation and requires some thought for calculating standard error. Is it really as simple as thinking hierarchically - summing together within- and among-population variation for each time step? Ask Brett.
