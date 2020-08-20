@@ -3,23 +3,41 @@ library(dplyr)
 library(tidyr)
 library(tidyselect)
 
-setwd('simulations/outputs/thrice_bottlenecked_results/')
+setwd('')
+
+### Load in parameters
+
+global.pars = data.frame(
+  end.time = 15,
+  init.row = 1e4,
+  n.loci = 25,
+  w.max = 2,
+  theta = 2.6,
+  wfitn = sqrt(1 / 0.14 / 2),
+  sig.e = 0.5,
+  pos.p = 0.5,
+  alpha = 0.0035
+)
 
 ### Population size data
 
-a0n = read.csv('a000_evotrue_all_n.csv') %>%
+a0n = read.csv('simulations/outputs/thrice_bottlenecked_results/a000_evotrue_all_n.csv') %>%
   mutate(ndd = FALSE) %>%
-  merge(y = read.csv('a000_evotrue_all_demo.csv') %>%
+  merge(y = read.csv('simulations/outputs/thrice_bottlenecked_results/a000_evotrue_all_demo.csv') %>%
           select(n.pop0, bottleneck, gen, n.trials))
-a3n = read.csv('a035_evotrue_all_n.csv') %>%
+a3n = read.csv('simulations/outputs/thrice_bottlenecked_results/a035_evotrue_all_n.csv') %>%
   mutate(ndd = TRUE) %>%
-  merge(y = read.csv('a035_evotrue_all_demo.csv') %>%
+  merge(y = read.csv('simulations/outputs/thrice_bottlenecked_results/a035_evotrue_all_demo.csv') %>%
           select(n.pop0, bottleneck, gen, n.trials))
 
 alln = rbind(a0n, a3n)
 
 ## All treatment figure
-ggplot(alln, aes(x = gen)) +
+## This would be Figure 1 in manuscript (or at least first fig in results)
+
+ggplot(alln %>% 
+         mutate(init.size = factor(ifelse(n.pop0 < 50, 'Initially small', 'Initially large'))), 
+       aes(x = gen)) +
   geom_segment(
     aes(x = 1, xend = max(gen), y = n.pop0, yend = n.pop0),
     linetype = 2,
@@ -40,11 +58,11 @@ ggplot(alln, aes(x = gen)) +
     alpha = 0.2,
     size = 0.125
   ) +
-  scale_color_manual(values = c('black', 'purple'),
+  scale_color_manual(values = c('black', 'slateblue1'),
                      labels = c("Density\nindependent",
                                 "Density\ndependent"),
                      name = "Growth form") +
-  scale_fill_manual(values = c('black', 'purple'),
+  scale_fill_manual(values = c('black', 'slateblue1'),
                     labels = c("Density\nindependent",
                                "Density\ndependent"),
                     name = "Growth form") +
@@ -54,8 +72,10 @@ ggplot(alln, aes(x = gen)) +
   labs(x = 'Generation',
        y = 'Mean population size') +
   scale_y_log10(limits = c(9, 1180)) +
+  facet_wrap(~ init.size) +
   theme(panel.background = element_blank(),
-        legend.position = 'bottom')
+        legend.position = 'bottom') +
+  ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_1.pdf')
 
 
 ##
@@ -106,16 +126,17 @@ ext.plot +
 
 ### Demographic data
 
-a0demo = read.csv('a000_evotrue_all_demo.csv') %>% 
+a0demo = read.csv('simulations/outputs/thrice_bottlenecked_results/a000_evotrue_all_demo.csv') %>% 
   mutate(ndd = FALSE) %>%
-  merge(y = read.csv('a000_evotrue_all_n.csv') %>%
+  merge(y = read.csv('simulations/outputs/thrice_bottlenecked_results/a000_evotrue_all_n.csv') %>%
           select(n.pop0, bottleneck, gen, pext))
-a3demo = read.csv('a035_evotrue_all_demo.csv') %>% 
+a3demo = read.csv('simulations/outputs/thrice_bottlenecked_results/a035_evotrue_all_demo.csv') %>% 
   mutate(ndd = TRUE) %>%
-  merge(y = read.csv('a035_evotrue_all_n.csv') %>%
+  merge(y = read.csv('simulations/outputs/thrice_bottlenecked_results/a035_evotrue_all_n.csv') %>%
           select(n.pop0, bottleneck, gen, pext))
 
 alldemo = rbind(a0demo, a3demo)
+
 
 ggplot(alldemo, aes(x = gen)) +
   geom_segment(
@@ -167,13 +188,13 @@ ggplot(alldemo, aes(x = gen)) +
 
 ### Genetic data
 
-a0gene = read.csv('a000_evotrue_all_gene.csv') %>%
+a0gene = read.csv('simulations/outputs/thrice_bottlenecked_results/a000_evotrue_all_gene.csv') %>%
   mutate(ndd = FALSE) %>%
-  merge(y = read.csv('a000_evotrue_all_demo.csv') %>%
+  merge(y = read.csv('simulations/outputs/thrice_bottlenecked_results/a000_evotrue_all_demo.csv') %>%
           select(n.pop0, bottleneck, gen, n.trials))
-a3gene = read.csv('a035_evotrue_all_gene.csv') %>%
+a3gene = read.csv('simulations/outputs/thrice_bottlenecked_results/a035_evotrue_all_gene.csv') %>%
   mutate(ndd = TRUE) %>%
-  merge(y = read.csv('a035_evotrue_all_demo.csv') %>%
+  merge(y = read.csv('simulations/outputs/thrice_bottlenecked_results/a035_evotrue_all_demo.csv') %>%
           select(n.pop0, bottleneck, gen, n.trials))
 
 allgene = rbind(a0gene, a3gene)
@@ -275,3 +296,76 @@ ggplot(allgene %>% filter(!bottleneck & !ndd), aes(x = gen)) +
         legend.position = 'bottom') +
   ggsave('~/Documents/Research/boulder/scott_rescue/esa_2020/genvar_fig_highvar_black_only.pdf',
          width = 10, height = 5)
+
+# Re-plot genotypes but with G&H estimates
+
+pred.ds = expand.grid(bottleneck = c(TRUE, FALSE),
+                      n.pop0 = c(20, 60),
+                      gen = 1:global.pars$end.time) %>%
+  merge(y = allgene %>% 
+          filter(gen %in% 1, ndd) %>%
+          select(bottleneck, n.pop0, vbar),
+        by = c('bottleneck', 'n.pop0')) %>%
+  rename(v1 = vbar) %>%
+  mutate(
+       k = with(global.pars, (wfitn^2 + sig.e^2) / (wfitn^2 + sig.e^2 + v1)),
+       dt = global.pars$theta * k^(gen-1),
+       zt = global.pars$theta - dt
+       )
+
+pred.ds
+
+ggplot(alldemo, aes(x = gen)) +
+  geom_segment(
+    aes(x = 1, xend = 15, y = 1, yend = 1),
+    linetype = 3, colour = 'gray'
+  ) +
+  geom_line(
+    aes(y = zbar,
+        group = interaction(n.pop0, ndd, bottleneck),
+        colour = ndd)
+  ) +
+  geom_ribbon(
+    aes(ymin = zbar - 2 * sqrt(zvar / n.trials),
+        ymax = zbar + 2 * sqrt(zvar / n.trials),
+        group = interaction(n.pop0, ndd, bottleneck),
+        fill = ndd),
+    alpha = 0.2
+  ) +
+  geom_line(
+    data = pred.ds,
+    aes(x = gen, y = zt),
+    linetype = 2
+  ) +
+  scale_color_manual(values = c('black', 'purple')) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  facet_wrap(n.pop0 ~ bottleneck) +
+  theme(panel.background = element_blank(),
+        legend.position = 'bottom')
+
+# Well... G&H doesn't match at all.
+# What the heck is happening here? 
+
+ggplot(alldemo, aes(x = gen)) +
+  geom_segment(
+    aes(x = 1, xend = 15, y = 1, yend = 1),
+    linetype = 3, colour = 'gray'
+  ) +
+  geom_line(
+    aes(y = zbar,
+        group = interaction(n.pop0, ndd, bottleneck),
+        colour = ndd,
+        linetype = bottleneck)
+  ) +
+  geom_ribbon(
+    aes(ymin = zbar - 2 * sqrt(zvar / n.trials),
+        ymax = zbar + 2 * sqrt(zvar / n.trials),
+        group = interaction(n.pop0, ndd, bottleneck),
+        fill = ndd),
+    alpha = 0.2
+  ) +
+  scale_color_manual(values = c('black', 'purple')) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  facet_wrap(n.pop0 ~ .) +
+  theme(panel.background = element_blank(),
+        legend.position = 'bottom')
