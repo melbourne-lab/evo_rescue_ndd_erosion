@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 *nohup.out
+*.html
+*.Rmd
