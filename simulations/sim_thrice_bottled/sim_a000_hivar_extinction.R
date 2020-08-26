@@ -61,7 +61,7 @@ for (i in 1:nrow(pars)) {
     group_by(gen) %>%
     summarise(n = sum(n)) %>%
     ungroup()
-  print(paste0('ndd non-bottle ', i, ' of ', nrow(pars)))
+  print(paste0('non-bottle ', i, ' of ', nrow(pars)))
 }
 
 all.vhi.sizes = unroller(liszt.vhi)
