@@ -47,7 +47,7 @@ for (i in 1:nrow(pars)) {
               g_t = mean(g_i),
               z_t = mean(z_i),
               w_t = mean(w_i))
-  print(paste0('ndd hi var ', i, ' of ', nrow(pars)))
+  print(paste0('hi var ', i, ' of ', nrow(pars)))
 }
 
 all.vhi.trials = unroller(liszt.vhi) %>%

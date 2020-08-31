@@ -38,7 +38,7 @@ pars = expand.grid(local.trial = 1:trials,
 
 liszt.vlo = vector('list', nrow(pars))
 
-set.seed(853443)
+set.seed(447)
 
 for (i in 1:nrow(pars)) {
   pop.init = init.sim(a = c(1/2, -1/2),
