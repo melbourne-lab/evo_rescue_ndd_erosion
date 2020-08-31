@@ -21,11 +21,11 @@ source('base_model_source/sim_functions.R')
 
 # Load source populations
 # (do this now to get the population numbers)
-neck.popns = read.csv('simulations/prepare_simulations/outputs/thrice_bottlenecked_popns.csv',
+neck.popns = read.csv('simulations/prepare_simulations/outputs/thrice_bottlenecked_600s.csv',
                       stringsAsFactors = FALSE)
 
 # Define number of trials per source populations
-trials.per = 42
+trials.per = 75
 
 pars = expand.grid(pop.id = unique(neck.popns$trial),
                    pop.trial = 1:trials.per,
@@ -43,7 +43,7 @@ pars = expand.grid(pop.id = unique(neck.popns$trial),
 
 liszt.vhi = vector('list', nrow(pars))
 
-set.seed(4572899)
+set.seed(457289)
 
 for (i in 1:nrow(pars)) {
   popid = pars$pop.id[i]

@@ -2,7 +2,7 @@
 # Here, I am extracting mean genotype, phenotype, and fitness for all eight combos.
 # In this script: low genetic variation (bottlenecks), density dependent.
 # SN - adapted from simulations/simulate_evolving_popns.R
-# adapted and run on August 26 2020
+# adapted and run on August 28 2020
 
 ### Clear namespace
 rm(list = ls())
@@ -21,12 +21,13 @@ source('base_model_source/sim_functions.R')
 
 # Load source populations
 # (do this now to get the population numbers)
-neck.popns = read.csv('simulations/prepare_simulations/outputs/thrice_bottlenecked_popns.csv',
+neck.popns = read.csv('simulations/prepare_simulations/outputs/thrice_bottlenecked_600s.csv',
                       stringsAsFactors = FALSE)
 
 # Define number of trials per source populations
-trials.per = 42
+trials.per = 75
 
+# Define parameters
 pars = expand.grid(pop.id = unique(neck.popns$trial),
                    pop.trial = 1:trials.per,
                    n.pop0 = c(20, 60)) %>%
@@ -68,32 +69,74 @@ all.vlo.trials = unroller(liszt.vlo) %>%
   mutate(n.pop0 = n[1],
          ext.gen = max(gen),
          extinct = !ext.gen %in% pars$end.time[1]) %>%
-  ungroup()
+  ungroup() %>%
+  merge(y = pars %>% select(pop.id, global.trial),
+        by.x = 'trial', by.y = 'global.trial')
 
 ### Combine the results.
 
-type.summ.all = all.vlo.trials %>%
+type.summ.all.means =  all.vlo.trials %>%
   group_by(n.pop0, gen) %>%
   summarise(gbar = mean(g_t),
-            gvar = var(g_t),
             zbar = mean(z_t),
-            zvar = var(z_t),
             wbar = mean(w_t),
-            wvar = var(w_t),
             n = n())
+
+type.summ.all.vars = all.vlo.trials %>%
+  group_by(gen, n.pop0, pop.id) %>%
+  summarize(gbar_win_pop = mean(g_t),
+            gvar_win_pop = var(g_t),
+            zbar_win_pop = mean(z_t),
+            zvar_win_pop = var(z_t),
+            wbar_win_pop = mean(w_t),
+            wvar_win_pop = var(w_t)) %>%
+  group_by(n.pop0, gen) %>%
+  summarise(gvar_win = mean(gvar_win_pop, na.rm = TRUE),
+            gvar_amg = var(gbar_win_pop, na.rm = TRUE),
+            gvar_var = var(gvar_win_pop, na.rm = TRUE),
+            zvar_win = mean(zvar_win_pop, na.rm = TRUE),
+            zvar_amg = var(zbar_win_pop, na.rm = TRUE),
+            zvar_var = var(zvar_win_pop, na.rm = TRUE),
+            wvar_win = mean(wvar_win_pop, na.rm = TRUE),
+            wvar_amg = var(wbar_win_pop, na.rm = TRUE),
+            wvar_var = var(wvar_win_pop, na.rm = TRUE))
+
+type.summ.all = merge(type.summ.all.means, type.summ.all.vars,
+                      by = c('n.pop0', 'gen'))
 
 write.csv(type.summ.all, na = '', row.names = FALSE,
           file = 'simulations/outputs/thrice_bottlenecked_results/a035_lovar_type_all.csv')
 
-type.summ.ext = all.vlo.trials %>%
+type.summ.ext.means = all.vlo.trials %>%
   group_by(n.pop0, extinct, gen) %>%
   summarise(gbar = mean(g_t),
-            gvar = var(g_t),
             zbar = mean(z_t),
-            zvar = var(z_t),
             wbar = mean(w_t),
-            wvar = var(w_t),
             n = n())
+
+type.summ.ext.vars = all.vlo.trials %>%
+  group_by(gen, n.pop0, pop.id, extinct) %>%
+  summarize(gbar_win_pop = mean(g_t),
+            gvar_win_pop = var(g_t),
+            zbar_win_pop = mean(z_t),
+            zvar_win_pop = var(z_t),
+            wbar_win_pop = mean(w_t),
+            wvar_win_pop = var(w_t)) %>%
+  group_by(n.pop0, extinct, gen) %>%
+  summarise(gvar_win = mean(gvar_win_pop, na.rm = TRUE),
+            gvar_amg = var(gbar_win_pop, na.rm = TRUE),
+            gvar_var = var(gvar_win_pop, na.rm = TRUE),
+            zvar_win = mean(zvar_win_pop, na.rm = TRUE),
+            zvar_amg = var(zbar_win_pop, na.rm = TRUE),
+            zvar_var = var(zvar_win_pop, na.rm = TRUE),
+            wvar_win = mean(wvar_win_pop, na.rm = TRUE),
+            wvar_amg = var(wbar_win_pop, na.rm = TRUE),
+            wvar_var = var(wvar_win_pop, na.rm = TRUE))
+
+type.summ.ext = merge(type.summ.ext.means, type.summ.ext.vars,
+                      by = c('n.pop0', 'gen', 'extinct'))
+
+# what to do about NaNs?
 
 write.csv(type.summ.ext, na = '', row.names = FALSE,
           file = 'simulations/outputs/thrice_bottlenecked_results/a035_lovar_type_ext.csv')
@@ -102,7 +145,7 @@ write.csv(type.summ.ext, na = '', row.names = FALSE,
 # Save all simulation output
 # save(liszt.vhi, liszt.vlo, file = 'out/bottleneck_adapted_outputs.RData')
 
-type.summ.gen = all.vlo.trials %>%
+type.summ.gen.means = all.vlo.trials %>%
   group_by(n.pop0, ext.gen, gen) %>%
   summarise(gbar = mean(g_t),
             gvar = var(g_t),
@@ -111,6 +154,29 @@ type.summ.gen = all.vlo.trials %>%
             wbar = mean(w_t),
             wvar = var(w_t),
             n = n())
+
+type.summ.gen.vars = all.vlo.trials %>%
+  group_by(gen, n.pop0, pop.id, ext.gen) %>%
+  summarize(gbar_win_pop = mean(g_t),
+            gvar_win_pop = var(g_t),
+            zbar_win_pop = mean(z_t),
+            zvar_win_pop = var(z_t),
+            wbar_win_pop = mean(w_t),
+            wvar_win_pop = var(w_t)) %>%
+  group_by(n.pop0, ext.gen, gen) %>%
+  summarise(gvar_win = mean(gvar_win_pop, na.rm = TRUE),
+            gvar_amg = var(gbar_win_pop, na.rm = TRUE),
+            gvar_var = var(gvar_win_pop, na.rm = TRUE),
+            zvar_win = mean(zvar_win_pop, na.rm = TRUE),
+            zvar_amg = var(zbar_win_pop, na.rm = TRUE),
+            zvar_var = var(zvar_win_pop, na.rm = TRUE),
+            wvar_win = mean(wvar_win_pop, na.rm = TRUE),
+            wvar_amg = var(wbar_win_pop, na.rm = TRUE),
+            wvar_var = var(wvar_win_pop, na.rm = TRUE))
+
+type.summ.gen = merge(type.summ.gen.means, type.summ.gen.vars,
+                      by = c('n.pop0', 'gen', 'ext.gen')) %>%
+  arrange(n.pop0, gen, ext.gen)
 
 write.csv(type.summ.gen, na = '', row.names = FALSE,
           file = 'simulations/outputs/thrice_bottlenecked_results/a035_lovar_type_gen.csv')
