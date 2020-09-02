@@ -285,7 +285,7 @@ gen.g %>%
     aes(
       ymin = vbar - 2 * sqrt(vvar / n),
       ymax = vbar + 2 * sqrt(vvar / n),
-      group = interaction(n.pop0, hi.var, ndd, ext.gen),
+      group = interaction(n.pop0, hi.var, ndd, ext.gen)
       #fill = p
     ),
     alpha = 0.1
@@ -304,7 +304,7 @@ gen.g %>%
     aes(
       ymin = vbar - 2 * sqrt(vvar / n),
       ymax = vbar + 2 * sqrt(vvar / n),
-      group = interaction(n.pop0, hi.var, ndd),
+      group = interaction(n.pop0, hi.var, ndd)
       #fill = p
     ),
     alpha = 0.1
@@ -342,7 +342,7 @@ gen.g %>%
       y = vbar,
       group = interaction(n.pop0, hi.var, ndd)
     ),
-    colour = 'black',
+    colour = 'black'
   )  +
   geom_ribbon(
     data = . %>% filter(ext.gen %in% 15),
@@ -377,3 +377,95 @@ gen.g %>%
     ),
     sides = 'b'
   )
+
+### Combining (with cowplot)
+
+library(cowplot)
+
+comp.pool.plot = all.g %>%
+  ggplot(aes(x = gen)) +
+  geom_line(
+    aes(
+      y = vbar,
+      group = interaction(n.pop0, hi.var, ndd),
+      colour = ndd
+    )
+  ) +
+  geom_ribbon(
+    aes(
+      ymin = vbar - 2 * sqrt(vvar / n),
+      ymax = vbar + 2 * sqrt(vvar / n),
+      group = interaction(n.pop0, hi.var, ndd),
+      fill = ndd
+    ),
+    alpha = 0.1
+  ) +
+  scale_y_continuous(limits = c(0, 0.5)) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  scale_colour_manual(values = c('black', 'purple')) +
+  guides(colour = guide_legend("Growth form", nrow = 1),
+         fill = guide_legend("Growth form", nrow = 1)) +
+  labs(x = '', y = 'Genetic variation') +
+  facet_wrap( ~ paste(hi.var, n.pop0, sep = ', '), ncol = 4) +
+  theme(panel.background = element_rect(fill = 'white'),
+        panel.grid = element_line(colour = 'gray88'),
+        panel.border = element_rect(fill = NA),
+        legend.position = 'none')
+
+comp.pool.plot
+
+gent.pool.plot = gen.g %>%
+  ggplot(aes(x = gen)) +
+  geom_line(
+    data = . %>% filter(ext.gen < 15),
+    aes(
+      y = vbar,
+      group = interaction(n.pop0, hi.var, ndd, ext.gen),
+      colour = ext.gen
+    )
+  ) +
+  geom_ribbon(
+    data = . %>% filter(ext.gen < 15),
+    aes(
+      ymin = vbar - 2 * sqrt(vvar / n),
+      ymax = vbar + 2 * sqrt(vvar / n),
+      group = interaction(n.pop0, hi.var, ndd, ext.gen),
+      fill = ext.gen
+    ),
+    alpha = 0.1
+  ) +
+  geom_line(
+    data = . %>% filter(ext.gen %in% 15),
+    aes(
+      y = vbar,
+      group = interaction(n.pop0, hi.var, ndd)
+    ),
+    colour = 'black'
+  )  +
+  geom_ribbon(
+    data = . %>% filter(ext.gen %in% 15),
+    aes(
+      ymin = vbar - 2 * sqrt(vvar / n),
+      ymax = vbar + 2 * sqrt(vvar / n),
+      group = interaction(n.pop0, hi.var, ndd)
+    ),
+    fill = 'black',
+    alpha = 0.1
+  ) +
+  scale_colour_gradient(low = 'lightpink1', high = 'darkred') +
+  scale_fill_gradient(low = 'lightpink1', high = 'darkred') +
+  guides(colour = guide_legend("Extinction\ngeneration"),
+         fill = guide_legend('Extinction\ngeneration')) +
+  labs(x = 'Generation', y = 'Genetic variation') +
+  facet_wrap(ndd ~ paste(hi.var, n.pop0, sep = ', '), ncol = 4) +
+  theme(panel.background = element_blank(),
+        panel.border = element_rect(fill = NA),
+        panel.grid = element_line(colour = 'gray88'),
+        legend.position = 'none')
+
+gent.pool.plot
+
+comb.plots = plot_grid(comp.pool.plot, NULL, gent.pool.plot, 
+                       ncol = 1, rel_heights = c(1, -0.1, 2))
+
+comb.plots
