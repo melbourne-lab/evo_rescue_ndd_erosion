@@ -56,14 +56,14 @@ all.n %>%
       group = interaction(ndd, n.pop0, low.var),
       colour = factor(ndd),
       linetype = low.var
-    )
+    ),
+    size = 1.25
   ) +
   geom_ribbon(
     aes(
       ymin = nbar - 2 * sqrt(nvar / n.trials),
       ymax = nbar + 2 * sqrt(nvar / n.trials),
       group = interaction(ndd, n.pop0, low.var),
-      colour = factor(ndd),
       fill = factor(ndd)
     ),
     alpha = 0.2,
@@ -72,23 +72,28 @@ all.n %>%
   scale_color_manual(
     values = c('black', 'purple'),
     labels = c("Density\nindependent", "Density\ndependent"),
-    name = "Growth form"
+    name = ""
   ) +
   scale_fill_manual(
     values = c('black', 'purple'),
     labels = c("Density\nindependent", "Density\ndependent"),
-    name = "Growth form"
+    name = ""
   ) +
   scale_linetype(
-    name = "Genetic variation",
-    labels = c("High", "Low")
+    name = "",
+    labels = c("High variation", "Low variation")
   ) +
   labs(x = 'Generation', y = 'Mean population size') +
   scale_y_log10() +
   facet_wrap(~ init.size) +
   theme(panel.background = element_blank(),
         panel.border = element_rect(fill = NA),
-        legend.position = 'bottom') +
+        legend.background = element_rect(fill = NA),
+        legend.direction = 'horizontal',
+        legend.position = c(0.2, 0.8),
+        legend.text = element_text(size = 12),
+        strip.background = element_rect(colour = 'black'),
+        strip.text = element_text(size = 12)) +
   ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_1.pdf',
          width = 8, height = 5)
 
@@ -116,7 +121,8 @@ inst.probs = ggplot(all.d %>% filter(gen < 15), aes(x = gen)) +
   facet_wrap( ~ paste(n.pop0, bottleneck, sep = ', '), ncol = 1) +
   labs(x = 'Generation', y = 'Probability of extinction') +
   theme(legend.position = 'none',
-        panel.background = element_blank())
+        panel.background = element_blank(),
+        strip.background = element_rect(colour = 'black'))
 
 cuml.probs = ggplot(all.d %>% filter(gen < 15), aes(x = gen)) +
   geom_ribbon(
@@ -132,7 +138,8 @@ cuml.probs = ggplot(all.d %>% filter(gen < 15), aes(x = gen)) +
   labs(x = 'Generation') +
   facet_wrap( ~ paste(n.pop0, bottleneck, sep = ', '), ncol = 1) +
   theme(legend.position = 'none',
-        panel.background = element_blank())
+        panel.background = element_blank(),
+        strip.background = element_rect(colour = 'black'))
 
 extinct.legend = get_legend(
   inst.probs + 
