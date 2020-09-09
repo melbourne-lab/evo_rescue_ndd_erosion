@@ -400,7 +400,7 @@ table(all.midps$trial)
 
 # Try a bigger batch of sims
 
-herit.trials = 500
+herit.trials = 1500
 herit.list = vector('list', length = herit.trials)
 
 set.seed(578)
@@ -421,14 +421,14 @@ table(all.midps$trial)
 
 all.h2s = all.midps %>%
   group_by(trial) %>%
-  mutate(var.a = var(g_i_dad) + var(g_i_mom),
-         cov.mpz = cov(z_midp, z_i),
-         narrow.h2.var = var.a / var(z_i),
-         broads.h2.var = var(g_i) / var(z_i),
-         broads.h2.cov = (cov(g_i, z_i) / (sd(g_i) * sd(z_i)))^2,
-         broads.h2.cor = cor(g_i, z_i)^2,
-         cov.g.z = cov(g_i, z_i),
-         var.g = var(g_i)) %>%
+  summarise(var.a = var(g_i_dad) + var(g_i_mom),
+            cov.mpz = cov(z_midp, z_i),
+            narrow.h2.var = var.a / var(z_i),
+            broads.h2.var = var(g_i) / var(z_i),
+            broads.h2.cov = (cov(g_i, z_i) / (sd(g_i) * sd(z_i)))^2,
+            broads.h2.cor = cor(g_i, z_i)^2,
+            cov.g.z = cov(g_i, z_i),
+            var.g = var(g_i)) %>%
   ungroup()
 
 all.h2s %>% select(contains('h2')) %>% plot()
@@ -445,18 +445,134 @@ abline(0, 1, col = 'blue')
 lm(cov.g.z ~ var.g, all.h2s) %>% summary()
 abline(lm(cov.g.z ~ var.g, all.h2s), col = 'orange')
 # This actually looks good
-# some evidence for non-zero intercept, non-1 slope
-# hmm...
+# some evidence of non-1 slope but intercept is 0
 lm(cov.g.z ~ var.g - 1, all.h2s) %>% summary()
 abline(lm(cov.g.z ~ var.g - 1, all.h2s), col = 'red')
-# still slightly less than 1.
-# This looks like there is the tiniest amount of negative covariation between g and e??
+# forced through zero that slope is basically 1
 
 with(all.h2s, hist(cov.g.z / var.g))
 with(all.h2s, mean(cov.g.z / var.g))
-# covariance is *slightly* smaller
+# covariance is *slightly* smaller but not appreciably
 
 all.h2s %>% select(contains('h2')) %>% apply(2, mean)
 # broad sense heritabilities look fine
 # very weird that the covariance-based one is lower (also that correlation is basically zero!)
 # narrow sense heritabilities are g-darn whack though
+# note that narrow sense is way off... have to go back and look at what's going on here
+
+all.midps %>% 
+  group_by(trial) %>% 
+  summarise(cov.g.e = cov(g_i, z_i - g_i)) %>%
+  ungroup() %>%
+  summarise(m = mean(cov.g.e), double.se = 2 * var(cov.g.e / sqrt(n)))
+# very slightly negative covariance but... is that just noise?
+
+all.midps %>%
+  ggplot(aes(x = g_i, y = z_i - g_i)) +
+  geom_point(position = position_jitter(width = 0.03)) +
+  stat_smooth(method = 'lm')
+
+all.midps %>% mutate(e_i = z_i - g_i) %>%
+  lm(formula = e_i ~ g_i) %>% summary()
+# nah this is n.s.
+
+# Try this again
+# NOTE: sourcing a script where the g_i has been moved outside the call to rnorm
+source('base_model_source/sim_functions_pedigreed.R')
+
+herit.trials = 1000
+herit.list = vector('list', length = herit.trials)
+
+set.seed(5782)
+for (i in 1:herit.trials) herit.list[[i]] = sim.par.id(params = pars[i,])
+
+herit.sims = unroller(herit.list)
+
+all.midps = merge(x = herit.sims %>% filter(gen %in% 2),
+                  y = herit.sims %>% filter(gen %in% 1) %>% select(i, g_i, z_i, trial),
+                  # x is offspring, y is parent
+                  by.x = c('mom_i', 'trial'), by.y = c('i', 'trial'), suffixes = c('', '_mom')) %>%
+  merge(y = herit.sims %>% filter(gen %in% 1) %>% select(i, g_i, z_i, trial),
+        by.x = c('dad_i', 'trial'), by.y = c('i', 'trial'), suffixes = c('', '_dad')) %>%
+  mutate(z_midp = (z_i_mom + z_i_dad) / 2,
+         g_midp = (g_i_mom + g_i_dad) / 2)
+
+all.h2s = all.midps %>%
+  group_by(trial) %>%
+  summarise(var.a = var(g_i_dad) + var(g_i_mom),
+            cov.mpz = cov(z_midp, z_i),
+            narrow.h2.var = var.a / var(z_i),
+            broads.h2.var = var(g_i) / var(z_i),
+            broads.h2.cov = (cov(g_i, z_i) / (sd(g_i) * sd(z_i)))^2,
+            broads.h2.cor = cor(g_i, z_i)^2,
+            cov.g.z = cov(g_i, z_i),
+            var.g = var(g_i)) %>%
+  ungroup()
+
+all.h2s %>% select(contains('h2')) %>% apply(2, mean)
+# once again, the broad-sense with variance is greater than the broad sense with covariance.
+
+# Comparing variance in genotypes with covariance between genos and phenos
+plot(cov.g.z ~ var.g, all.h2s)
+abline(0, 1, col = 'blue')
+lm(cov.g.z ~ var.g, all.h2s) %>% summary()
+abline(lm(cov.g.z ~ var.g, all.h2s), col = 'orange')
+lm(cov.g.z ~ var.g - 1, all.h2s) %>% summary()
+abline(lm(cov.g.z ~ var.g - 1, all.h2s), col = 'red')
+# eh... look much more similar now
+
+all.h2s %>%
+  ggplot(aes(x = var.g, y = cov.g.z)) +
+  geom_point() +
+  stat_smooth(method = 'lm', col = 'orange') +
+  geom_segment(aes(x = 0.25, y = 0.25, xend = 1, yend = 1),
+               colour = 'blue')
+# with 1000 trials and a different seed, this looks in.
+
+# does var.e vary with var.g?
+all.midps %>% 
+  group_by(trial) %>% 
+  summarise(var.g = var(g_i), var.e = var(z_i - g_i)) %>% 
+  ggplot(aes(var.g, var.e)) + 
+  geom_point() + 
+  stat_smooth(method = 'lm')
+# hmm... not certain enough to see a relationship
+
+# what about covariation
+all.midps %>% 
+  group_by(trial) %>% 
+  summarise(cov.g.e = cov(g_i, z_i - g_i)) %>% 
+  ungroup() %>%
+  ggplot(aes(x = cov.g.e)) +
+  geom_histogram(binwidth = 0.01) 
+
+all.midps %>% 
+  group_by(trial) %>% 
+  summarise(cov.g.e = cov(g_i, z_i - g_i)) %>%
+  ungroup() %>%
+  summarise(m = mean(cov.g.e), double.se = 2 * var(cov.g.e / sqrt(n)))
+# with 1000 trials and a different seed, covariance is positive...
+# (wth 500 and original seed, was not)
+
+all.midps %>%
+  ggplot(aes(x = g_i, y = z_i - g_i)) +
+  geom_point(position = position_jitter(width = 0.02)) +
+  stat_smooth(method = 'lm')
+
+# Okay - did a lot of stuff today. (Wed. September 9)
+# To what avail?
+
+# Three different ways of calculating heritability give slightly different answers.
+# I think the var(g) / var(z) overestimates h2
+# (relative to the correlation squared)
+# this says that the var(g) does not necessarily equal cov(g+e, g)
+# (i.e., that cov(e,g) is not zero)
+# but evidence of covariance between e and g, though, is not convincing.
+# (i.e., cov(e,g) may be zero!)
+# Which of these belongs in the Lande equation? The correlation/covariance
+# expression or the variance one?
+# On this note, what to make of correlations between these? What does it mean
+# that relationships between covariances and variances are so wildly different?
+# Also, haven't even considered the narrow-sense heritability, which looks way off.
+# How does narrow-sense heritability play into Lande?
+
