@@ -251,7 +251,7 @@ com2 %>%
 # Yes, lande's expression is correct (should just be the integral)
 
 com2 %>%
-  mutate(wsum = (d1 * evar + dw1a * gvar) / (evar + gvar))) %>%
+  mutate(wsum = (d1 * evar + dw1a * gvar) / (evar + gvar)) %>%
   ggplot() +
   geom_point(aes(x = wsum, y = d2)) +
   geom_segment(aes(x = 2, xend = 3, y = 2, yend = 3), colour = 'blue')
@@ -271,6 +271,10 @@ com2 %>%
   geom_point(aes(x = wzum, y = d2)) +
   geom_segment(aes(x = 2, xend = 2.75, y = 2, yend = 2.75), colour = 'blue')
 
+# In both cases, seeing the same pattern
+# the new phenotype is *greater* than it the heritability-weighted sum
+# (this means that either the expression is wrong, or h2 is wrong).
+
 # So what's the problem...?
 # Think mechanistically...
 
@@ -279,3 +283,180 @@ com2 %>%
 # i.e., (w^2 + sig.e^2) / (w^2 + sig.e^2 + sig.a^2) is *larger* than expected
 # i.e., (1 - h2 (sig^2) / (w^2 + sig^2)) is *larger* than expected
 # (could be: h2, sig.e, sig, sig.a)
+
+### Go back to the big batch of sims.
+
+# What is the correct k?
+
+comp %>%
+  mutate(k_obs = d2 / d1) %>%
+  ggplot() +
+  geom_histogram(aes(x = k_obs))
+
+comp %>%
+  mutate(w2 = pars$wfitn[1]^2,
+         k_obs = d2 / d1) %>%
+  ggplot() +
+  geom_point(aes(x = (w2 + evar) / (w2 + zvar),
+                 y = k_obs)) +
+  geom_segment(aes(x = 0.8, y = 0.8, xend = 1.0, yend = 1.0),
+               colour = 'blue') +
+  stat_smooth(aes(x = (w2 + evar) / (w2 + zvar),
+                  y = k_obs),
+              colour = 'orange',
+              method = 'lm')
+
+comp %>%
+  mutate(w2 = pars$wfitn[1]^2,
+         k_obs = d2 / d1) %>%
+  ggplot() +
+  geom_point(aes(x = (w2 + evar) / (w2 + evar + gvar),
+                 y = k_obs)) +
+  geom_segment(aes(x = 0.8, y = 0.8, xend = 1.0, yend = 1.0),
+               colour = 'blue') +
+  stat_smooth(aes(x = (w2 + evar) / (w2 + zvar),
+                  y = k_obs),
+              colour = 'orange',
+              method = 'lm')
+
+# Here too, estimates are biased
+# k_obs is greater than what is k as predicted above
+# (because we just dropped the d1 term from both sides of the equation)
+
+comp %>%
+  mutate(w2 = pars$wfitn[1]^2,
+         k_obs = d2 / d1) %>%
+  ggplot() +
+  geom_point(aes(x = 1 - (evar / zvar) * (zvar / (w2 + zvar)),
+                 y = k_obs)) +
+  geom_segment(aes(x = 0.8, y = 0.8, xend = 1.0, yend = 1.0),
+               colour = 'blue') +
+  stat_smooth(aes(x = (w2 + evar) / (w2 + zvar),
+                  y = k_obs),
+              colour = 'orange',
+              method = 'lm')
+
+comp %>% ggplot() + geom_point(aes(x = v, y = gvar), alpha = 0.2)
+mean(comp$gvar)
+# these are the same on average but why aren't they 1-1...?
+# and why is thre such hideously massive variation in gvar?
+
+# (although neither of these seem to be causing the problem)
+
+### Heritability - maybe the model has heritability wrong
+
+# Load in pedigreed sims
+# (note: overrides sim functions)
+source('base_model_source/sim_functions_pedigreed.R')
+
+set.seed(409)
+herit.sim = sim.par.id(params = pars[1,])
+
+head(herit.sim)
+
+midp = merge(x = herit.sim %>% filter(gen %in% 2),
+      y = herit.sim %>% filter(gen %in% 1) %>% select(i, g_i, z_i),
+      # x is offspring, y is parent
+      by.x = 'mom_i', by.y = 'i', suffixes = c('', '_mom')) %>%
+  merge(y = herit.sim %>% filter(gen %in% 1) %>% select(i, g_i, z_i),
+        by.x = 'dad_i', by.y = 'i', suffixes = c('', '_dad')) %>%
+  mutate(z_midp = (z_i_mom + z_i_dad) / 2,
+         g_midp = (g_i_mom + g_i_dad) / 2)
+
+midp
+
+with(midp, cov(z_midp, z_i) / var(z_i)) # 0.229?? that's very small
+# but is this the same thing as broad sense?
+with(midp, var(g_i) / var(z_i)) # 0.598...
+with(midp, cov(g_i, z_i) / var(z_i)) # 0.579...
+# this is just one trial.
+
+# Run a loop.
+
+herit.trials = 2
+herit.list = vector('list', length = herit.trials)
+
+set.seed(578)
+for (i in 1:herit.trials) herit.list[[i]] = sim.par.id(params = pars[i,])
+
+herit.sims = unroller(herit.list)
+
+with(herit.sims, table(trial, gen))
+
+# output should be nrow = 49 + 47
+
+# Can I just include trial in merge...?
+all.midps = merge(x = herit.sims %>% filter(gen %in% 2),
+      y = herit.sims %>% filter(gen %in% 1) %>% select(i, g_i, z_i, trial),
+      # x is offspring, y is parent
+      by.x = c('mom_i', 'trial'), by.y = c('i', 'trial'), suffixes = c('', '_mom')) %>%
+  merge(y = herit.sims %>% filter(gen %in% 1) %>% select(i, g_i, z_i, trial),
+        by.x = c('dad_i', 'trial'), by.y = c('i', 'trial'), suffixes = c('', '_dad')) %>%
+  mutate(z_midp = (z_i_mom + z_i_dad) / 2,
+         g_midp = (g_i_mom + g_i_dad) / 2)
+
+table(all.midps$trial)
+# hell yes.
+
+# Try a bigger batch of sims
+
+herit.trials = 500
+herit.list = vector('list', length = herit.trials)
+
+set.seed(578)
+for (i in 1:herit.trials) herit.list[[i]] = sim.par.id(params = pars[i,])
+
+herit.sims = unroller(herit.list)
+
+all.midps = merge(x = herit.sims %>% filter(gen %in% 2),
+                  y = herit.sims %>% filter(gen %in% 1) %>% select(i, g_i, z_i, trial),
+                  # x is offspring, y is parent
+                  by.x = c('mom_i', 'trial'), by.y = c('i', 'trial'), suffixes = c('', '_mom')) %>%
+  merge(y = herit.sims %>% filter(gen %in% 1) %>% select(i, g_i, z_i, trial),
+        by.x = c('dad_i', 'trial'), by.y = c('i', 'trial'), suffixes = c('', '_dad')) %>%
+  mutate(z_midp = (z_i_mom + z_i_dad) / 2,
+         g_midp = (g_i_mom + g_i_dad) / 2)
+
+table(all.midps$trial)
+
+all.h2s = all.midps %>%
+  group_by(trial) %>%
+  mutate(var.a = var(g_i_dad) + var(g_i_mom),
+         cov.mpz = cov(z_midp, z_i),
+         narrow.h2.var = var.a / var(z_i),
+         broads.h2.var = var(g_i) / var(z_i),
+         broads.h2.cov = (cov(g_i, z_i) / (sd(g_i) * sd(z_i)))^2,
+         broads.h2.cor = cor(g_i, z_i)^2,
+         cov.g.z = cov(g_i, z_i),
+         var.g = var(g_i)) %>%
+  ungroup()
+
+all.h2s %>% select(contains('h2')) %>% plot()
+all.h2s %>% select(contains('h2')) %>% cor()
+# das heck? correlation here is quite bad.
+# (except that squared correlation IS the cov. expression)
+# so - the var expression is _not_ the squared correlation
+# interesting.
+
+# is var(g) same as cov(g, z)?
+plot(cov.g.z ~ var.g, all.h2s)
+abline(0, 1, col = 'blue')
+# plausibly is the same?
+lm(cov.g.z ~ var.g, all.h2s) %>% summary()
+abline(lm(cov.g.z ~ var.g, all.h2s), col = 'orange')
+# This actually looks good
+# some evidence for non-zero intercept, non-1 slope
+# hmm...
+lm(cov.g.z ~ var.g - 1, all.h2s) %>% summary()
+abline(lm(cov.g.z ~ var.g - 1, all.h2s), col = 'red')
+# still slightly less than 1.
+# This looks like there is the tiniest amount of negative covariation between g and e??
+
+with(all.h2s, hist(cov.g.z / var.g))
+with(all.h2s, mean(cov.g.z / var.g))
+# covariance is *slightly* smaller
+
+all.h2s %>% select(contains('h2')) %>% apply(2, mean)
+# broad sense heritabilities look fine
+# very weird that the covariance-based one is lower (also that correlation is basically zero!)
+# narrow sense heritabilities are g-darn whack though
