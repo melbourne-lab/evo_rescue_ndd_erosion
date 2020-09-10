@@ -450,3 +450,27 @@ Very interesting paper, thankfully quite different from ours. Idea here is that 
 
 Here: as the title says, rescue is constrained by genetic load. Accumulation of deleterious mutations due to small population sizes (n.b. comparable to our populations) likely candidate.
 
+### Jain, K., and W. Stephan. 2017. Rapid adaptation of a polygenic trait after a sudden environmental shift. Genetics. 
+
+##### Model
+- Polygenic trait with sudden shift in optimum: diallelic loci ($l$) of unqual effects
+	- see also Jain and Stephan 2015, Wright 1935, Barton 1986, de Vladar and Barton, 2014
+- Infinitely large population of diploids
+- positve allele has (g_i)/2 at freq. p_i and negative is (-g_i)/2
+- trait c1 is the sum across all l loci
+	- n.b. phenotypes are not necessarily gaussian
+- quadratic selection: w(z) = 1 - (s/2)(z-z')^2
+	- somehow produces average fitness which is gaussian-looking
+- analytic expression for dp_i/dt
+	- one term to stabilize the phenotypic mean to optimum value
+	- one term to produce fixation of (one) allele
+	- final term changes between pos/neg alleles (mutations)
+- equilibrium frequencies of p_i are roots of a cubic polynomial
+	- three roots when mean (phenotype?) is optimum
+		- of these, p = 1/2 is stable if effect is strongr than a threshold: 2 * sqrt(2 mu / s)
+		- if selection is weaker than mutation, eqm. freq. is 1/2
+- when most effects are small, equilibrated to a pheno of 0, p approx 1/2
+	- then, dp/dt = S_i p_i q_i for S_i = -s g_i (c1 - zf)
+- closed for expr. for trait mean over time
+
+(resume on p. 392)
