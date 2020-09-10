@@ -408,3 +408,45 @@ The importance of initial genetic variation is highlighted here. Using mean + 2s
 
 Very interesting paper, thankfully quite different from ours. Idea here is that *if the environment returns to its pre-disturbance state* on a short timescale, heritability leads to maladaptation. This is mentioned in the discussion, but this is a question of environmental autocorrelation. The classic rescue model is essentially very high autocorrelation, this in a sense is kind of low (at least in one direction - a ratio of transition probs is high/low). This paper demonstrates how helpful heritability is in these. Thinking about it for two seconds, heritability will of course be helpful overall if the autocorrelation his high!
 
+### Stewart, G.S., et al. 2017. The power of evolutionary rescue is constrained by genetic load. Evolutionary Applications.
+
+##### Framing
+- Evolutionary rescue in diploid sexual reproduction understudied
+- Recessive and deleterious mutations can be masked by dominance but can be revealed at low population size
+- Genetic load: population mean deviance from an optimal phenotoype
+	- Increased as drift and inbreeding increase
+- Genetic load = drift load + inbreeding load
+	- Drift load: fitness of outcross (btwn pop) offspring vs. fitness of within-population randomly mated offspring
+	- Inbreeding load: fitness of mating between relatives vs. random mating within pop
+	- high outcross population is heterosis
+- Founding populations in novel environments: evolving but also possibly could accrue genetic load
+
+##### Experiment
+- Beetles in to either a favorable or unfavorable environment
+- Initial population size: 10 or 40
+- Evolving vs. non-evolving: one-for-one replacement in non-evolving
+- After generation 8, mix populations to assess heterosis
+	- Treatments: mixed evolving, unmixed evolving, non-evolving control
+- Evaluate: 
+	- Did Pr(extinction) vary by treatments
+	- Time to extinction
+	- Growth rate
+- Founding size and evolution treatment had similar effects on extinction rates
+	- n.s. evolution x founding size term
+- In poor environment, small populations went extinct sooner
+	- in small poulations, evolution was 1.2x faster in evolving pops
+		- (likely reached homozygosity quickly)
+	- in large populations, evolution was 1.2 times slower
+- In favorable environment, evolving populatons grew but then slightly shrank while non-evolving was more consistent in size
+	- growth rates in favorable: evolvers started high but then declined
+	- in all environments, population growth rates declined in final few time steps
+- outbreeding populations have higher growth rates rel. to close populations in both environments (also better than controls)
+
+##### Discussion
+- Even small founding poopulations in poor environments had reduced extinction risk if they could evolve
+- The fact control populations could grow in favorable environment means that habitat quality is important
+- "Strong selection on traits conferring adaptation could have reduced overall genetic diversity and increased homozygosty in our experimental populations, and at the same time, genetic drift due to small population size could also have contributed to the rapid fixation of deleterious alleles." on why there is genetic load
+- Mixture even in the poor environment confers adaptation
+
+Here: as the title says, rescue is constrained by genetic load. Accumulation of deleterious mutations due to small population sizes (n.b. comparable to our populations) likely candidate.
+
