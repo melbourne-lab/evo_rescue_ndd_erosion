@@ -474,3 +474,55 @@ Here: as the title says, rescue is constrained by genetic load. Accumulation of 
 - closed for expr. for trait mean over time
 
 (resume on p. 392)
+
+### Peniston, J.H., et al. 2020. Environmental fluctuations can promote evolutionary rescue in high-extinction scenarios. Proc. R. Soc. B.
+
+##### Previous stuff on environmental variance (temporal)
+- Environmental fluctuations understudied rel. to magn. of environmental change
+- In general, temporal autocorrelation (typically positive) can increase or decrease extinction probabilities (refs. herein)
+- Prior work suggests that greater magnitude of variation -> decreased rescue probability (decreasing expected population size and increased variation in pop. size)
+	- But, autocorrelation: pop. size makes it easier to track change sin optimal phenotype so more (pos.) autocorrelation is good, although it increases variance and can cause a run of bd years.
+
+##### Models
+- *Baseline risk* is probability of a population going extinct following abrupt environmental change (w/o fluctuations)
+	- a function of initial size, mutation rate, rate of environmental change
+###### *Polygenic model*
+- Quantitative trait ($z$) determining survival prob., with Gaussian selection
+	- additive genetic component $g$ w/ normally distributed noise
+	- amount of genotypic and phenotypic variation assumed constant
+	- no density dependence
+- Phenotyipe changes through a gaussian random sequence with autocorrelation $\rho$, and mean $\mu$, s.d. $\theta$.
+- Population dynamics smulated over 1000 generations
+- Also simulated an IBM with ten freely recombining additive loci
+- G&H gives a baseline extinction risk w/o variability
+	- if populaton will go below threshold (deterministically) high ext. risk
+###### *Monogenic model*
+- Adaptation only through novel mutations (no reliance on standing variation)
+- Mutation: low probability (u) for each newborn, one possible mutation, no back-mutation
+	- Mutations: probability of adult dying before adulthood
+- Number of births evolving over time in relation to gaussian random sequence
+- Here: rescue req's a single mutant to produce a lineage that persists
+	- Here: branching process
+
+##### Results
+###### Polygenic model
+- mild env. changes (baseline risk low): variation in optimal pheno means more extinction due to runs of bad years
+- harsh env. changes (baseline risk high): variation in opt. pheno means less extinction due to runs of good years
+- The first change was very important: mean of opt. phenotype predicted outcome with 96% accuracy
+###### Monogenic model
+- Variation in fecundity increases mean cumulative # births before extinction
+	- More mutations
+- But, variation in fecundity does not affect prob. of lineage surviving once arising
+	- Survival/extinction determined by first few generations after mutation
+###### Overall
+- Following abrupt change, the effects of variation depend on baseline extinction risk
+	- Low-extinction cases see more ext. risk w/ variation
+	- High-extinction cases: extinction likely anyway, but variation means runs of good years favorable to adaptation
+- Fluctuating phenotypic optimum vs. fluctuating fecundity - similar results
+	- variation in pop'n trajectories, not necessarily the lag load, likely are causing changes in extinction
+- "our models should be a reasonable approximation of evolutionary rescue dynamcs if there is weak density dependence, but given strong density dependence that acts even at small population sizes the rescue process might differ. In addition, in models without density dependence, once  population is locally adpted (e.g. mean bsolute fitness is greater than 1), the population size can grow without bound. Therefore, most of our results only pertain to extinction over relatiely shorttime-scales due to maladaptation following environmental change and do not pertain to the long-term extinction risk in a population following adaptation. Following adaptation, environmental variation should increase the probability of extinction in a finite population, and the expectd time to extinction is known to scale with carryng capacity"
+- Managers: for populations whch are *a priori* at low risk, provide stable environment, but for high-risk populations intervene as soon as possible
+- "Effects of environmental variation that we have explored in this study are relatively minor compared with the importance of the magnitude of envronmental change or initial population size."
+
+Environmental assists populations likely to fail (good years), hurts populations likelyt o to survive (bad years). The initial trajectories of populations are very important. (In context of density dependence: this will depress growth rates, making populations inherently higher risk, meaning good years more likely good?)
+
