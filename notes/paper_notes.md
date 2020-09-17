@@ -526,3 +526,27 @@ Here: as the title says, rescue is constrained by genetic load. Accumulation of 
 
 Environmental assists populations likely to fail (good years), hurts populations likelyt o to survive (bad years). The initial trajectories of populations are very important. (In context of density dependence: this will depress growth rates, making populations inherently higher risk, meaning good years more likely good?)
 
+### Lande, R. 1993. Risks of population extinction from demographic and environmental stochasticity and random catastrophes. American Naturalist.
+
+- Stochastic diffusion approximations to examine expected time to extinction in populations under varying growth rates and levels of stochasticty
+- Model: two-piece model with linear/expo growth up to carrying capacity, then stuck there
+	- this is the Macarthur and Wilson model (1967)
+	- (n.b., our model behaves differently)
+- With demographic stochasticity, variance in growth rate is just V1/N (individual variance divided by # individuals)
+- Demographic stochasticity: time to extinction is approx. exponential if r > 0, linear if r = 0, sublinear for r < 1
+- In long run for sufficently large sze mean extinction time is nearly independent of initial size because population sizes are expected to quickly grow to CC and fluctuate before stochasticity can have large effect
+
+Hmm... not sure how to relate this to ours. Growth form is different (growth rate here is always going to be greater than ours, so upper bound), our variance in growth rate is also slightly higher. Still, we have a carrying capacity that increases - rate of increase in CC has increasingly large effect due to exponential scaling.
+
+### Gomulkiewicz, R., and D. Houle. 2009. Demographic and genetic constraints on evolution. The American Naturalist.
+
+##### Evolutionary constraints
+- Evolutionary constraints prevent a population from obtaining a target phenotype
+	- **Absolute constraint** on evolution: population lacks genetic variation in some direction of phenotypic space
+		- e.g., absence of variation in particular combos of traits
+		- produces a singular $G$ matrix of additive genetic variances and covariances
+	- **Genetic constraint** - ability to respond to selection is present but limited (??)
+- Demographic limitations make quantitative constraints impossible to overcome
+
+(did not fully read - very opaque)
+
