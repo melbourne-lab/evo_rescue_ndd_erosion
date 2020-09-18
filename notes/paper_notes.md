@@ -550,3 +550,51 @@ Hmm... not sure how to relate this to ours. Growth form is different (growth rat
 
 (did not fully read - very opaque)
 
+### Whitlock, M.C. 2000. Fixation of new alleles and the extinction of small populations: drift load, benefcal alleles, and sexual selection. Evolution.
+
+- Prob. of fixation of a new mutation: function of its effect and effective population size
+- Change in fitness depends a lot on the distribution of allelic effects
+- Assume for rest of paper that distribution is exponential
+- ISO: critical Ne below which fixation of deleterious alleles overwhelm fixation of beneficial alleles
+	- delt W = delt W_b + delt W_d
+	- It exists (eq. 9) - proportional to cubic root of ratio of mutation rates of deleterious to beneficial alleles, inv. proportional to mean effect of beneficial and deleterious alleles (product)
+	- Higher when:
+		- Rate of beneficial mutation is high rel. to deleterious
+		- mean effects of mutation (both?) are high
+		- Ne is high (compared to N)
+		- sexual selection removes deleterious alleles
+		- beneficial alleles are more common or have stronger effect when compensating for decline (when does this happen?)
+- Below the threshold, loss of fitness becomes rapid with decreasing Ne, but above the threshold, gain in fitness is slow with increasing Ne
+	- "short periods at small size will require that the population spend many times longer at large size to compensate for the fitness loss"
+- Ne in the hundreds is typically good for indefinite persistence w/o genetic issues
+	- with thousands of individuals, prob. of deleterious alleles fixing faster than beneficial ones is low
+	- more likelihood of extinction due to catastrophes
+- For small Ne, fixation of benefcial alleles can still stem mutation loss
+	- but below the critical value, these beneficial fixations have negligible effects
+
+This paper is looking at mutations but it's unclear if all aspects of it relate to mutations. Two interesting ideas here: being very small has disproportionately large effects (comp. to being large) for change in fitness. Also, Ne in the hundreds is good for avoiding potential fitness losses due to genetics. Thinking about how NDD constrains population size here is good and important.
+
+### Frankham, R. 2005. Genetics and extinction. Biological Conservation. 
+
+##### Background
+- Inbreeding: H_t / H_0 = (1 - 1/(2Ne))^t = 1 - F (H_t is heterozygosty at gen t)
+	- middle term approx. e^(-t/(2Ne)) - exponential decay inv. proportional to population size
+- Controversies: does inbreeding impact extinciton risk?
+	- Does selection purge deleterious alleles, reducing their impact?
+	- Does inbreeding affect wild populations?
+	- Do mutations influence extinctions in sexually reproducing species?
+
+##### Inbreeding and extinction
+- Inbreeding having deleterious effects (fitness, reproduction, survival) pretty widely demonstrated
+- Newman and Pilson, 1997: less inbred populations (F = 4%) had 25% extinction rate but slightly more inbred (8-9%) had ~69% - 26% of variation in extinction risk was attributable to inbreeding
+- Simulations of populations with genetic and demographic extinction threats: inbreeding decreases time to extinction
+	- esp. in outbreeding taxa
+	- pop'ns with already low growth rates were less affected (already headed to extinction)
+- If inbreeding/genetic threats do not induce extinctions (see Lande 1988), then genetic variation will not vary by extinction threat levels
+	- but Spielman et al., 2004, found 77% of 170 taxa surveyed had reduced genetic diversity (median difference in heterozygosity was 40%)
+	- N_e / N is typically around 0.1 rather than 0.25 - 0.5 as previously thouhgt (see Frankham, 1995)
+	- Lande 1998 also is overly-optimistic about the degree of purging; see refs herein
+- Outbreeding typically removes inbreeding depression
+- *Mutational meltdown* - accumulation of negative alleles reducing growth rates and eventually inducing extinction
+
+Good general reference for extinction risks in small populations. Mutational meltdown is an intersting idea outlined here (ths is likely nt the first place). Also some reviews of empirical things in here. 
