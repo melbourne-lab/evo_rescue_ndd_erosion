@@ -10,6 +10,7 @@ head(bb)
 bb.pos = bb %>%
   group_by(trial) %>%
   mutate(ext.next = extinct & (gen == ext.gen-1)) %>%
+  filter(gen < 15) %>%
   group_by(p.fix.pos, n.pop0, ndd) %>%
   summarise(pexnex = mean(ext.next),
             n = n())
@@ -45,6 +46,7 @@ pos.plot = bb.pos %>%
 bb.neg = bb %>%
   group_by(trial) %>%
   mutate(ext.next = extinct & (gen == ext.gen-1)) %>%
+  filter(gen < 15) %>%
   group_by(p.fix.neg, n.pop0, ndd) %>%
   summarise(pexnex = mean(ext.next),
             n = n())
