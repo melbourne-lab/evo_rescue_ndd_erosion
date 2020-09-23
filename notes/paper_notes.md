@@ -597,4 +597,72 @@ This paper is looking at mutations but it's unclear if all aspects of it relate 
 - Outbreeding typically removes inbreeding depression
 - *Mutational meltdown* - accumulation of negative alleles reducing growth rates and eventually inducing extinction
 
-Good general reference for extinction risks in small populations. Mutational meltdown is an intersting idea outlined here (ths is likely nt the first place). Also some reviews of empirical things in here. 
+Good general reference for extinction risks in small populations. Mutational meltdown is an intersting idea outlined here (ths is likely nt the first place). Also some reviews of empirical things in here. 	
+### Lynch, M., et al. 1995. Mutational meltdowns in sexual populations. Evolution.
+
+##### Background
+- Muller's ratchet (not explained here): accumulaton of deleterious alleles
+	- W/o recombination, offspring can't have fewer deleterious mutations than offspring
+	- Accumulation of deleterious alleles -> eventual extinction
+	- Segregation and recombination lower the probability of fixation
+	- Acc'd to Kimura et al. 1963, for high Ne, segregation of deleterious mutations reduces mean fitness by factor of at most exp(-m) for mutation rate m per individual across all loci
+		- i.e., large sexual populations that can produce enough offspring to offset this difference will not face extinction risk due to deleterious mutation
+- Charlesworth 1993 and Lande 1994 address how much mutation accumulation should affect extinction times in large populations
+	- **Hill-Robertson effect** background genetic variation reduces efficiency of slection on indivdual loci
+	- HR-effect is a violation of some of the assumptions from Lande 1994
+	- Also: Lande 1994 ignores changing population size, reducing arithmetic mean of the Ne
+- What is the risk that large sexually reproducing populations face from accumulating deleterious mutations?
+- Lynch et al. 1993: mutation accumulaton has three phases
+	- (as long as population is initially mutation free and reproductive rate is high)
+	- Phase 1: mutations accumulate rapidly because selection is low (due to low genetic variance)
+	- Phase 2: Mutation, drift, selection start to balance,
+	- Phase 3: WR = 1 (i.e., replacement rate?) increases in the mutation load will reduce population size, increasing the rate of mutaton accumulation as drift overwhelms selection
+- 
+
+##### Model
+- Simulations similar to Charlesworth 1993
+- Monoecious randomly mating populations with discrete generations
+	- R is reproductive rate per (surviving) adult
+	- N(t) is number of reproducing adults at time t
+- Viability selection on number of deleterious mutations
+	- W(n1,n2) = 1 for no mutations, W < 1 for mutations
+	- Mutations are poisson distributed with rate \mu
+- Analytical approximations with diffusion theory
+	- assumes: constant population size, gives length of phase 2
+	- mean viablity is product of segregting mutations (fluctuating) and fixations (increasing)
+- Transition-probability theory approach (see Ewens 1979) 
+	- assume constant population size $K$
+	- probability of going from i to j loci in a time step is Binomal with size 2K and prob nu
+
+##### Results and discussion
+- As found in other places, mean time to extinction scales with log(R)
+	- Populations have "steady fractional decline in fitness" during phase 2 but phase 3 doesn't begin until mean viability is 1/R
+- Whatever.
+- "It is now well established that mutations with small, but intermediate, deleterious effects cause the most cumulative damage to populatons."
+	- Lande showed that generally the selection pressure that minimizs time to extinction is inversely proportional to the effective population size
+- "Roughly speaking, immunity to the meltdown requires a large enough population size that during the period in which we predict a high probability of extinction (due purely to unconditionally dleterious mutations), there are enough opportunities (individuals x generations) with effectve enough selection to correct the damage.
+
+Jesus, I don't know. Main finding is you need large populations to avoid extinction by the accumulation of mutations. This scales with the log of mean fitness. The idea here of loss of fitness through segregation (?) and fixation is worthwhile.
+
+### Keller, L. and D.M. Waller. 2002. Inbreeding effects in wild populations. TREE.
+
+- Small isolated populations face two threats: fixation/loss of alleles eroding genetic variation (drift) and accumulation of deleterious alleles
+	- Leads to mutatonal meltdowns although this happens gradually
+	- Inbreeding happens more quickly
+- Inbreeding - shared ancestry
+	- Wright calculated through correlation, but now calculated by probabilities
+	- $F_i$ is prob of individual having two genes being IBD (identical by descent)
+	- Inbreeding also measured by F_{is} = 1 - H_o / H_e (heterozygosity observed/expected under HWE) where F_{is} > 0 suggests more inbreeding than expected; this gives deviation from random mating
+- Inbreeding would be less prevalent in natural populations if it was purged (inbred individiauls don't survive/reproduce)
+	- Purging most effective when
+		- Deleterious mutational strength strong rel. to Ne
+		- Selection does not have strong cross-loci effects
+		- Gradual inbreeding
+		- Isolation means purged alleles do not reappear
+	- Meta-analysis showed tht purging occurred in ~33% of studies observable in ~10%
+- Inbreeding depression - typically within populations measured as slope between inbreeding coefficient of individuls (F) and log fitness
+- "Whereas our understanding of how inbreeding affects individuals has improved, we still know little about the effects of inbreeding on population dynamics. In the presence of strong density-dependent regulation, inbreeding depression might eliminate inbred individuals without affecting population dynamics (so-called "soft selecton"). In such circumstances, the magnitude of inbreeding depression would not necessarily directly affect population dnamcs. When selection is 'hard', however, inbreeding could substantially affect population dynamics."
+- "It would lso be of interest to know how variance in the degree of inbreeding among individuals within a population affects the expression of inbreeding depression and subsequent population dynamcs."
+
+Good things in here. Drift vs. genetic load and their relationship to inbreding. Measuring inbreeding (may be annoyingly difficult in our populations). Reviews suggesting that inbreeding does in fact exist and influencs individuals, although there is an opening for looking at population dynamics (esp. with NDD - NDD and hard selection should make a difference!)
+
