@@ -26,3 +26,15 @@ It would be good to see how much inbreeding contributes both to the overall gene
 
 This seems like the pair of variables with the weakest correlation, but there is some connction. More diversity -> more genetic change -> more phenotypic change. Because the phenotypic change is expected to be positive, more phenotypic change should mean greater increase in population size. But, there's stochasticity at every step of this process. This is interesting because the premise of these models is that increased genetic diversity directly contributes to population growth rates. It's also central to the vortex.
 
+### Completng the loop: pop size/NDD on variation in genotypic change (09/29)
+
+Lower population size (and through this means, NDD) may not necessarily change the *mean* rate of phenotypic/genotypic change, but it *would* increase the sampling variance in genotypic change.
+
+What is the net effect of this change? The sampling variation in phenotypic change is not biased, i.e., the expected phenotypic change *should* still be the same. But, the effect of this phenotypic change on fitness may be biased.
+
+Say the current genotypic distance from the optimum is $d$, and the expected genotype is $Dd$. Under our parameterization $Dd < d$. The expected change in fitness, then, is positive as exp(-Dd) < exp(-d). Note that the expected change in fitness is by definition the change in fitness with in a deterministic model, i.e., a model with no variance in the genotypic changes. However, say that there is $e > 0$ variance in the genotypic change. If  $W''(d) < 0$ (i.e. if the fitness landscape is concave down at $d$), then for any $0 < x < e$, $W(d+x) - W(d) < W(d) - W(d-x)$, i.e, a population with greater-than-average change will have a marginal fitness advantage that is less than the marginal fitness disadvantage of a population with less-than-average change. The result will be flipped if the concavity is positive.
+
+Because added variation in the phenotypic change changes the expected change in fitness, it will change the population growth rate. The concavity of the fitness landscape ($W(z)$) determines whether the change is positive or negative. For a Gaussian fitness landscape, this means that sampling variation would *increase* fitness when populations are far from the optimum but decrease it when they are closer to the optimum. 
+
+This alone would not necessarily change the rate of adaptation, just the (instantaneous) population growth rate. Perhaps a more evolutionarily-relevant and straightforward way that sampling variation would affect the rate of genotypic variation is to cause genetic drift, which will lower the rate of adaptation. Argh... but this is what we've been having so much trouble demonstrating!
+
