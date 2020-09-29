@@ -666,3 +666,15 @@ Jesus, I don't know. Main finding is you need large populations to avoid extinct
 
 Good things in here. Drift vs. genetic load and their relationship to inbreding. Measuring inbreeding (may be annoyingly difficult in our populations). Reviews suggesting that inbreeding does in fact exist and influencs individuals, although there is an opening for looking at population dynamics (esp. with NDD - NDD and hard selection should make a difference!)
 
+### Comeron, J.M., Williford, A., and R.M. Kliman. 2008. The Hill-Robertson effect: evolutionary consequences of weak selection and linkage in finite populations. Heredity, 100: 19 - 31.
+
+- Fisher (1930) says that fixation of beneficial mutations depends on presence of other mutations, the presence of which could slow down fixation of beneficial mutation
+- Hill and Robertson (1966) - two loci in a finite population (genetic drift), selection at one locus interferes with selection at the other
+	- in general multiple loci meas less efficient selection	- degree of interference increases with genetic linkage, such that genomic regions wth reduced recombination will have reduced Ne
+- Recombination: Felsenstein (1974) showed that recombination increases the rate of adaptation by reducing linkage disequilibrium 
+	- (n.b. apparently this is not the primary feature of HR effect but instead a consequence)
+- Other modls of interference between segregating mutations: Muller's ratchet (stochastic accumulation of deleterious mutations through drift and linkage), hitchiking (selective sweeps also bringing bad mutations to fixation), background selection (selection aginst deleterious mutations also removing linked neutral mutations)
+- Genomes likely contain a lot of weakly selected sites, which are likely to be clustered in exons and regulatory regions (which would amplify the HR effect)
+
+Not sure... makes more sense to go and read original Hill and Robertson. This review looks mainly at more complicated genomes than we are modeling.
+
