@@ -678,3 +678,39 @@ Good things in here. Drift vs. genetic load and their relationship to inbreding.
 
 Not sure... makes more sense to go and read original Hill and Robertson. This review looks mainly at more complicated genomes than we are modeling.
 
+### Orr, H.A., and R.L. Unckless. 2008. Population extincton and the genetics of adaptation. Am. Nat.
+
+##### Framing
+- "Nearly all work on the theory of adaptation, however, has been limited in at least one important way: it assumes that populations maintan a stable size following a sudden change in environment, a change to which the population must adapt."
+- This study: looking at rescue from new mutations and/or standing variation
+	- mutation: "we calculate the probablity that a population substitutes a beneficial allele of sufficently large effect to escape extinction"
+- "our results are most directly relevant to organisms such as microbes, in which a small number of genes can respond to n environmental challenge"
+
+##### Model
+###### Rescue from mutation
+- Population size changes geometrically up until carrying capacity $K$ (the Macarthur and Wilson model)
+- Haploid genetics, one locus, two alleles $A$ and initially absent/rare mutant $a$
+	- wt has W_A = 1 - r, mutant has W_a = 1 + s - r (s>r)
+- Use theory of branching processes
+	- so long as a lineage with W_a > 1 becomes large enough it will survive, so we are most interested in probabillity of ultimate survival
+- Prob. of arising in generation $t$ and going to fixation: 1 - probabilty that all mutations are lost accidentally
+	- under assumptions this is 1 - exp(- (2 N0 u(s-r)) / r)
+	- Prob(T = t | surv) approx r exp(-rt) where T is generation where the mutation occurs
+###### Rescue from standing variation
+- e.g., alleles previously deleterious reaching fixation?
+	- if this allele is favored for t > 0 after environmental change, al it has to do is escape accidental loss
+	- avoid extinction with approx prob. 1 - exp(- (2N0u(s-r))/sd) for selectve advantage sd
+- Mean probablty of survival is 1 - ((s-r+sd)/sd)^(-2N0u)
+###### Overall probablty of rescue
+- Overall probability of rescue is Pr(standing) + (1-Pr(standing) * Pr(mutation)
+
+###### Discussion
+- "our qualitative conclusion agrees with that of Gomulkiewicz and Holt; unless populations are very large or suffer only modest decreases in absolute fitness below 1, adaptation to a sudden environmental change can be difficult"
+- As r becomes small, new mutations are more likely to rescue a population because decline is slow
+- Evolution from new mutations or from mutation-selection balance are assisted by: s large (large selective advantage for mutant), N0u is large (number of mutations? u not defined), r small (slow population decline), sd small (small initial disadvantage for deleterious)
+
+Use for some similarities to G&H - notably that initial population size is important. Also talk about population size and mutation.
+
+### Orr, H.A. 2005. The genetic theory of adaptation: a brief history. Nature Reviews: Genetics.
+
+
