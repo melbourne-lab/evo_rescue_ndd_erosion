@@ -142,3 +142,78 @@ all.inf %>%
 # Conclusion: definitely no evidence to conclude that heterozygosity is _less_
 # than expected. This result is not totally surprising as mating here is totally
 # random. It's possible there's slightly _more_ heterozygosity than expected.
+
+
+### Oh what the hell, let's do some with directional selection.
+
+# Define parameters
+pard = expand.grid(local.trial = 1:trials,
+                   n.pop0 = c(20, 60)) %>%
+  mutate(end.time = 15,
+         init.row = 1e4,
+         n.loci = 25,
+         w.max = 2,
+         theta = 2.75,
+         wfitn = sqrt(1 / 0.14 / 2),
+         sig.e = sqrt(0.5),
+         pos.p = 0.5)
+
+### Run simulatons
+
+liszd = vector('list', nrow(pard))
+
+set.seed(45)
+
+for (i in 1:nrow(pard)) {
+  liszd[[i]] = sim( params = pard[i,])
+  print(i)
+}
+
+# Put all sims into one object.
+dir.pops = unroller(liszd)
+
+# Observed heterozygosity (same as above).
+dir.obs.h = dir.pops %>%
+  select(-c(g_i, z_i, w_i, r_i, fem)) %>%
+  gather(key = loc.copy, value = val, -c(i, gen, trial)) %>%
+  mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
+  group_by(trial, gen, locus, i) %>%
+  summarise(h_i = !sum(val)) %>%
+  group_by(trial, gen, locus) %>%
+  summarise(h_j = mean(h_i)) %>%
+  group_by(trial, gen) %>%
+  summarise(h_t = mean(h_j))
+
+# Expected heterozygosity (same as above)
+dir.hwe.h = dir.pops %>%
+  select(-c(i, g_i, z_i, w_i, r_i, fem)) %>%
+  gather(key = loc.copy, value = val, -c(gen, trial)) %>%
+  mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
+  group_by(trial, gen, locus) %>%
+  summarise(p = mean(val > 0),
+            h = 2 * p * (1 - p)) %>%
+  group_by(trial, gen) %>%
+  summarise(h.pred = mean(h))
+
+# Merge
+dir.inf = merge(dir.obs.h, dir.hwe.h,
+                by = c('trial', 'gen')) %>%
+  mutate(f = 1 - (h_t / h.pred))
+
+# Plot of all trials
+# Black = surviving to end, red = extinct
+dir.inf %>%
+  group_by(trial) %>% mutate(surv = max(gen) == 15) %>% ungroup() %>%
+  ggplot() +
+  geom_line(aes(x = gen, y = f, group = trial, colour = surv)) +
+  scale_color_manual(values = c('red', 'black'))
+
+# Quick sketch: are these different from zero?
+dir.inf %>%
+  group_by(gen) %>%
+  summarise(mu = mean(f),
+            sig = var(f),
+            mup2 = mu + 2 * sqrt(sig / 40))
+
+# Wtf... heterozygosity is way greater than expected right before extinctions.
+# am I making a mistake...?
