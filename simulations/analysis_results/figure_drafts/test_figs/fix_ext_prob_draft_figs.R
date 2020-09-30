@@ -153,3 +153,110 @@ save_plot(
   file = 'simulations/analysis_results/figure_drafts/test_figs/fix_ext_prob_nerr.pdf',
   base_width = 8
 )
+
+##### Updated plots with recent (Sept ~20) batch of simulations.
+
+library(ggplot2)
+library(cowplot)
+library(dplyr)
+library(tidyr)
+
+### Clear namespace
+
+rm(list = ls())
+
+### Global parameters
+
+trials = 4000
+
+pars = data.frame(
+  end.time = 15,
+  n.loci = 25,
+  w.max = 2,
+  theta = 2.75,
+  wfitn = sqrt(1 / 0.14 / 2),
+  sig.e = sqrt(0.5),
+  pos.p = 0.5,
+  alpha = 0
+)
+
+### Read in all data
+
+all.data = 
+  rbind(
+    read.csv('simulations/outputs/alldata_n100_a000_hivar.csv'),
+    read.csv('simulations/outputs/alldata_n100_a000_lowvar.csv'),
+    read.csv('simulations/outputs/alldata_n20_a000_hivar.csv'),
+    read.csv('simulations/outputs/alldata_n20_a000_lowvar.csv'),
+    read.csv('simulations/outputs/alldata_n100_a035_hivar.csv'),
+    read.csv('simulations/outputs/alldata_n100_a035_lowvar.csv'),
+    read.csv('simulations/outputs/alldata_n20_a035_hivar.csv'),
+    read.csv('simulations/outputs/alldata_n20_a035_lowvar.csv')
+  )
+
+### Do the gridding thing.
+
+grid.y.res = 0.025
+
+any.ext = all.data %>%
+  # Now, bin variances and aggregate extinction probabilities
+  mutate(vr = round((1/grid.y.res) * v) / (1/grid.y.res)) %>%
+  group_by(gen, n.pop0, low.var, alpha, vr) %>%
+  summarise(p.extinct = mean(extinct),
+            n = n())
+
+### Plot
+
+any.ext %>%
+  filter(gen < 15) %>%
+  ungroup() %>%
+  # mutate(ndd = factor(ndd, labels = c("Density independent", "Density dependent")),
+  #        n.pop0 = factor(n.pop0, labels = c("Initially small", "Initially large"))) %>%
+  ggplot() +
+  geom_tile(
+    aes(
+      x = gen,
+      y = vr,
+      fill = p.extinct
+    )
+  ) +
+  facet_grid(rows = vars(low.var, n.pop0), cols = vars(alpha)) +
+  scale_fill_viridis_b(option = 'B') +
+  labs(x = 'Generation', y = 'Genetic variance') +
+  guides(fill = guide_colorbar('Extinction\nprobability', barwidth = unit(3, 'cm'))) +
+  theme(panel.background = element_rect(fill = NA),
+        legend.position = 'bottom') +
+  ggsave(file = 'simulations/analysis_results/figure_drafts/test_figs/eg_extinction_prob_over_time.pdf')
+
+### N.b. Ruth was curious once about *instantaneous extinction*
+
+ins.ext = all.data %>%
+  # Instantaneous extinction risk
+  group_by(trial,  n.pop0, low.var, alpha) %>%
+  mutate(extinct.now = (gen == max(gen)) & extinct) %>%
+  # Now, bin variances and aggregate instantaneous risk
+  mutate(vr = round((1/grid.y.res) * v) / (1/grid.y.res)) %>%
+  group_by(gen, n.pop0, low.var, alpha, vr) %>%
+  summarise(p.extinct = mean(extinct.now),
+            n = n())
+
+ins.ext %>%
+  filter(gen < 15) %>%
+  ungroup() %>%
+  # mutate(ndd = factor(ndd, labels = c("Density independent", "Density dependent")),
+  #        n.pop0 = factor(n.pop0, labels = c("Initially small", "Initially large"))) %>%
+  ggplot() +
+  geom_tile(
+    aes(
+      x = gen,
+      y = vr,
+      fill = p.extinct
+    )
+  ) +
+  facet_grid(rows = vars(low.var, n.pop0), cols = vars(alpha)) +
+  scale_fill_viridis_b(option = 'B') +
+  labs(x = 'Generation', y = 'Genetic variance') +
+  guides(fill = guide_colorbar('Extinction\nprobability', barwidth = unit(3, 'cm'))) +
+  theme(panel.background = element_rect(fill = NA),
+        legend.position = 'bottom') +
+  ggsave(file = 'simulations/analysis_results/figure_drafts/test_figs/eg_ins_extinction_prob_over_time.pdf')
