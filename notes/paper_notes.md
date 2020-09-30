@@ -713,4 +713,23 @@ Use for some similarities to G&H - notably that initial population size is impor
 
 ### Orr, H.A. 2005. The genetic theory of adaptation: a brief history. Nature Reviews: Genetics.
 
+##### The "micromutation" paradigm
+- "Micromutation" small unspecified mutations of small effect
+- The quantitative trait model - from Fisher, regarded today as mostly mathematical convenience
+- Fisher's "geometric model" - alternative to the quantitative trait model, features random mutations of unequal size in n-dimensional phentoypic space, pleiotropy, etc.
+	- Kimura pointed out in the 1990s that under this model only mutations of intermedate effect are likely to contribute to adaptation
+- Quantitative trait loci (QTLs, mid 1980s) - use a large suite of molecular markers (mapped) and associate them with population/species characteristics
+
+##### Sequence-based techniques
+- John Maynard Smith: real adaptation occurs in discrete steps, not a continuous phenotypic space (more reflective of molecular mechanism)
+	- for a L-length base sequence, there are really only approx 3L possible mutations
+	- populations make "adaptive walks" through this space
+- The "NK model" features fitness landscapes of varying shape/ruggedness, and probability of arriving at global optima bsed on initial condition, etc.
+	- but, rules for moving through the landscape are unrealistic, and this model typically ignores starts from highly fit wild-type phenotypes
+- John Gillespie: the distribution of fitnesses is often unknown, but WTs are probably on the right tail and adaptations will be even more extreme
+	- use extreme value theorem, which makes few if any assumptions about the shape of the distribution, for this
+	- when presented with several mutations, populations will follow mutations proportional to their selective advantage
+	- number of steps needed to reach new optimum is very small (2-5)
+	- subsequent work demonstrting that adaptation features large jumps in fitness rank (Pareto principle - most of the adaptive benefit can come from few substitutions)
+- (thoughts on current hurdles/future challenges/directions on final page)
 
