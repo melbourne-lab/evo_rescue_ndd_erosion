@@ -182,17 +182,7 @@ pars = data.frame(
 
 ### Read in all data
 
-all.data = 
-  rbind(
-    read.csv('simulations/outputs/alldata_n100_a000_hivar.csv'),
-    read.csv('simulations/outputs/alldata_n100_a000_lowvar.csv'),
-    read.csv('simulations/outputs/alldata_n20_a000_hivar.csv'),
-    read.csv('simulations/outputs/alldata_n20_a000_lowvar.csv'),
-    read.csv('simulations/outputs/alldata_n100_a035_hivar.csv'),
-    read.csv('simulations/outputs/alldata_n100_a035_lowvar.csv'),
-    read.csv('simulations/outputs/alldata_n20_a035_hivar.csv'),
-    read.csv('simulations/outputs/alldata_n20_a035_lowvar.csv')
-  )
+all.data = read.csv('simulations/outputs/final_results/alldata_combined.csv')
 
 ### Do the gridding thing.
 
@@ -260,3 +250,72 @@ ins.ext %>%
   theme(panel.background = element_rect(fill = NA),
         legend.position = 'bottom') +
   ggsave(file = 'simulations/analysis_results/figure_drafts/test_figs/eg_ins_extinction_prob_over_time.pdf')
+
+# Try separating out by NDD to get differences in extinction probability.
+
+any.ext.alpha = any.ext %>%
+  pivot_wider(names_from = alpha, values_from = c(p.extinct, n)) %>%
+  mutate(p.diff = p.extinct_0 - p.extinct_0.0035)
+
+any.ext.alpha %>%
+  ggplot() +
+  geom_tile(
+    aes(
+      x = gen,
+      y = vr,
+      fill = p.diff
+    )
+  ) +
+  facet_grid(rows = vars(low.var, n.pop0)) +
+  scale_fill_gradient2(high = 'blue', mid = 'white', midpoint = 0, low = 'red')
+  
+# Not great...
+
+# Try a circle plot...
+
+any.ext %>%
+  filter(gen < 15) %>%
+  ggplot() +
+  geom_point(
+    aes(
+      x = gen,
+      y = vr,
+      colour = p.extinct,
+      size = log(n)
+    )
+  ) +
+  scale_colour_viridis_b(option = 'B') +
+  facet_grid(rows = vars(low.var, n.pop0), cols = vars(alpha)) +
+  labs(x = 'Generation', y = 'Genetic variance') +
+  guides(fill = guide_colorbar('Extinction\nprobability', barwidth = unit(3, 'cm')),
+         size = 'none') +
+  theme(panel.background = element_rect(fill = NA),
+        legend.position = 'bottom') +
+  ggsave(file = 'simulations/analysis_results/figure_drafts/test_figs/eg_extinction_pt_size.pdf',
+         height = 8, width = 5)
+
+# ^ I kinda like this one.
+
+# Instantaneous extinctions 
+
+ins.ext %>%
+  filter(gen < 15) %>%
+  ggplot() +
+  geom_point(
+    aes(
+      x = gen,
+      y = vr,
+      colour = p.extinct,
+      size = log(n)
+    )
+  ) +
+  scale_colour_viridis_b(option = 'B') +
+  facet_grid(rows = vars(low.var, n.pop0), cols = vars(alpha)) +
+  labs(x = 'Generation', y = 'Genetic variance') +
+  guides(fill = guide_colorbar('Extinction\nprobability', barwidth = unit(3, 'cm')),
+         size = 'none') +
+  theme(panel.background = element_rect(fill = NA),
+        legend.position = 'bottom') +
+  ggsave(file = 'simulations/analysis_results/figure_drafts/test_figs/eg_ins_extinction_pt_size.pdf',
+         height = 8, width = 5)
+o
