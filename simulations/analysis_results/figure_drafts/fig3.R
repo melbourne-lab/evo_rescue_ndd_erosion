@@ -16,9 +16,9 @@ ext.d = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
             wvar = var(w),
             n = n()) %>%
   ungroup() %>%
-  mutate(n0 = factor(n.pop0, labels = c("Initially small", "Initially large")),
+  mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("Low genetic variance", "High genetic variance")))
+         low.var = factor(low.var, labels = c("Low variance", "High variance")))
 
 # Plot fitness changes
 
@@ -45,7 +45,7 @@ ext.d %>%
     ),
     alpha = 0.1
   ) +
-  facet_wrap( ~ paste(low.var, reorder(n.pop0, desc(n.pop0)), sep = ', '), ncol = 2) +
+  facet_wrap( ~ paste(reorder(n0, desc(n0)), low.var, sep = ', '), ncol = 2) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   scale_linetype(labels = c('Extant', 'Extinct')) +
