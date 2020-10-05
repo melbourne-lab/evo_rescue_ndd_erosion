@@ -9,19 +9,16 @@ library(tidyr)
 
 # Load data
 
-ext.d = rbind(
-  read.csv('simulations/outputs/final_results/a000_hivar_type_ext.csv') %>%
-    mutate(low.var = FALSE, ndd = FALSE),
-  read.csv('simulations/outputs/final_results/a000_lovar_type_ext.csv') %>%
-    mutate(low.var = TRUE, ndd = FALSE),
-  read.csv('simulations/outputs/final_results/a035_hivar_type_ext.csv') %>%
-    mutate(low.var = FALSE, ndd = TRUE),
-  read.csv('simulations/outputs/final_results/a035_lovar_type_ext.csv') %>%
-    mutate(low.var = TRUE, ndd = TRUE)
-) %>%
-  mutate(n.pop0 = factor(n.pop0, labels = c('Initially small', 'Initially large')),
-         low.var = factor(low.var, labels = c('High variation', 'Low variation')),
-         ndd = factor(ndd, labels = c('Density independent', 'Density dependent')))
+ext.d = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+  mutate(w = wbar) %>%
+  group_by(n.pop0, low.var, alpha, gen, extinct) %>%
+  summarise(wbar = mean(w),
+            wvar = var(w),
+            n = n()) %>%
+  ungroup() %>%
+  mutate(n0 = factor(n.pop0, labels = c("Initially small", "Initially large")),
+         alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
+         low.var = factor(low.var, labels = c("Low genetic variance", "High genetic variance")))
 
 # Plot fitness changes
 
@@ -34,17 +31,17 @@ ext.d %>%
   geom_line(
     aes(
       y = wbar,
-      group = interaction(n.pop0, low.var, ndd, extinct),
+      group = interaction(n.pop0, low.var, alpha, extinct),
       linetype = extinct,
-      colour = ndd
+      colour = alpha
     )
   ) +
   geom_ribbon(
     aes(
       ymin = wbar - 2 * sqrt(wvar / n),
       ymax = wbar + 2 * sqrt(wvar / n),
-      group = interaction(n.pop0, low.var, ndd, extinct),
-      fill = ndd
+      group = interaction(n.pop0, low.var, alpha, extinct),
+      fill = alpha
     ),
     alpha = 0.1
   ) +
