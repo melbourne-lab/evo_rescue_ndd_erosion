@@ -177,7 +177,7 @@ ext.n %>%
 
 ##### Figure 2
 
-all.ext = alln %>%
+all.ext = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
   # Get number of extant trials in each generation for each treatment
   group_by(n.pop0, low.var, alpha, gen) %>%
   summarise(n.trials = n()) %>%
@@ -189,12 +189,32 @@ all.ext = alln %>%
          # Proportion of all trials going extinct
          prop.totaln = c(d.trials[-1], 0) / max(n.trials),
          # Proportion of extinct trials extinct in this generation
-         prop.condit = c(d.trials[-1], 0) / sum(d.trials)) %>%
+         prop.condit = c(d.trials[-1], 0) / sum(d.trials),
+         # Proportion of trials surviving
+         prop.surviv = n.trials / max(n.trials)) %>%
   ungroup() %>%
-  mutate(n.pop0 = factor(n.pop0, labels = c("Initially small", "Initially large")),
+  mutate(n.pop0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("Low genetic variance", "High genetic variance")))
+         low.var = factor(low.var, labels = c("Low variance", "High variance")))
 
+### Get genotype vs. extinction risk
+
+# fit model
+all.ext.glm.3 = glm(extinct ~ factor(n.pop0) * low.var * factor(alpha) +
+                              factor(n.pop0) * factor(alpha) * gbar, 
+                    data = ext.probs,
+                    family = 'binomial')
+
+predicted.surv = expand.grid(low.var = c(TRUE, FALSE),
+                             n.pop0 = factor(c(20, 100)),
+                             alpha = factor(c(0, 0.0035)),
+                             gbar = (-5:5)/10) %>%
+  cbind(logit.extinct = predict(all.ext.glm.3, newdata = .)) %>%
+  mutate(p.extinct = logit.extinct %>% (function(x) exp(x) / (1 + exp(x)))) %>%
+  mutate(low.var = factor(low.var, labels = c("High variance", "Low variance")),
+         n.pop0 = factor(n.pop0, labels = c("Small", "Large")))
+
+# Instant probability of extinction
 inst.probs = ggplot(all.ext %>% filter(gen < 15), aes(x = gen)) +
   geom_line(
     aes( 
@@ -215,26 +235,42 @@ inst.probs = ggplot(all.ext %>% filter(gen < 15), aes(x = gen)) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 1) +
-  labs(x = 'Generation', y = 'Probability of extinction') +
+  labs(x = 'Generation', y = '') +
   theme(legend.position = 'none',
         panel.background = element_blank(),
         strip.background = element_rect(colour = 'black'))
 
-# start here v
-
-cuml.probs = ggplot(all.d %>% filter(gen < 15), aes(x = gen)) +
+# Cumulative probability of extinction
+cuml.probs = ggplot(all.ext %>% filter(gen < 15), aes(x = gen)) +
   geom_ribbon(
     aes(
       xmin = 0, xmax = 14,
-      ymin = 0, ymax = 1 - pext,
-      group = interaction(n.pop0, bottleneck, ndd),
-      fill = ndd
+      ymin = 0, ymax = 1 - prop.surviv,
+      group = interaction(n.pop0, low.var, alpha),
+      fill = factor(alpha)
     ),
     alpha = 0.25
   ) +
   scale_fill_manual(values = c('black', 'purple')) +
-  labs(x = 'Generation') +
-  facet_wrap( ~ paste(n.pop0, bottleneck, sep = ', '), ncol = 1) +
+  labs(x = 'Generation', y = 'Probability of extinction') +
+  facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 1) +
+  theme(legend.position = 'none',
+        panel.background = element_blank(),
+        strip.background = element_rect(colour = 'black'))
+
+# Genotype vs. probability of extinction
+geno.probs = ggplot(predicted.surv) +
+  geom_line(
+    aes(
+      x = gbar, 
+      y = p.extinct, 
+      group = interaction(n.pop0, low.var, alpha), 
+      colour = alpha
+    )
+  ) +
+  scale_color_manual(values = c('black', 'purple')) +
+  labs(x = 'Initial genotype', y = '') +
+  facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 1) +
   theme(legend.position = 'none',
         panel.background = element_blank(),
         strip.background = element_rect(colour = 'black'))
@@ -246,15 +282,12 @@ extinct.legend = get_legend(
           legend.box.margin = margin(1, 0, 0, 0))
 )
 
-data.plots = plot_grid(inst.probs, cuml.probs)
+data.plots = plot_grid(cuml.probs, inst.probs, geno.probs, nrow = 1)
 plot_grid(data.plots, extinct.legend, ncol = 1, rel_heights = c(1, .1))
 
 plot_grid(data.plots, extinct.legend, ncol = 1, rel_heights = c(1, .1)) %>%
   save_plot(filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_2.pdf',
-            base_width = 5, base_height = 6)
-
-
-
+            base_width = 8, base_height = 5)
 
 ##### Figure S2
 
