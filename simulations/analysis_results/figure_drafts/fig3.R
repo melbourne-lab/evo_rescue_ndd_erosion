@@ -43,7 +43,7 @@ ext.d %>%
       group = interaction(n.pop0, low.var, alpha, extinct),
       fill = alpha
     ),
-    alpha = 0.1
+    alpha = 0.25
   ) +
   facet_wrap( ~ paste(reorder(n0, desc(n0)), low.var, sep = ', '), ncol = 2) +
   scale_color_manual(values = c('black', 'purple')) +
@@ -60,3 +60,20 @@ ext.d %>%
         strip.background = element_rect(colour = 'black')) +
   ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_3.pdf',
          height = 5, width = 5)
+
+# Supplemental: get differences in extant variances
+
+ext.d %>%
+  filter(!extinct) %>%
+  select(-c(wvar, n)) %>%
+  spread(key = alpha, value = wbar) %>%
+  rename(di = `Density independent`,
+         dd = `Density dependent`) %>%
+  mutate(wdiff = dd - di) %>%
+  summarise(maxd = max(wdiff))
+
+# Supplemental: first time period with wbar > 1
+ext.d %>%
+  filter(!extinct) %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(rescue.time = min(gen[wbar > 1]))
