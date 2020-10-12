@@ -7,70 +7,84 @@ library(tidyr)
 ### Read in genetic data
 
 # Complete pooling data (all in one curve/average)
-all.g = rbind(
-  read.csv('simulations/outputs/final_results/a000_hivar_gene_all.csv')  %>%
-    mutate(low.var = FALSE, ndd = FALSE),
-  read.csv('simulations/outputs/final_results/a035_hivar_gene_all.csv') %>%
-    mutate(low.var = FALSE, ndd = TRUE),
-  read.csv('simulations/outputs/final_results/a000_lowvar_gene_all.csv') %>%
-    mutate(low.var = TRUE, ndd = FALSE),
-  read.csv('simulations/outputs/final_results/a035_lowvar_gene_all.csv') %>%
-    mutate(low.var = TRUE, ndd = TRUE)
-) %>%
-  mutate(n.pop0 = factor(n.pop0, labels = c('Initially small', 'Initially large')),
-         low.var = factor(low.var, labels = c('High variation', 'Low variation')),
-         ndd = factor(ndd, labels = c('Density independent', 'Density dependent')))
+all.v = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+  group_by(n.pop0, low.var, alpha, gen) %>%
+  summarise(vbar = mean(v),
+            vvar = var(v),
+            n = n()) %>%
+  ungroup() %>%
+  mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
+         alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
+         low.var = factor(low.var, labels = c("Low variance", "High variance")))
 
 # Pooling by extinct/extant
 
-ext.g = rbind(
-  read.csv('simulations/outputs/final_results/a000_hivar_gene_ext.csv')  %>%
-    mutate(low.var = FALSE, ndd = FALSE),
-  read.csv('simulations/outputs/final_results/a035_hivar_gene_ext.csv') %>%
-    mutate(low.var = FALSE, ndd = TRUE),
-  read.csv('simulations/outputs/final_results/a000_lowvar_gene_ext.csv') %>%
-    mutate(low.var = TRUE, ndd = FALSE),
-  read.csv('simulations/outputs/final_results/a035_lowvar_gene_ext.csv') %>%
-    mutate(low.var = TRUE, ndd = TRUE)
-) %>%
-  mutate(n.pop0 = factor(n.pop0, labels = c('Initially small', 'Initially large')),
-         low.var = factor(low.var, labels = c('High variation', 'Low variation')),
-         ndd = factor(ndd, labels = c('Density independent', 'Density dependent')))
+ext.v = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+  group_by(n.pop0, low.var, alpha, gen, extinct) %>%
+  summarise(vbar = mean(v),
+            vvar = var(v),
+            n = n()) %>%
+  ungroup() %>%
+  mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
+         alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
+         low.var = factor(low.var, labels = c("Low variance", "High variance")))
+
 
 # Pooling by extant/extinct generation
 
-gen.g = rbind(
-  read.csv('simulations/outputs/final_results/a000_hivar_gene_gen.csv')  %>%
-    mutate(low.var = FALSE, ndd = FALSE),
-  read.csv('simulations/outputs/final_results/a035_hivar_gene_gen.csv') %>%
-    mutate(low.var = FALSE, ndd = TRUE),
-  read.csv('simulations/outputs/final_results/a000_lowvar_gene_gen.csv') %>%
-    mutate(low.var = TRUE, ndd = FALSE),
-  read.csv('simulations/outputs/final_results/a035_lowvar_gene_gen.csv') %>%
-    mutate(low.var = TRUE, ndd = TRUE)
-) %>%
-  mutate(n.pop0 = factor(n.pop0, labels = c('Initially small', 'Initially large')),
-         low.var = factor(low.var, labels = c('High variation', 'Low variation')),
-         ndd = factor(ndd, labels = c('Density independent', 'Density dependent')))
+gen.v = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+  group_by(n.pop0, low.var, alpha, gen, ext.gen) %>%
+  summarise(vbar = mean(v),
+            vvar = var(v),
+            n = n()) %>%
+  ungroup() %>%
+  mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
+         alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
+         low.var = factor(low.var, labels = c("Low variance", "High variance")))
 
+# Fixation probabilities, unconditional
+
+all.fix = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+  group_by(n.pop0, low.var, alpha, gen) %>%
+  summarise(p.fix.pos = mean(p.fix.pos),
+            p.fix.neg = mean(p.fix.neg),
+            n = n()) %>%
+  ungroup() %>%
+  mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
+         alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
+         low.var = factor(low.var, labels = c("Low variance", "High variance")))
+
+# Fixation probabilities by extinction
+
+ext.fix = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+  group_by(n.pop0, low.var, alpha, gen, extinct) %>%
+  summarise(p.pos = mean(p.fix.pos),
+            v.pos = var(p.fix.pos),
+            p.neg = mean(p.fix.neg),
+            v.neg = var(p.fix.neg),
+            n = n()) %>%
+  ungroup() %>%
+  mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
+         alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
+         low.var = factor(low.var, labels = c("High variance", "Low variance")))
 
 ### Genetic variation plot
 
-comp.pool.plot = all.g %>%
+comp.pool.plot = all.v %>%
   ggplot(aes(x = gen)) +
   geom_line(
     aes(
       y = vbar,
-      group = interaction(n.pop0, low.var, ndd),
-      colour = ndd
+      group = interaction(n.pop0, low.var, alpha),
+      colour = alpha
     )
   ) +
   geom_ribbon(
     aes(
       ymin = vbar - 2 * sqrt(vvar / n),
       ymax = vbar + 2 * sqrt(vvar / n),
-      group = interaction(n.pop0, low.var, ndd),
-      fill = ndd
+      group = interaction(n.pop0, low.var, alpha),
+      fill = alpha
     ),
     alpha = 0.1
   ) +
@@ -88,13 +102,13 @@ comp.pool.plot = all.g %>%
 
 comp.pool.plot
 
-gent.pool.plot = gen.g %>%
+gent.pool.plot = gen.v %>%
   ggplot(aes(x = gen)) +
   geom_line(
     data = . %>% filter(ext.gen < 15),
     aes(
       y = vbar,
-      group = interaction(n.pop0, low.var, ndd, ext.gen),
+      group = interaction(n.pop0, low.var, alpha, ext.gen),
       colour = ext.gen
     )
   ) +
@@ -103,7 +117,7 @@ gent.pool.plot = gen.g %>%
     aes(
       ymin = vbar - 2 * sqrt(vvar / n),
       ymax = vbar + 2 * sqrt(vvar / n),
-      group = interaction(n.pop0, low.var, ndd, ext.gen),
+      group = interaction(n.pop0, low.var, alpha, ext.gen),
       fill = ext.gen
     ),
     alpha = 0.1
@@ -112,7 +126,7 @@ gent.pool.plot = gen.g %>%
     data = . %>% filter(ext.gen %in% 15),
     aes(
       y = vbar,
-      group = interaction(n.pop0, low.var, ndd)
+      group = interaction(n.pop0, low.var, alpha)
     ),
     colour = 'black'
   )  +
@@ -121,7 +135,7 @@ gent.pool.plot = gen.g %>%
     aes(
       ymin = vbar - 2 * sqrt(vvar / n),
       ymax = vbar + 2 * sqrt(vvar / n),
-      group = interaction(n.pop0, low.var, ndd)
+      group = interaction(n.pop0, low.var, alpha)
     ),
     fill = 'black',
     alpha = 0.1
@@ -131,7 +145,7 @@ gent.pool.plot = gen.g %>%
   guides(colour = guide_legend("Extinction\ngeneration"),
          fill = guide_legend('Extinction\ngeneration')) +
   labs(x = 'Generation', y = 'Genetic variation') +
-  facet_wrap(ndd ~ paste(low.var, n.pop0, sep = ', '), ncol = 4) +
+  facet_wrap(alpha ~ paste(low.var, n0, sep = ', '), ncol = 4) +
   theme(panel.background = element_blank(),
         panel.border = element_rect(fill = NA),
         panel.grid = element_line(colour = 'gray88'),
@@ -151,7 +165,7 @@ comb.plots %>%
 
 # Fixation of only extant populations
 
-ext.g %>%
+ext.fix %>%
   filter(!extinct) %>%
   gather(key = fixtype, value = p, p.fix.pos, p.fix.neg) %>%
   mutate(fixtype = factor(fixtype, labels = c('Negative allele', 'Positive allele'))) %>%
@@ -159,9 +173,9 @@ ext.g %>%
   geom_line(
     aes(
       y = p,
-      group = interaction(n.pop0, low.var, ndd, fixtype),
-      linetype = paste(n.pop0, low.var, sep = ', '),
-      colour = ndd
+      group = interaction(n.pop0, low.var, alpha, fixtype),
+      linetype = paste(n0, low.var, sep = ', '),
+      colour = alpha
     )
   ) +
   scale_linetype_manual(values = c(4, 6, 2, 5)) +
@@ -176,11 +190,11 @@ ext.g %>%
         legend.position = 'bottom',
         legend.text = element_text(size = 8),
         strip.background = element_rect(colour = 'black'),
-        strip.text = element_text(size = 12)) +
+        strip.text = element_text(size = 12)) #+
   ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_5_extant.pdf',
          height = 5, width = 8)
 
-all.g %>%
+all.v %>%
   gather(key = fixtype, value = p, p.fix.pos, p.fix.neg) %>%
   mutate(fixtype = factor(fixtype, labels = c('Negative allele', 'Positive allele'))) %>%
   ggplot(aes(x = gen)) +
