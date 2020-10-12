@@ -733,3 +733,22 @@ Use for some similarities to G&H - notably that initial population size is impor
 	- subsequent work demonstrting that adaptation features large jumps in fitness rank (Pareto principle - most of the adaptive benefit can come from few substitutions)
 - (thoughts on current hurdles/future challenges/directions on final page)
 
+### Bell, G. 2012. Evolutionary rescue of a green alga kept in the dark. Biol Lett.
+
+##### Experiment
+- Prediction: rescue should be most effective in outbred populations, somewhat effective in inbred sexual populations, least effective in asexual populations (i.e., gradient of genetic diversity)
+- Algae populations, all popagated for thousands of gens. across many years:
+	- Obligate large sexual populations (three replicates)
+	- Bottlenecked obligate sexual populations (two lines) propagated each gen. from one individual
+	- Mixed mating populatons
+	- Asexual populations
+- Two experiments involving plates growing in the dark:
+	- Long term (50 growth cycles) and short term (20 cycles)
+- In long-term experiment, most populations went extinct within 10 cycles
+	- surviving populations declined at first but recovered with U-shaped curve
+- Short-term sexual lines, survival varied by treatment
+	- Outbred > bottlenecked obligate > mixed > asexual
+	- diff. between asexual and mixed is n.s.
+
+Sex is important, and within the realm of sexually reproducing populations genetic variation is important. Consider this for contrasting sex vs. asexual and also effects of bottlenecking. 
+
