@@ -495,3 +495,50 @@ all.lambda %>%
         legend.text = element_text(size = 12),
         strip.background = element_rect(colour = 'black'),
         strip.text = element_text(size = 12))
+
+### Some summary stats
+
+# Size at end of simulation
+all.n %>%
+  filter(gen %in% 15) %>%
+  mutate(ndd = ifelse(alpha %in% 'Density dependent', 'ndd', 'di')) %>%
+  select(-c(alpha, nvar, n.trials, n0)) %>%
+  spread(key = ndd, value = nbar) %>%
+  mutate(ratio.n = 1 - (ndd / di),
+         ldiff.n = log(di) - log(ndd))
+  
+all.n.nosum = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+  # Get relevant columns only
+  select(trial, gen, n, n.pop0, low.var, alpha) %>%
+  # Add extinctions in (for mean population size)
+  rbind(
+    expand.grid(trial = 1:4000,
+                gen = 1:15,
+                n = 0,
+                n.pop0 = c(20, 100),
+                low.var = c(TRUE, FALSE),
+                alpha = c(0, 0.0035))
+  ) %>%
+  group_by(trial, gen, n.pop0, low.var, alpha) %>%
+  summarise(n = sum(n)) %>%
+  # Get rid of trials where population was erroneously added
+  group_by(trial, n.pop0, low.var, alpha) %>%
+  filter(any(n>0)) 
+
+all.n.nosum %>%
+  filter(gen %in% 15) %>%
+  glm(formula = n ~ factor(n.pop0) * factor(alpha) * low.var,
+      family = 'poisson') %>%
+  summary()
+
+# At minimum size
+
+all.n %>%
+  group_by(n.pop0, alpha, low.var) %>%
+  filter(nbar %in% min(nbar)) %>%
+  ungroup() %>%
+  mutate(ndd = ifelse(alpha %in% 'Density dependent', 'ndd', 'di')) %>%
+  select(-c(alpha, nvar, n.trials, n0, gen)) %>%
+  spread(key = ndd, value = nbar) %>%
+  mutate(ratio.n = 1 - (ndd / di),
+         ldiff.n = log(di) - log(ndd))
