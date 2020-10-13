@@ -6,8 +6,11 @@ library(tidyr)
 
 ### Read in genetic data
 
+# All data
+all.data = read.csv('simulations/outputs/final_results/alldata_combined.csv')
+
 # Complete pooling data (all in one curve/average)
-all.v = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+all.v = all.data %>%
   group_by(n.pop0, low.var, alpha, gen) %>%
   summarise(vbar = mean(v),
             vvar = var(v),
@@ -19,7 +22,7 @@ all.v = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
 
 # Pooling by extinct/extant
 
-ext.v = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+ext.v = all.data %>%
   group_by(n.pop0, low.var, alpha, gen, extinct) %>%
   summarise(vbar = mean(v),
             vvar = var(v),
@@ -32,7 +35,7 @@ ext.v = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
 
 # Pooling by extant/extinct generation
 
-gen.v = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+gen.v = all.data %>%
   group_by(n.pop0, low.var, alpha, gen, ext.gen) %>%
   summarise(vbar = mean(v),
             vvar = var(v),
@@ -44,7 +47,7 @@ gen.v = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
 
 # Fixation probabilities, unconditional
 
-all.fix = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+all.fix = all.data %>%
   group_by(n.pop0, low.var, alpha, gen) %>%
   summarise(p.fix.pos = mean(p.fix.pos),
             p.fix.neg = mean(p.fix.neg),
@@ -56,7 +59,7 @@ all.fix = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
 
 # Fixation probabilities by extinction
 
-ext.fix = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+ext.fix = all.data %>%
   group_by(n.pop0, low.var, alpha, gen, extinct) %>%
   summarise(p.pos = mean(p.fix.pos),
             v.pos = var(p.fix.pos),
@@ -108,18 +111,18 @@ gent.pool.plot = gen.v %>%
     data = . %>% filter(ext.gen < 15),
     aes(
       y = vbar,
-      group = interaction(n.pop0, low.var, alpha, ext.gen),
-      colour = ext.gen
-    )
+      group = interaction(n.pop0, low.var, alpha, ext.gen)
+    ),
+    colour = 'firebrick3'
   ) +
   geom_ribbon(
     data = . %>% filter(ext.gen < 15),
     aes(
       ymin = vbar - 2 * sqrt(vvar / n),
       ymax = vbar + 2 * sqrt(vvar / n),
-      group = interaction(n.pop0, low.var, alpha, ext.gen),
-      fill = ext.gen
+      group = interaction(n.pop0, low.var, alpha, ext.gen)
     ),
+    fill = 'firebrick3',
     alpha = 0.1
   ) +
   geom_line(
@@ -140,8 +143,8 @@ gent.pool.plot = gen.v %>%
     fill = 'black',
     alpha = 0.1
   ) +
-  scale_colour_gradient(low = 'lightpink1', high = 'darkred') +
-  scale_fill_gradient(low = 'lightpink1', high = 'darkred') +
+  # scale_colour_gradient(low = 'lightpink1', high = 'darkred') +
+  # scale_fill_gradient(low = 'lightpink1', high = 'darkred') +
   guides(colour = guide_legend("Extinction\ngeneration"),
          fill = guide_legend('Extinction\ngeneration')) +
   labs(x = 'Generation', y = 'Genetic variation') +
@@ -212,6 +215,7 @@ ext.fix %>%
 
 # Summary stats of above:
 
+# Fold-change in fixation of both alleles
 ext.fix %>%
   filter(gen %in% 15) %>%
   mutate(ndd = ifelse(alpha %in% 'Density dependent', 'ndd', 'di')) %>%
@@ -220,6 +224,7 @@ ext.fix %>%
   mutate(fold.pos = p.pos_ndd / p.pos_di,
          fold.neg = p.neg_ndd / p.neg_di)
 
+# Change in number of loci changed
 ext.fix %>%
   filter(gen %in% 15) %>%
   mutate(ndd = ifelse(alpha %in% 'Density dependent', 'ndd', 'di')) %>%
