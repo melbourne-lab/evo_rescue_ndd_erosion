@@ -7,11 +7,15 @@ library(cowplot)
 library(dplyr)
 library(tidyr)
 
+# Load in all simulation data
+all.data = read.csv('simulations/outputs/final_results/alldata_combined.csv')
+
 ##### Figure 1
+
 
 ### Aggregate mean population size (and variance for standard error)
 
-all.n = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+all.n = all.data %>%
   # Get relevant columns only
   select(trial, gen, n, n.pop0, low.var, alpha) %>%
   # Add extinctions in (for mean population size)
@@ -78,7 +82,8 @@ all.n %>%
     labels = c("Density\nindependent", "Density\ndependent"),
     name = ""
   ) +
-  scale_linetype(
+  scale_linetype(# _manual(
+    # values = c(1, 5),
     name = "",
     labels = c("High variation", "Low variation")
   ) +
@@ -100,7 +105,7 @@ all.n %>%
 
 ### Get mean population size by time to extinction (or extant)
 
-ext.n = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+ext.n = all.data %>%
   group_by(gen, n.pop0, low.var, alpha, ext.gen) %>%
   summarise(nbar = mean(n),
             nvar = var(n),
@@ -108,7 +113,7 @@ ext.n = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Initially small", "Initially large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("Low genetic variance", "High genetic variance")))
+         low.var = factor(low.var, labels = c("High genetic variance", "Low genetic variance")))
 
 ### Plot
 
@@ -129,8 +134,8 @@ ext.n %>%
       y = nbar,
       group = interaction(alpha, n.pop0, low.var, ext.gen)
     ),
-    colour = 'red',
-    size = 1.25
+    colour = 'firebrick3',
+    size = 0.5
   ) +
   geom_line(
     data = . %>% filter(ext.gen == 15),
@@ -139,7 +144,7 @@ ext.n %>%
       group = interaction(alpha, n.pop0, low.var)
     ),
     colour = 'black',
-    size = 1.25
+    size = 1
   ) +
   geom_ribbon(
     data = . %>% filter(ext.gen < 15),
@@ -148,7 +153,7 @@ ext.n %>%
       ymax = nbar + sqrt(nvar / n.trials),
       group = interaction(alpha, n.pop0, low.var, ext.gen)
     ),
-    fill = 'red',
+    fill = 'firebrick3',
     alpha = 0.2,
     size = 0.125
   ) +
@@ -165,7 +170,7 @@ ext.n %>%
   ) +  
   labs(x = 'Generation', y = 'Mean population size') +
   scale_y_log10() +
-  facet_grid(cols = vars(n0, low.var), rows = vars(alpha)) +
+  facet_grid(cols = vars(reorder(n0, desc(n0)), low.var), rows = vars(alpha)) +
   theme(panel.background = element_blank(),
         panel.border = element_rect(fill = NA),
         legend.background = element_rect(fill = NA),
@@ -173,11 +178,13 @@ ext.n %>%
 #        legend.position = c(0.2, 0.8),
         legend.text = element_text(size = 12),
         strip.background = element_rect(colour = 'black'),
-        strip.text = element_text(size = 12))
+        strip.text = element_text(size = 12)) +
+  ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_s1.pdf',
+         width = 8, height = 5)
 
 ##### Figure 2
 
-all.ext = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+all.ext = all.data %>%
   # Get number of extant trials in each generation for each treatment
   group_by(n.pop0, low.var, alpha, gen) %>%
   summarise(n.trials = n()) %>%
@@ -198,6 +205,8 @@ all.ext = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
          low.var = factor(low.var, labels = c("Low variance", "High variance")))
 
 ### Get genotype vs. extinction risk
+
+ext.probs = all.data %>% distinct(n.pop0, alpha, low.var, trial, .keep_all = TRUE)
 
 # fit model
 all.ext.glm.3 = glm(extinct ~ factor(n.pop0) * low.var * factor(alpha) +
@@ -282,7 +291,9 @@ extinct.legend = get_legend(
           legend.box.margin = margin(1, 0, 0, 0))
 )
 
-data.plots = plot_grid(cuml.probs, inst.probs, geno.probs, nrow = 1)
+data.plots = plot_grid(cuml.probs, inst.probs, geno.probs, 
+                       labels = c('(A)', '(B)', '(C)'),
+                       nrow = 1)
 plot_grid(data.plots, extinct.legend, ncol = 1, rel_heights = c(1, .1))
 
 plot_grid(data.plots, extinct.legend, ncol = 1, rel_heights = c(1, .1)) %>%
@@ -293,7 +304,7 @@ plot_grid(data.plots, extinct.legend, ncol = 1, rel_heights = c(1, .1)) %>%
 
 ### Get population growth rates of _extant/recently extinct_ populations
 
-all.lambda = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
+all.lambda = all.data %>%
   # Get relevant columns only
   select(trial, gen, n, n.pop0, low.var, alpha) %>%
   # Add extinctions in (for mean population size)
@@ -308,10 +319,11 @@ all.lambda = read.csv('simulations/outputs/final_results/alldata_combined.csv') 
   group_by(trial, gen, n.pop0, low.var, alpha) %>%
   summarise(n = sum(n)) %>%
   # Get rid of trials where population was erroneously added
-  group_by(trial, n.pop0, low.var, alpha) %>%
-  filter(any(n>0)) %>%
+  # group_by(trial, n.pop0, low.var, alpha) %>%
+  # filter(any(n>0)) %>%
   # Get rid of unnecessary zeros (more than one gen post-extincton)
   # start by adding difference column
+  group_by(trial, n.pop0, low.var, alpha) %>%
   mutate(ndiff = c(0, diff(n))) %>%
   # get rid of rows where population is extinct and size did not change
   filter(! (!n & !ndiff)) %>%
@@ -333,6 +345,14 @@ all.lambda = read.csv('simulations/outputs/final_results/alldata_combined.csv') 
 
 all.lambda %>%
   ggplot(aes(x = gen)) +
+  geom_segment(
+    aes(
+      x = 1, xend = 14,
+      y = 1, yend = 1
+    ),
+    linetype = 3,
+    colour = 'lightgray'
+  ) +
   geom_line(
     aes(
       y = lambda.bar,
@@ -378,6 +398,7 @@ all.lambda %>%
         strip.background = element_rect(colour = 'black'),
         strip.text = element_text(size = 12))
 
+# Hm - is this worth including?
 
 ### Old code
 
