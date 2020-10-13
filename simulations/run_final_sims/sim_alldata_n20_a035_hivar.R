@@ -39,7 +39,7 @@ pars = data.frame(
 
 liszt = vector('list', nrow(pars))
 
-set.seed(25275)
+set.seed(100298)
 
 for (i in 1:nrow(pars)) {
   sim.output = sim( a = c(1/2, -1/2), params = pars[i,] )
@@ -64,7 +64,7 @@ for (i in 1:nrow(pars)) {
   
   liszt[[i]] = cbind(demo.summ, gene.summ %>% select(-gen)) 
   
-  print(paste0('ndd 100 hi var ', i, ' of ', nrow(pars)))
+  print(paste0('ndd 20 hi var ', i, ' of ', nrow(pars)))
 }
 
 all.sims = unroller(liszt) %>%
