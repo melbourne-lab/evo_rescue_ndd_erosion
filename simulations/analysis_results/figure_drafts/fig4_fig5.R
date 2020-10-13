@@ -15,7 +15,7 @@ all.v = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("Low variance", "High variance")))
+         low.var = factor(low.var, labels = c("High variance", "Low variance")))
 
 # Pooling by extinct/extant
 
@@ -27,7 +27,7 @@ ext.v = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("Low variance", "High variance")))
+         low.var = factor(low.var, labels = c("High variance", "Low variance")))
 
 
 # Pooling by extant/extinct generation
@@ -40,7 +40,7 @@ gen.v = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("Low variance", "High variance")))
+         low.var = factor(low.var, labels = c("High variance", "Low variance")))
 
 # Fixation probabilities, unconditional
 
@@ -52,7 +52,7 @@ all.fix = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("Low variance", "High variance")))
+         low.var = factor(low.var, labels = c("High variance", "Low variance")))
 
 # Fixation probabilities by extinction
 
@@ -94,7 +94,7 @@ comp.pool.plot = all.v %>%
   guides(colour = guide_legend("Growth form", nrow = 1),
          fill = guide_legend("Growth form", nrow = 1)) +
   labs(x = '', y = 'Genetic variation') +
-  facet_wrap( ~ paste(low.var, n.pop0, sep = ', '), ncol = 4) +
+  facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   theme(panel.background = element_rect(fill = 'white'),
         panel.grid = element_line(colour = 'gray88'),
         panel.border = element_rect(fill = NA),
@@ -145,7 +145,7 @@ gent.pool.plot = gen.v %>%
   guides(colour = guide_legend("Extinction\ngeneration"),
          fill = guide_legend('Extinction\ngeneration')) +
   labs(x = 'Generation', y = 'Genetic variation') +
-  facet_wrap(alpha ~ paste(low.var, n0, sep = ', '), ncol = 4) +
+  facet_wrap(alpha ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   theme(panel.background = element_blank(),
         panel.border = element_rect(fill = NA),
         panel.grid = element_line(colour = 'gray88'),
@@ -162,6 +162,74 @@ comb.plots %>%
             base_height = 8, base_width = 8)
 
 ### Fixation plot
+
+# Figure 5
+
+ext.fix %>%
+  gather(key = fixtype.mean, value = p, p.pos, p.neg) %>%
+  gather(key = fixtype.vars, value = v, v.pos, v.neg) %>%
+  filter((grepl('pos', fixtype.mean) & grepl('pos', fixtype.vars)) |
+           (grepl('neg', fixtype.mean) & grepl('neg', fixtype.vars)) ) %>%
+  mutate(fixtype = gsub('^p\\.', '', fixtype.mean)) %>%
+  select(-c(fixtype.mean, fixtype.vars)) %>%
+  mutate(fixtype = factor(fixtype, labels = c('Maladaptive allele', 'Adaptive allele'))) %>%
+  ggplot(aes(x = gen)) +
+  geom_line(
+    aes(
+      y = p,
+      group = interaction(n.pop0, low.var, alpha, fixtype, extinct),
+      linetype = extinct,
+      colour = alpha
+    ),
+    size = 1.5
+  ) +
+  geom_ribbon(
+    aes(
+      ymin = p - 2 * sqrt(v / n),
+      ymax = p + 2 * sqrt(v / n),
+      group = interaction(n.pop0, low.var, alpha, fixtype, extinct),
+      fill = alpha
+    ),
+    alpha = 0.1
+  ) +
+  scale_colour_manual(values = c('black', 'purple')) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  scale_linetype(labels = c("Surviving", "Extinct")) +
+  facet_wrap(reorder(fixtype, desc(fixtype)) ~ paste(n0, low.var, sep = ', '), ncol = 4) +
+  guides(linetype = guide_legend('', nrow = 1),
+         colour = guide_legend('', nrow = 1),
+         fill = guide_legend('', nrow = 1)) +
+  labs(x = 'Generation', y = 'Probability of fixation') +
+  theme(panel.background = element_blank(),
+        panel.border = element_rect(fill = NA),
+        legend.direction = 'horizontal',
+        legend.position = 'bottom',
+        legend.text = element_text(size = 8),
+        strip.background = element_rect(colour = 'black'),
+        strip.text = element_text(size = 12)) +
+  ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_5_eight_line.pdf',
+         width = 8, height = 5)
+
+# Summary stats of above:
+
+ext.fix %>%
+  filter(gen %in% 15) %>%
+  mutate(ndd = ifelse(alpha %in% 'Density dependent', 'ndd', 'di')) %>%
+  select(-c(v.pos, v.neg, n, alpha)) %>%
+  pivot_wider(names_from = ndd, values_from = c(p.pos, p.neg)) %>%
+  mutate(fold.pos = p.pos_ndd / p.pos_di,
+         fold.neg = p.neg_ndd / p.neg_di)
+
+ext.fix %>%
+  filter(gen %in% 15) %>%
+  mutate(ndd = ifelse(alpha %in% 'Density dependent', 'ndd', 'di')) %>%
+  select(-c(v.pos, v.neg, n, alpha)) %>%
+  pivot_wider(names_from = ndd, values_from = c(p.pos, p.neg)) %>%
+  mutate(fold.pos = 25 * (p.pos_ndd - p.pos_di),
+         fold.neg = 25 * (p.neg_ndd - p.neg_di))
+
+
+# Below: old and obsolete plots (code won't work)
 
 # Fixation of only extant populations
 
