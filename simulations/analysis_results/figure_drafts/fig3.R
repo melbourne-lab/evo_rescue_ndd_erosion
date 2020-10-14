@@ -7,7 +7,7 @@ library(cowplot)
 library(dplyr)
 library(tidyr)
 
-# Load data
+# Load data for intrinsic fitness
 
 ext.d = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
   mutate(w = wbar) %>%
@@ -18,7 +18,7 @@ ext.d = read.csv('simulations/outputs/final_results/alldata_combined.csv') %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("Low variance", "High variance")))
+         low.var = factor(low.var, labels = c("High variance", "Low variance")))
 
 # Plot fitness changes
 
@@ -48,7 +48,7 @@ ext.d %>%
   facet_wrap( ~ paste(reorder(n0, desc(n0)), low.var, sep = ', '), ncol = 2) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
-  scale_linetype(labels = c('Extant', 'Extinct')) +
+  scale_linetype(labels = c('Surviving', 'Extinct')) +
   labs(x = 'Generation', y = expression(paste('Mean intrinsic fitness, ', W[t]))) +
   guides(colour = guide_legend('', nrow = 2), 
          fill = guide_legend('', nrow = 2), 
@@ -58,7 +58,7 @@ ext.d %>%
         panel.grid = element_line(colour = 'gray88'),
         legend.position = 'bottom',
         strip.background = element_rect(colour = 'black')) +
-  ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_3.pdf',
+  ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_3_w.pdf',
          height = 5, width = 5)
 
 # Supplemental: get differences in extant variances
