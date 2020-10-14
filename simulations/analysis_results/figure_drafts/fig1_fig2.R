@@ -298,7 +298,7 @@ plot_grid(data.plots, extinct.legend, ncol = 1, rel_heights = c(1, .1))
 
 plot_grid(data.plots, extinct.legend, ncol = 1, rel_heights = c(1, .1)) %>%
   save_plot(filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_2.pdf',
-            base_width = 8, base_height = 5)
+            base_width = 8, base_height = 8)
 
 ##### Figure S2
 
