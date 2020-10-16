@@ -146,7 +146,10 @@ diff.bars = all.wbars %>%
   group_by(n.pop0, low.var, gen) %>%
   summarise(d_dw = dwbar[alpha == 0] - dwbar[alpha > 0],
             p_di = prop.extant[alpha == 0],
-            p_dd = prop.extant[alpha >  0])
+            p_dd = prop.extant[alpha >  0],
+            p_ln = log(p_di / p_dd)) %>%
+  ungroup() %>%
+  mutate(p_ln = ifelse(is.nan(p_ln), 0, p_ln))
 
 diff.bars %>%
   ggplot() +
@@ -173,4 +176,18 @@ diff.bars %>%
     size = 2
   ) +
   facet_wrap(n.pop0 ~ low.var)
+
+diff.bars %>%
+  ggplot() +
+  geom_point(
+    aes(
+      x = p_ln,
+      y = d_dw
+    )
+  ) +
+  facet_wrap(n.pop0 ~ low.var)
+
+# kill me
+# god why is this so hard yet so uninteresting
+# unbelievable
 
