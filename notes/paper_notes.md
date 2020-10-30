@@ -752,3 +752,44 @@ Use for some similarities to G&H - notably that initial population size is impor
 
 Sex is important, and within the realm of sexually reproducing populations genetic variation is important. Consider this for contrasting sex vs. asexual and also effects of bottlenecking. 
 
+### Pray, L.A., et al. 1996. The effect of population size on effective population size: an empiritcal study in the red flour beetle *Triboleum castaneum*. Genet. Res. Comb.
+
+##### Background
+- Nunney (1993) speculated that Ne/N > 0.5 in most populatons, including small ones (some empirical stuff cited here)
+- Frankham (1995) argues that Ne.N approx 0.1 is more likely common
+
+##### Study
+- Studied Ne in replicates of populations initiated from size 2, 4, ..., 48, 480, 960 (9 - 25 reps/each)
+	- each populaton was initiated with one cSM ++ genotype and remaining cSM bb (geno corresponds to color)
+	- Populations run for only one generation? Counting each geno
+	- among offspring generations, mean and varance of +b indviduals calculated
+- Some statistics and corrections used to estimate Ne
+- Ne/N appears to shrink logarithmically with N
+	- is approx 1 for N = 2, approx 0.8 for N = 960
+	- "a decrease in Ne/N is proportional to an increase in Va"
+	- "there is a significant increase in V_k with logN"
+
+##### Discussion
+- Decrease along large N-gradient is consistent with Husband and Barrett (1992) as well as recalculations from Nunney (1995). 
+
+### Lande, R., and Shannon, S. 1996. The role of genetic variation in adaptaton and population persistence in a changing environment. Evolution, 50(1): 434 - 437. 
+
+- "In the short term, genetic variability is often less critical than other determinants of population persistence (Lande 1988), but in the long-term, it can play the decisive role in allowing a population to persist and adapt in a changing environment."
+	- "However, gnetic variability is thought not to be the rate-limiting factor in long-term evolution... instead, long-term rates of evolution and adaptive radation are constrained by ecological opportunity [refs]"
+- Model: rate if increase, r, is the sum
+	r_max - (maladaptaton penalty) - density dependent term [(n.b. looks very similar to Lande 76/G&H)]
+	- Want: time-averaged fitness (rbar) > 1
+	- Note: the maladaptation penalty includes standing load and maladaptation load
+	- The relative sizes of maladaptation and standing load depends on the type of selection
+- In a constant environment, any amount of phenotypic variance will increase standing load and decrease growth rates
+- Under a directional change in fitness (deterministic), mean phenotype tracks optimum with a predictableevolutionary load
+	- the evolutionary load is more responsive to genotypic variation than to the rate of adaptation, so more variaton is good (closer tracking)
+- In a cyclically changing environment, more variance is good for slow, small-amplitude oscillations
+- Table gives evolutionary loads for randomly fluctuating and autocorrelated random environments
+	- In totally unpredictable envronment, additive genetic variation increases expected deviation from optimal environment
+	- In an autocorrelated environment, load decreases with additive variance as well as autocorrelation time
+- So, genetic variance is not always adaptive. t is maladaptive in cases where increasing adaptve capacity will lead it into evolutionary traps
+	- autocorrelation is helpful here for ensuring that adaptation doesn't end in traps
+
+Interesting but not necessarily relevant to us due to timescales and type of environmental change (although will give some intuition for more complex models).
+
