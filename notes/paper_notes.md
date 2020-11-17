@@ -752,7 +752,7 @@ Use for some similarities to G&H - notably that initial population size is impor
 
 Sex is important, and within the realm of sexually reproducing populations genetic variation is important. Consider this for contrasting sex vs. asexual and also effects of bottlenecking. 
 
-### Pray, L.A., et al. 1996. The effect of population size on effective population size: an empiritcal study in the red flour beetle *Triboleum castaneum*. Genet. Res. Comb.
+### Pray, L.A., et al. 1996. The effect of population size on effective population size: an empiritcal study in the red flour beetle *Tribolium castaneum*. Genet. Res. Comb.
 
 ##### Background
 - Nunney (1993) speculated that Ne/N > 0.5 in most populatons, including small ones (some empirical stuff cited here)
@@ -793,3 +793,61 @@ Sex is important, and within the realm of sexually reproducing populations genet
 
 Interesting but not necessarily relevant to us due to timescales and type of environmental change (although will give some intuition for more complex models).
 
+### Arnaud, L., Haubruge, E., and Gage, M.J.G. 2001. Morphology of Tribolium castaneum male genitalia and its possible role in sperm competition and cryptic female choice. Belgian Journal of Zoology, 132(2): 111 - 115.
+
+- Sexual selection post-copulation: when mating with multiple males females can select for certain sperm
+	- e.g. preferental uptake, directional movement into different storage organs
+- In *T. castaneum* the refs. suggesting that the last male to mate achives predcence (fertilizes 2/3 of ova)
+- Here, looking at male genetalia in reared *T. castaneum*
+	- They have an aedeagus, a scoop with hard spines, which trap and remove rival sperm
+	- Aedeagal length is correlated with body size!
+		- other studies have shown that rel. body size influences success in sperm competition
+	- The bristled hairs on the retractable brush may dislodge rival sperm
+		- or it may be used to signal to females
+
+So: the aedeagus (which may vary in size among individuals) is an organ that appears to have a scoop and brushes which can be used to remove rival sperm to increase fertilization potential for the most recent mate.
+
+### Pai, A., and Yan, G. 2020. Long-term study of female multple mating indicates direct benefits in *Triboleim castaneum*. Entomologia Experimentalis et Applicata, doi:10.1111/eea.12906
+
+- Polyandry (multiple-mating) - why could or would it be advantageous for females? 
+	- E.g., Multiple mating may allow sperm competition
+	- Protects from infertility in case first mate has bad sperm
+	- The inter-mating interval is important: short time periods allows sperm competition
+- Three hypothses for why periodic multiple mating may be good
+	- Fresh sperm means more offspring production
+		- either because old sperm is bad or because there's less of it
+		- females can have long mating periods (several months) although fertility typically is small after the first month
+		- Test: females who can mate at least once a month will have more offspring than less often
+	- Ejaculate contents (besides sperm?) may have effects
+		- e.g., what if it stimulates more egg production
+		- Test: ehanced survivorship and/or offspring for females with more mating opportunites
+	- Genetic benefits
+		- genetic mate compatbility? lots of matings are unsuccessful
+		- polyandry may increase odds of receiving compatible sperm
+		- Test: polyandrous offspring production higher than singly-mated female mating at similar rates
+- Experiment on *T. castaneum*
+	- Nine treatments
+		- Mating period (2wk, month, 1/3 months, 1/5 months)
+		- Distinct mates (distinct vs. multiple)
+	- Recording: n. mating opportunities, n. mates, n. offspring, lifespan
+	- ANOVA: sqrt(offspring) as respons
+	- Sperm replenishment test: paired t-test for offspring prod.
+	- Frequency test: ANOVA comparing offspr ~ mating freq.
+	- Ejaculate effect test: product limit survival analysis
+- Results
+	- Everyone produced offspring
+		- so n. mates does not affect offspring yes/no
+	- Remating frequency (but not n. distinct partners?) influenced n. offspring
+		- More frequent mating, but not more mates per se, increases n. offspring
+	- More offspring in younger mothers, and higher n. offspring after mating when mating every 3-5 months but not >=1/month
+		- I.e., females produce more offspring if second mating is ~3 months after initial mating
+	- Survival was not affected by mating
+	- Fig. 2 is good: n. offspring tails off after mating bout in all groups, but increases after extra mating, such that but mating even more frequently has big impact on n. offspring
+- Sperm replenishment: more frequent mating is good, because sperm apparnetly doens't stick around for very long (offspring tails off after mating)
+- Female longevity: no evidence supporting this in *T. castaneum* although it does in some species
+- Genetic compatibility: no evidence supporting this
+	- although n.b. it would be helpful for avoiding inbreeding
+
+In the context of our rescue study: Triboleum can mate wth multiple males (won't affect number of offspring). They can mate multple times over the course of their lifetimes.
+
+ 
