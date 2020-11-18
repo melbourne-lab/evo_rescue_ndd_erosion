@@ -25,3 +25,10 @@ Was thinking about this earlier today. If we are trying to simulate all four of 
 A question. Thinking about how to incorporate bottlenecks into simulated populations. Perhaps this question has a trivial answer, or thinking about it here will inspire me. If we incorporate a poulation from an old environment into a new environment, does the phenotype from the old environment necessarily cary over? Or will there be a new trait value, determined in part with noise from the new environment? 
 
 
+### Density dependence as a variable
+
+(Nov. 18)
+
+It's worth mentioning in the discussion that the strength of density dependence (alpha) is itself a variable. Increasing the resource or habitat availability will reduce the strength of density dependence and avert some of its negative consequences for rescue. Also as Mike K. suggested, perhaps the strength of density dependence can be thought of as a heritable trait, itself subject to evolution.
+
+
