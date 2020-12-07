@@ -850,4 +850,84 @@ So: the aedeagus (which may vary in size among individuals) is an organ that app
 
 In the context of our rescue study: Triboleum can mate wth multiple males (won't affect number of offspring). They can mate multple times over the course of their lifetimes.
 
- 
+### Chevin, L, and Lande, R. 2010. When do adaptive plasticity and genetic evolution prevent extinction of a density-regulated population? Evolution, 64(4): 1143 - 1150.
+
+- Single environmental shift in an otherwise-stable environment
+- Phenotypic plasticity (see Hendry et al. 2008) which is itself evolvable
+- Similar to Lande 2009
+	- Lande '09 shows that w/ sufficient variation in plasticity, first step in rescue is rapid increase in plastcty then slow genetic change supplanting it
+- trait $z$ with a linear reaction norm, $z = a + beps + e$
+	- eps is environmental variable
+	- e residual variaton
+	- a is breeding value in (arb.) reference environment
+	- b is plasticity (slope, how much env. change affects pheno)
+	- sig_e, sig_a, sig_b are genetic variances assoc. with each var s/t sig^2_z = sig^2_e + sig^2_a + sig^2-b
+		- assume sig_a, sig_b constant over time
+- Fitness of individual with trait z, plasticity b, in pop. size N is
+	- R(z,b,N) = R0^{1 - f(N)/f(K0)} W(z) C(b)
+	- K0 carrying capacity in abs of plasticity and genetic load
+	- W(z) is gaussan selection, exp(-(z-Beps)^2 / (2 om_z^2))
+		- so fitness changes linearly with environment acc'd to B
+	- C(b) is cost of plasticity, exp(-b^2 / (w \om_b^2))
+- Selection first acts on b, then on z
+- Phase 1 of evolutionary process: rapid increase "mean plasticity" (mean of b)
+- Phase 2 of process: loss of plasticity compensated for by trait evoluton (increase in mean of height in reaction norms, a?)
+	- trait (z) not affected here
+- Density dependence: f(N) = N is Ricker model, f(N) = N^{th} is theta-logistic
+	- "By comparison [to GH95], density dependence accelerates the declining phase and slows the increasing phase, reducng population size at all phases"
+- More plasticity means less time to reach phenotypic optimum and higher population trough
+- Persistence: more plasticity means the initial population size required for persistence can be smaller (rel. to extinction threshold)
+	- for alpha > 0.5 persistence seems guaranteed?
+
+Main effects of NDD studied here are simply the obvious ones: steeper decline, slower ascent. Because plasticity is faster and then is replaced at rate by adaptation, more plasticity means more rapid adaptation and lower trough. Without plasticity the initial size needed to avert extinction (under NDD) is much larger.
+
+### Reznick, DN and Ghalambor, CK. 2001. The population ecology of contemporary adaptations: what empirical studies reveal about the conditions that promote adaptive evolution. Genetica, 112-113: 183 - 198.
+
+- "Recent reviews suggest that natural populations are capable of sustained rates of evolution many orders of magnitude higher than those observed in the fossil record [refs]"
+- Here: review of studies focusng on rapid adaptive evolution, phenotypic change, genetic basis for observed trait change
+##### Studies
+- Most empirical studies look at resp. to anthropogenic changes in environment (e.g., heavy metal tolerance)
+- 47 studies in all
+	- 36 with some genetic basis for change and 11 with only evidence of pheno change
+	- 38 with rapid evolution in animals (16 vertebrate species, 19 invert)
+	- Nine terrestral isects, five aquatic inverts
+- Traits under selection: morphology, phys, lfe history, phen, behavior
+- "almost all cases of contemporary adaptation were associated with 'colonization' events." (i.e. into new habitats)
+	- all but six studies had colonizaton components
+	- coloninies could be isolated, or could result from heterogeneity in environments allowing adaptation (e.g., metapopulations), i.e., is there gene flow possible between populatons
+- Adaptations
+	- use of novel resource/food source (e.g., soap bugs feeding on novel plants)
+	- bio-physical changes (e.g., metal tolerance)
+	- changes to mortality (interesting life history), mostly predation
+	- character dsplacement? competition?
+##### Discussion
+- Adaptations are typically polygenic and involve a suite of adaptations (e.g., life history of guppies, size at maturity, devo rate, fecundity, offspring size)
+- [...]
+
+So... uh, radid adaptation can occur, although usually in several traits.
+
+### Shaw, RG, and Etterson, JR. 2012. Rapid climate change and the rate of adaptation: insight from experimental quantitative genetics. New Phytologist 199: 752 - 765.
+
+- "a critcal outstanding queston of our time is the extent to which adaptve evoluton will ameliorate the detrimental effects of rapid contemporary climate change"
+- Migration: populations could "track" climate by moving polewards or up elevational gradients
+	- meta-analyses suggest range contraction in 60-90% of species in USDA Forest Inventory and only ~20% of these sp. show poleward expansion
+	- Habitat fragmentation makes dispersal polewards more difficult
+- Adaptaton and rescue
+	- grass species and metal tolerance (Antonovics refs)
+		- although many species by mines dd not adapt
+	- widespread angiosperm resistance to herbicide
+- Fitness links demography with evolutionary processes
+	- What influences the rate of adaptation? 
+		- Mutation, recombnation.
+		- Drft (random sampling) opposes by reducing VA(w)
+	- Lopez et al. 2009 on fragmentation and reduced population size and its effects on drift
+	- Gene flow: good by alleviating inbreeding and potentially bringing in useful genetic diversity (esp. for similar environments), bad if incoming genes are maladapted esp. in temporally stable environments
+	- See Pease et al. 1989, Polechova et al. 2009 for adaptation + migration + NDD
+- Experiments and predictions
+	- Traits which are/are not likely to be under selection pressure suggestng populations may have considerable genetic variation with heritability although some trats may have negative correlation (e.g., water-use efficiency and rosette size) (maybe use these refs?)
+- "To our knowledge, [VA(w) and mean absolute fitness W] have never been jointly estimated for any population in nature, perhaps largely because of the challenges of doing so"
+	- but you can use Aster mods for measuring mean lifetime fitness
+
+So: some stuff in here about how much genetic variation exists in wild populations, but also we lack joint estimation of these and don't have a thorough knowledge of which traits are actually under selection and/or what their variance+heritabilities are. This is all for plants. Good for overviews.
+
+
