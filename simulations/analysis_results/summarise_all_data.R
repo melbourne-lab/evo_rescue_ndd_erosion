@@ -24,17 +24,7 @@ pars = data.frame(
 
 ### Read in all data
 
-all.data = 
-  rbind(
-    read.csv('simulations/outputs/alldata_n100_a000_hivar.csv'),
-    read.csv('simulations/outputs/alldata_n100_a000_lowvar.csv'),
-    read.csv('simulations/outputs/alldata_n20_a000_hivar.csv'),
-    read.csv('simulations/outputs/alldata_n20_a000_lowvar.csv'),
-    read.csv('simulations/outputs/alldata_n100_a035_hivar.csv'),
-    read.csv('simulations/outputs/alldata_n100_a035_lowvar.csv'),
-    read.csv('simulations/outputs/alldata_n20_a035_hivar.csv'),
-    read.csv('simulations/outputs/alldata_n20_a035_lowvar.csv')
-  )
+all.data = read.csv('simulations/outputs/final_results/alldata_combined.csv')
 
 ### Inspect all data
 
