@@ -35,11 +35,7 @@ all.z = all.data %>%
   summarise(zbar = mean(d),
             zvar = var(d),
             n = n()) %>%
-  ungroup() #%>%
-  # factorize levels (not run here)
-  mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
-         alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("High diversity", "Low diversity")))
+  ungroup() 
 
 # Run the above, but conditioned on surviving to the end of the experiment
 ext.z = all.data %>%
@@ -48,10 +44,7 @@ ext.z = all.data %>%
   summarise(zbar = mean(d),
             zvar = var(d),
             n = n()) %>%
-  ungroup() #%>%
-  mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
-         alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("High diversity", "Low diversity")))
+  ungroup()
 
 # Here: get the mean rate of phenotypic change (+ uncertainty) for each param combo
 all.k0 = all.data %>%
@@ -98,6 +91,7 @@ all.dk = merge(x = all.z, y = all.k0, by = c('n.pop0', 'low.var')) %>%
 #   - dashed line is expectated geometric increase to pheno. optimum
 
 all.dk %>%
+  mutate_at(vars(zest, zmin, zmax, zbar), list(~ 2.75 - .)) %>%
   ggplot(
     aes(
       x = gen, 
@@ -240,29 +234,52 @@ all.0 = all.data %>%
 did.preds = expand.grid(n.pop0 = c(20, 100),
             low.var = c(TRUE, FALSE),
             gen = 1:15) %>%
+  # initialize all param combos (alpha = 0) and time steps
+  # merge with initial observed means in `all.0`
   merge(all.0, by = c('n.pop0', 'low.var')) %>%
+  # t is time step (gen 1 is inital condition, t = 0)
   mutate(t = gen - 1) %>%
+  # G&H's expression for log pop size
+  # line 1: log of nitial condition
+  # line 2: standing variation load (max fitn. - pop deviation)
+  # line 3: lag load (due to population mean pheno)
+  # (nl, nh are low and high based on uncertainty n k)
   mutate(nt = log(n.pop0) + 
               t * (log(2) + (1/2)*log(w2 / (w2 + sig2))) -
-              (2.75)^2 / (2 * (w2 + sig2)) * ((1 - kbar^(2*t)) / (1 - kbar^2))) %>%
+              (2.75)^2 / (2 * (w2 + sig2)) * ((1 - kbar^(2*t)) / (1 - kbar^2)),
+         nl = log(n.pop0) + 
+              t * (log(2) + (1/2)*log(w2 / (w2 + sig2))) -
+              (2.75)^2 / (2 * (w2 + sig2)) * ((1 - (kbar-2*kse)^(2*t)) / (1 - (kbar-2*kse)^2)),
+         nh = log(n.pop0) + 
+              t * (log(2) + (1/2)*log(w2 / (w2 + sig2))) -
+              (2.75)^2 / (2 * (w2 + sig2)) * ((1 - (kbar+2*kse)^(2*t)) / (1 - (kbar+2*kse)^2))
+  ) %>%
+  # Sort rows
   arrange(n.pop0, low.var, gen)
   
-merge(all.n, did.preds %>% select(n.pop0, low.var, gen, nt)) %>%
-  mutate(Nt = exp(nt)) %>%
+# Plot data 
+# (combine data, get pop size on natural scale, factorize levels, plot)
+merge(all.n, did.preds %>% select(n.pop0, low.var, gen, nt, nl, nh)) %>%
+  mutate(Nt = exp(nt),
+         Nl = exp(nl),
+         Nh = exp(nh)) %>%
+  mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
+         alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
+         low.var = factor(low.var, labels = c("High diversity", "Low diversity"))) %>%
   ggplot(aes(x = gen)) +
   geom_line(
     aes(
       y = nbar,
-      colour = factor(alpha > 0),
-      group = factor(alpha > 0)
+      colour = alpha,
+      group = alpha
     )
   ) +
   geom_ribbon(
     aes(
       ymin = nbar - 2 * sqrt(nvar / n.trials),
       ymax = nbar + 2 * sqrt(nvar / n.trials),
-      fill = factor(alpha > 0),
-      group = factor(alpha > 0)
+      fill = alpha,
+      group = alpha
     ),
     alpha = 0.1
   ) +
@@ -272,11 +289,32 @@ merge(all.n, did.preds %>% select(n.pop0, low.var, gen, nt)) %>%
     ),
     linetype = 5
   ) +
+  geom_ribbon(
+    aes(
+      ymin = Nl,
+      ymax = Nh
+    ),
+    alpha = 0.25
+  ) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   scale_y_log10() +
-  facet_wrap(n.pop0 ~ low.var)
+  facet_wrap(n.pop0 ~ low.var) +
+  theme(legend.position = 'bottom')
 
+# Okay, very intersting.
+# Patterns:
+#   - The expression seems to handle the first few tme steps well
+#     (i.e. dashed line corresponds to solid black line well)
+#   - NDD has much larger effects than other changes to model
+#   - Very surprising: observed D pop sizes are *larger* than
+#     G&H's expectations
 
-ggplot(did.preds) +
-  geom_line(aes(x = t, y = nt, group = interaction(n.pop0, low.var)))
+# What explains expectations being smaller than observed?
+# One obvious possibility is I have the formula wrong somehow
+# (although note that the rate of adaptation looks good!)
+# Another thing worth noting is that when phenotypic var. changes, it's not just
+# the $k$ term that changes. Pheno variance also appears in the (z^2 / (w^2 +
+# sig^2)) term (although this should increase) as well as in the lag term. These
+# may be causing the deviations. I played around with this expression with pen
+# and paper and it's not analytically tractable as far as I can tell.
