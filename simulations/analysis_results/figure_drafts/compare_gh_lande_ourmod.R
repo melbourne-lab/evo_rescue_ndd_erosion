@@ -81,13 +81,6 @@ all.k0 = all.data %>%
 
 ### Get first time step's genotypic change
 
-# all.k0 = all.g %>%
-#   filter(gen %in% 1:2, alpha %in% 'Density independent') %>%
-#   group_by(n.pop0, low.var) %>%
-#   mutate(k0 = exp(diff(log(gbar)))) %>%
-#   distinct(n.pop0, low.var, k0) %>%
-#   merge(x = all.g, y = ., by = c('n.pop0', 'low.var'))
-
 # Use the observed k values above to get estimated z_t (`zest` for z est.)
 # also use the bounds of a ~95% uncertainty interval
 # Merge this with observed phenotypic data for comparison.
@@ -99,7 +92,10 @@ all.dk = merge(x = all.z, y = all.k0, by = c('n.pop0', 'low.var')) %>%
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
          low.var = factor(low.var, labels = c("High diversity", "Low diversity")))
 
-# Plot
+# Plot 
+#   - NDD in purple
+#   - density independent in solid black
+#   - dashed line is expectated geometric increase to pheno. optimum
 
 all.dk %>%
   ggplot(
@@ -128,60 +124,31 @@ all.dk %>%
     ),
     linetype = 5
   ) +
-  scale_color_manual(values = c('black', 'purple')) +
-  scale_fill_manual(values = c('black', 'purple')) +
-  facet_wrap(n0 ~ low.var)
-
-all.dk %>%
-  ggplot(
-    aes(
-      x = gen, 
-      group = interaction(n.pop0, low.var, alpha)
-    )
-  ) +
-  geom_line(
-    aes(
-      y = gbar,
-      colour = alpha
-    )
-  ) +
   geom_ribbon(
     aes(
-      ymin = gbar - 2 * sqrt(gvar / n),
-      ymax = gbar + 2 * sqrt(gvar / n),
-      fill = alpha
+      ymin = zmin,
+      ymax = zmax
     ),
-    alpha = 0.1
-  ) +
-  geom_line(
-    aes(
-      y = gest
-    ),
-    linetype = 5
-  ) +
-  geom_ribbon(
-    aes(
-      ymin = gmin,
-      ymax = gmax
-    ),
-    alpha = 0.1
+    alpha = 0.2
   ) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap(n0 ~ low.var)
 
-### 
+### Now do the same but conditioned on popultions going extinct/surviving
 
-ext.dk = merge(x = ext.g, y = all.k0, by = c('n.pop0', 'low.var')) %>%
-  mutate(gest = 2.75 * kbar^(gen - 1),
-         gmin = 2.75 * (kbar - 2 * kse)^(gen-1),
-         gmax = 2.75 * (kbar + 2 * kse)^(gen-1)) %>%
+ext.dk = merge(x = ext.z, y = all.k0, by = c('n.pop0', 'low.var')) %>%
+  mutate(zest = 2.75 * kbar^(gen - 1),
+         zmin = 2.75 * (kbar - 2 * kse)^(gen-1),
+         zmax = 2.75 * (kbar + 2 * kse)^(gen-1)) %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
          low.var = factor(low.var, labels = c("High diversity", "Low diversity")))
 
+# Plot
+
 ext.dk %>%
-  mutate_at(vars(gest, gmin, gmax, gbar), list(~ 2.75 - .)) %>%
+  mutate_at(vars(zest, zmin, zmax, zbar), list(~ 2.75 - .)) %>%
   ggplot(
     aes(
       x = gen, 
@@ -190,38 +157,46 @@ ext.dk %>%
   ) +
   geom_line(
     aes(
-      y = gbar,
-      colour = alpha
+      y = zbar,
+      colour = alpha,
+      linetype = extinct
     )
   ) +
   geom_ribbon(
     aes(
-      ymin = gbar - 2 * sqrt(gvar / n),
-      ymax = gbar + 2 * sqrt(gvar / n),
+      ymin = zbar - 2 * sqrt(zvar / n),
+      ymax = zbar + 2 * sqrt(zvar / n),
       fill = alpha
     ),
     alpha = 0.1
   ) +
   geom_line(
     aes(
-      y = gest
+      y = zest
     ),
     linetype = 5
   ) +
   geom_ribbon(
     data = . %>% mutate(!extinct),
     aes(
-      ymin = gmin,
-      ymax = gmax
+      ymin = zmin,
+      ymax = zmax
     ),
     alpha = 0.1
   ) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
+  scale_linetype_manual(values = 1:2) +
   facet_wrap(n0 ~ low.var)
 
 ### Could we use this to get population size? (*eyes emoji*)
+# G&H 1995 provide (in piecemeal form) an expression for log pop size over time
+# Let's plot that and compare with observed population sizes
+# Note that G&H's model is continuous valued and handles extinctions by an
+# extincton threshold, i.e., this expression should account for extinctions. Our
+# model likewise includes extinctions in the mean population size.
 
+# Get population size
 all.n = all.data %>%
   # Get relevant columns only
   select(trial, gen, n, n.pop0, low.var, alpha) %>%
@@ -246,14 +221,22 @@ all.n = all.data %>%
             n.trials = n()) %>%
   ungroup()
 
+# Get global initial variables used in the G&H expression
 all.0 = all.data %>%
+  # Density independent trials only
   filter(!alpha) %>%
-  distinct(trial, n.pop0, low.var, .keep_all = TRUE) %>%
+  # Get intial conditions for each trial
+  filter(gen %in% 1) %>%
+  # Get mean phenotypic variance (genetic var. v + env. var.)
+  # I checked in sims and this is pretty similar to the true variances
   group_by(n.pop0, low.var) %>%
   summarise(sig2 = mean(v) + 0.5) %>%
+  # Selection pressure
   mutate(w2 = 1 / 0.14 / 2) %>%
+  # Get `k` (the rate of phenotypic change)
   merge(y = all.k0, by = c('n.pop0', 'low.var'))
 
+# Now, get the density independent predictions from G&H
 did.preds = expand.grid(n.pop0 = c(20, 100),
             low.var = c(TRUE, FALSE),
             gen = 1:15) %>%
