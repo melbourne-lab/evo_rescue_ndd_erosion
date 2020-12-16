@@ -930,4 +930,77 @@ So... uh, radid adaptation can occur, although usually in several traits.
 
 So: some stuff in here about how much genetic variation exists in wild populations, but also we lack joint estimation of these and don't have a thorough knowledge of which traits are actually under selection and/or what their variance+heritabilities are. This is all for plants. Good for overviews.
 
+### Godwin, JL, et al. 2020. Mating patterns influence vulnerability to the extinction vortex. Global Change Biology.
+
+- "the extinction vortex has proven to be an informative model for conceptualizing [...]" refs
+- "[...] ample evidence across a range of systems showing that individual or combined effects of envronmental stress and genetcs lead to reduced population size or even extinction" refs
+	- but, no explicit experimental tests of the vort model
+- This study: explicit experimental test of the vortex model, where resp. is "consquences for population viability"
+	- Trt 1: dietary restriction (restrain missing protein)
+	- Trt 2: environmental stress (heat wave)
+	- Trt 3: bottleneck
+	- Resp: # offspring produced after ~15 generations
+	- Also, trt 4? Mating patterns (monogamy vs. polyandry)
+		- sexual selection can create more btwn-individual variance in reproductive success potentially accentuating effects of vortex (due to adaptation loss?)
+- "Genic capture theory" - reproductive success in face of competton and choice depends on "wider conditon which is contingent on genome-wide variation" (??)
+	- sexual selection can reduce load by (1) making mutations more deleterous in males and (2) load ffects mating and fertilization s/t average father has less fitness load than average male (hmm...)
+	- under this theory (?) sexual selection may enhance population fate in the face of vortex by increasing overall condition (??)
+	- or, if sex selection operates in opposition to natural selection (e.g., antlers too big) or by creating different reproductive optima for males and females
+##### Experiment
+- Mating treatment: enforced monogamy vs. polyandrous (five males to one female) 
+	- three independent lines within each regme with 20 monogmous or 12 polyandrous groups per line (Ne approx 40)
+- Vorte: 95 generations of experimentl evolution wth strong vs. weak selection
+	- 15 generations inside the vortex
+	- in each line, nine replicate populations initiated with non-sib virgin pairs (9 pop'ns x 3 lines x 2 sexual selection treatments = 54 populations)
+	- populations initiated... somehow
+	- in each treatment: generation initiated wth 5m + 5f, after mating 10 pupae sexed and used for initiating next gen while remaining pupae are usd to calculate population fitness
+	- then run through five three-generation cycles of stress (nutrents then thermal then or genetic)
+		- nutrients: replicate small popn's of 5m and 5f in single sex groups w/ nutrient-poor food for 10 days then placed together for 7; some pupae taken for next generation and remainder counted for pop'n fitness
+		- thermal: small populations (Ne = 10) exposed to 5 day heat wave during mating stage; heat will damage male fertility
+		- bottleneck: inbreeding depresson based on restricting population to size Ne = 2
+##### Analysis
+- Responses: 
+	- time to extinction (accelerated failure time model; ext. time ~ ss)
+	- population ftness (neg. bin; offspring by all adults averaged over populations and lines ~ ss + gen)
+	- per female fitness (total number of offspring divided by two)
+	- relative population fitness (per pop'n fitness per regime-x-gen divided by baseline fitness for pattern
+##### Results
+- in control condition, total reproductive output of small populations did not vary by ss
+	- in pairs, small but sign. difference; monog > polya
+	- per female, fewer offspring in small groups than in pairs for both ss treatments (could be due to group oviposition)
+- extinctions more likely in monogamous treatments than in polyandrous ones (100% after 15 gens vs 40%)
+	- suggests poly survived 2.65x longer than monog
+- fitness: more rapid decline in mean fitness for monogamy compared to poly
+	- divergence happened after generation four (in second cycle)
+	- no strong differences among stressor types on fitn decline
+##### Discussion
+- prev. work in Triboleum has shown sexual selection -> more male reproductive competitiveness (?), more female abilty to handle sexual conflict (???), increases ability to cope with inbreeding stress, stronger competitors with conspecifics
+- could the difference in performance be explained by differences in inbreeding? evidence suggests no (what the heck is going on in this paragraph?)
+- support for the genic capture theory, s/t reproductive success in face of competition is achieved by individuals in better condition (what the heck does this mean? genome-wde variation across traits?)
+	- sexual selection + genic capture would counter the cost of making males who don't reproduce in polyandry (because the most fit male would reproduce meaning on sum offspring is more fit?)
+- para on the vortex: two predictions of the EV model (logarithmic scaling time of pop size to extincton and also increasing rate of decline closer to extinction) not supported (sigmoidal rate of extinction and flattening of fitness declines)
+	- could be genetic purging
+
+Okay... this paper is very confusing. Will need a re-read. Extinction vortex plays only a small role it seems; the sexual selection stuff seems to be more important. Were the 95 generations just to establish an evolutionary history? The part about sexual selection and implications of competition among males (this genic capture stuff?) may be related to intraspecific competition. At least there is some stuff about the extinction vortex and predictions of that model (which do not come true here). Does the experimental procedure really fit in with the idea of the vortex? Seems convoluted and confusing, esp. the way individuals are sampled in founding the next generation.
+
+### Yamada, Y. (???) Tribolium as a biological model in quantitative genetics. (???)
+
+###### Trib. mating and genetics, etc.
+- 10 (small) chromosomes incl. XY sex chromosome
+- "mating is polygamous in nature"
+- Quantitative traits include: larval weight, pupal weight, adult weight, development tme, egg number
+	- heritability of egg number: "low to medium", high heterosis
+	- egg number +correlated with larval weight
+- Cite Orozco 1969: heritability for egg laying about 20%, responds to environment
+
+Hmm... weird, where was this even published? Consider the Orozco 1969 piece. Beyond that probably no use.
+
+### Lavie, B, Ritte, U, and Moav, R. 1978. The genetic basis of egg lay response to conditioned medium in the flour betle, Tribolium castaneum. Theoretical and Applied Genetics, 52, 193 - 199.
+
+- Is rate of egg laying in Tc an "independent genetic character"?
+- Krause and Bell 1972 say that 75-80% of penotypic variation in fitness is from egg production (so selection should favor higher rates)
+	- but, we would expect egg production to be involved in adapting to changing environments and thus it may be good to have fewer eggs in certain cases (e.g., overcrowding)
+
+Is this going in the right direction? This seems to be about selection and treats that differently than the assertion that egg numbers is a quantitative trait... maybe first consider Orazco above. Maybe return to this.
+
 
