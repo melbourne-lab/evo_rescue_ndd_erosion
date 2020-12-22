@@ -1003,4 +1003,41 @@ Hmm... weird, where was this even published? Consider the Orozco 1969 piece. Bey
 
 Is this going in the right direction? This seems to be about selection and treats that differently than the assertion that egg numbers is a quantitative trait... maybe first consider Orazco above. Maybe return to this.
 
+### Fagan, W.F., and Holmes, E.E. 2006. Quantifying the extinction vortex. Ecology letters.
+
+- Observation studies during actual extinction events are rare (but see, Belovsky et al. 1999 and Schoener et al. 2003)
+- This study: compiled studies looking at vertebrate extinctions (publshed and unpublished), testing two predctions
+	1. In extinct populatons, lifetimes scale logarithmically with populaton size (see Lande et al. 2003)
+	2. Extinction vortex characteristics, feedbacks,
+		a. proportionately larger declines in abundance as population nears extinction
+		b. increase in inter-annual variability in changes in population size for smaller populations (isn't this just stochasticity?)
+- Dataset: 10 annual time serieses 12-21 years long of vertebrate population declining to extinction
+	- note that the short time-frame may bias extinction times to be sooner compared to pool of all extinct populations
+- Metrics from each dataset:
+	- smallest size from which an increase occurred
+	- population size from which smallest decline occurred
+	- population size one year before extinction
+	- n.b. when calculating growth rates N_final = 1 (good idea!)
+- EV tests:
+	- (1) did year-to-year rates of decline increase as extinction neared
+		- i.e. dd ln(N_t / N_{t+1}) depend on t?
+		- if positive slope with t, supported
+		- also does it depend on N_{t+1}
+	- (2) did year-to-year rates of decline become more variable closer to extincton
+		- variability is square of residuals from regression above
+	- (3) did the "value" of a population ??
+		- time greater than/less than 10 to see if dynamics are different closer to extinction
+##### Results
+- In four populatons, no increases once populations went < 50
+	- in two populations, increases < 10
+- Rate of decline to extinction from population peak did not vary by population size (no dens. dep.?)
+- Last peak was 70 (incl. salmon)/ 49 (not incl. salmon)
+	- mean last census size before extinction was 8 (2-26)
+- Population size: logarithm of pop size prop. to time to extinction (i.e., time to extinction exponential with pop size)
+	- initial populaton size also log. relationship w/ time to extinction
+- Year to year population decline grow larger closer to extinction
+- More variable population size changes closer ot extinction
+- The slope in the log curve for tau < 10 steeper than tau > 10 (i.e., steeper decline closer to extinction)
+
+Interesting. EV hypothesis supported here. For our purposes, looking at log(N_t / N_{t+1}) and regressing it against time to extincton seems like a good idea. Some difficulty in here because our model also has rates of adaptation that will change the population growth rate... Can also think about regressing change in genotypes. Extinct/surviving - would this work as a predictor?
 
