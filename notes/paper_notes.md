@@ -1041,3 +1041,24 @@ Is this going in the right direction? This seems to be about selection and treat
 
 Interesting. EV hypothesis supported here. For our purposes, looking at log(N_t / N_{t+1}) and regressing it against time to extincton seems like a good idea. Some difficulty in here because our model also has rates of adaptation that will change the population growth rate... Can also think about regressing change in genotypes. Extinct/surviving - would this work as a predictor?
 
+### Rogers, A., and Prugel-Bennett, A. 2000. Evolving populations with overlapping generations. Theoretical Population Biology.
+
+- One-locus models of adaptation with overlapping generations: Moran 1958, Ewens 1979
+- Multi-locus models of overlapping generations using cumulants or momnts of population efficacy distributon: Woodcock and Higgs 1996, Prugel-Bennett 1997
+	- analytical solutions for weak selection
+	- effects of genetic drift are twice as large with overlapping generations compared to non-overlapping ("extra randomness with which population members die")
+##### Model
+- N haploid organisms, L genes with positive/negative alleles s/t efficacy is E = \sum_i^L S_i for S_i = -1 or 1
+- Individuals are included in the next generation according to W_j = exp(b E_j) / Z where b is selection pressure (b = log(1+s)), Z is selection pressure-weighted sum of fitnesses
+- (not that b' = b / sqrt(L) to scale by number of loci... same scaling as our model)
+- Each time step, population member selected to reproduce asexually (offspring identical genotype?) and another population member randomly selected to die (uniformly?)
+- Mutations occur - bdirectional at rate g
+- Track dynamics using cumulants of the distribution of E
+	- Prugel-Bennett and Shapiro 1997 use cumulants to model non-oerlapping generations
+- Expressions given for both overlapping and non-overlapping generations, first four cumulants
+	- the overlapping generation equations have an extra factor of N in denominator (due to extra reproductive event?)
+- Uh... the cumulants are slightly different over time. I guess K1 reaches a smaller steady state and K2 is always slightly smaller...
+- Some stuff on mutations...
+
+Okay... the discussion here is two paragraphs. What the heck? I can't rally interpret what's going on here. Very strange. But I like the idea of studying the cumulants. Is this easy to do? Is it amenable to our model? Note the efficacy here is a haploid version of our genetic model although selection is handled slightly differently.
+
