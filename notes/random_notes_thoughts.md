@@ -31,4 +31,16 @@ A question. Thinking about how to incorporate bottlenecks into simulated populat
 
 It's worth mentioning in the discussion that the strength of density dependence (alpha) is itself a variable. Increasing the resource or habitat availability will reduce the strength of density dependence and avert some of its negative consequences for rescue. Also as Mike K. suggested, perhaps the strength of density dependence can be thought of as a heritable trait, itself subject to evolution.
 
+### Overlapping generations
 
+(Dec. 28)
+
+Been thinking... so many models of rescue and adaptation assume there are no overlapping generations. This makes modeling phenotypic change much simpler. But we know that lots of organisms are perennials with overlapping generations. It would be very easy to flexibly adapt our model to compare discrete generations with overlapping generations.
+
+The easiest way to do this in simulations is to make the beetles biennial; here, cut the *annual* fitness of females in half but have them survive for an extra year. Their per-capita lifetime fitness should be the same... is it necessarily true that the population growth rate is the same though? Think harder about this. (Individuals age 1 contribute 1 + E[z_i] to next generation because they survive... - does it make sense to have survival proportional to fitness?). It would be a little difficult to  have a longer lifespan with stochastic survival, as there is some finagling to set growth rates to be equivalent to the annual life history model.
+
+One note on modeling biennials - a lot of plants are biennial, including some weedy species. This could be interesting for pest control.
+
+I haven't looked too seriously into what is known about the rate of phenotypic change with overlapping generations. A. Prugel-Bennett has some models (and analytical work) demonstrating that adaptation is slowed down. This is pretty intuitive - maladapted alleles stick around for longer and will mix with adapted alleles, meaning maladapted alleles remain in the population for longer. I should look into some textbooks (Lynch and Walsh, Falconer and Mackay) to see what they say. Can the rate of adaptation be analytically characterized in biennials? 
+
+A single sudden environmental shift would be trivial (likely) - adaptation would be slower and extinction is probably more likely. To make this project more interesting, it would be interesting to focus on a stochastic environment. Stochasticity is potentially what is making longer survival beneficial. Then, we may end up in cases similar to the Lyberger et al. paper where higher heritability (or greater levels of phenotypic change) increase extinction risk by having the population adapt to noise. This probably makes sense to think about a moving target with stochasticity, i.e., $\theta_t = \theta_0 + (b)(t) + e_t$ for random variable $e_t$. Here there's likely some classic lit to refer to about survival strategies in varying environments. Nancy and Dan would be great to talk to here.
