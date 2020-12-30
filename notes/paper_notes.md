@@ -1062,3 +1062,36 @@ Interesting. EV hypothesis supported here. For our purposes, looking at log(N_t 
 
 Okay... the discussion here is two paragraphs. What the heck? I can't rally interpret what's going on here. Very strange. But I like the idea of studying the cumulants. Is this easy to do? Is it amenable to our model? Note the efficacy here is a haploid version of our genetic model although selection is handled slightly differently.
 
+### Klausmeier, C.A., et al. 2020. Ecological limits to evolutionary rescue. Phil Trans R Soc B.
+
+- Review of moving-optimum models: Kopp and Matuszewski and supplements to (this) text
+	- Needed for rescue: populaton phenotype closely tracks environment
+- Missing from the optimum model: density dependence, species interactions, non-quadratic relationships between phenotype and fitness, limits to the niche
+- In continuous models, fitness r is defined by r = r_max - (x-E)^2/(2*s^2) (discrete models have W = e^r)
+	- trait value \bar{x} evolves as product (dr/dx)V_g (for V_g genetic variance) from Lande 1976
+- for constant rate of change, d, environmnt is E(t) = E0 + dt
+	- for x1 = E - \bar{x}, dx1/dt = d - V_g(dr/dx)
+	- equibrium lag has V_g(dr/dx) = d i.e. adaptation rate tracking the environmental change
+		- can derive conditions for persistence from this
+		- although note that a relaxed assumption of constant environmental variance complicates things... see Burger and Lynch 1995
+##### Complication 1: non-quadratic fitness functions
+- Quadratic phenotypic-fitness relationship comes from a Taylor expansion of fitness around the optimum, which isn't guaranteed to hold up when populations are far from phenotypic optimum
+- Osmond and Klausmeier (2017?) show that non-quadratic fitness functions will cause deviaton from expectation (e.g., evolutionary tipping points)
+	- (Fig. 2 - having trouble relating panels b, c)
+	- Will want to check out Cotto et al., 2019 for some of this stuff with stage-structured populations (GODDAMNIT)
+##### Complication 2: population dynamics
+- Some models looking at NDD in moving optimum models: B&L 1995, Polchova et al., 2009, Osmond et al. 2017
+- "Ecological quantitative genetics": N' = r(x,E,N) * N (see Klausmeier et al., 2020, Geritz t al., 1998)
+- Also, trait-dependence on births and deaths (note: not included in our modl)
+- oh my god I'm having a breakdown this shit is important but I just can't follow along with it... my career is over. It's over. I'm done. I'm never going anywhere. It's over.
+##### Complication 3: Community context
+- Prior moving optimum models have considered competition and predaton, no mutualisms yet
+- No study of community adaptation yt
+##### Complication 4: limits to the fundamental niche
+- Central assumption of moving optimum models: the fitness landscape doesn't change shape ever
+	- But there may be fundamental limits to how much/far populations can adapt [...]
+	- The shape of the fitness landscape likely depends on environmental variables
+
+Okay... I skimmed part (3) and skipped part (4). Good rundown of the moving optimum models. Go back to density dependence sections esp. for trait dependence. Look at reference for other population types. 
+
+
