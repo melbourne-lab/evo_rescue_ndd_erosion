@@ -81,8 +81,9 @@ init.sim.overlap = function(a = c(1/2, -1/2), params, theta0) {
            w_i = w.max * exp(-(z_i - theta)^2 / (2 * wfitn^2)),
            r_i = rpois(n = n.pop0, lambda = ifelse(fem, w_i * exp(-alpha * n.pop0), 0)),
            age = sample(1:2, size = n.pop0, replace = TRUE),
-           gen = 1) %>%
-    select(i, g_i, z_i, w_i, r_i, fem, age, gen, all_of(names.array))
+           gen = 1,
+           theta = theta) %>%
+    select(i, g_i, z_i, w_i, r_i, fem, age, gen, theta, all_of(names.array))
   
   return(init.popn)
   
@@ -146,7 +147,7 @@ propagate.sim.overlap = function(a = c(1/2, -1/2), params, theta, popn) {
       #   NOTE: r_i also included here because we will need it later
       popn %>% 
         filter(fem) %>% 
-        select(-c(i, g_i, w_i, z_i, fem, age, gen)) %>%
+        select(-c(i, g_i, w_i, z_i, fem, age, gen, theta)) %>%
         set.names(paste(ifelse(grepl('^[ab]\\d', names(.)), 'mom', ''),
                         names(.), 
                         sep = '_')),
@@ -197,21 +198,23 @@ propagate.sim.overlap = function(a = c(1/2, -1/2), params, theta, popn) {
              w_i = w.max * exp(-(z_i - theta)^2 / (2*wfitn^2)),
              r_i = rpois(n = nrow(.), lambda = ifelse(fem, w_i * exp(-alpha * nrow(.)), 0)),
              age = 1,
-             gen = max(popn$gen) + 1) %>%
-      select(i, g_i, z_i, w_i, r_i, fem, age, gen, all_of(names.array)) 
+             gen = max(popn$gen) + 1,
+             theta = theta) %>%
+      select(i, g_i, z_i, w_i, r_i, fem, age, gen, theta, all_of(names.array)) 
     
     if (any(popn$age < 2)) {
       
       next.gen = offspring %>%
         # Add one year old parents from above
         #   take prev. generaton, filter out 
-        #   update age from 1 to 2 and update generation
+        #   update age from 1 to 2, generation, theta
         #   recalculate number of offspring
         rbind(
           popn %>%
             filter(age < 2) %>%
             mutate(age = age + 1,
-                   gen = gen + 1) %>%
+                   gen = gen + 1,
+                   theta = theta) %>%
             mutate(r_i = rpois(n = nrow(.), lambda = ifelse(fem, w_i * exp(-alpha * nrow(.)), 0)))
         )
       
@@ -260,7 +263,7 @@ propagate.sim.overlap = function(a = c(1/2, -1/2), params, theta, popn) {
 # 
 # # Try it out with two females. Should fail.
 # propagate.sim.overlap(a = c(-1/2, 1/2), params = pars, theta = 2.75,
-#                       popn = popn0[3:4,])
+#                       popn = popn0[c(3, 8),])
 # # Good.
 # 
 # # Try feeding in only individuals at age 1 (should still work)
@@ -299,7 +302,8 @@ sim.overlap = function(a = c(1/2, -1/2), params, theta_t, init.popn = NULL) {
                        r_i = rep(NA, init.row),
                        fem = rep(NA, init.row),
                        age = rep(NA, init.row),
-                       gen = rep(NA, init.row)) %>%
+                       gen = rep(NA, init.row),
+                       theta = rep(NA, init.row)) %>%
     cbind(matrix(NA, 
                  nrow = init.row,
                  ncol = 2 * n.loci) %>%
@@ -316,8 +320,9 @@ sim.overlap = function(a = c(1/2, -1/2), params, theta_t, init.popn = NULL) {
              w_i = params$w.max * exp(-(z_i - params$theta_t[1])^2 / (2*params$wfitn^2)),
              r_i = rpois(n = nrow(.), lambda = ifelse(fem, w_i * exp(-params$alpha * nrow(.)), 0)),
              i = 1:nrow(.),
-             gen = 1) %>%
-      select(i, g_i, z_i, w_i, r_i, fem, age, gen, all_of(names.array))
+             gen = 1,
+             theta = theta_t[1]) %>%
+      select(i, g_i, z_i, w_i, r_i, fem, age, gen, theta, all_of(names.array))
   } else {                   
     pop0 = init.sim.overlap(a, params, theta0 = theta_t[1]) 
   }
