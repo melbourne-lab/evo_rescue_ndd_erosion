@@ -57,33 +57,66 @@ bign0.gt %>%
   ggplot(aes(x = gen)) +
   geom_line(
     aes(y = wbar, 
-        colour = ndd,
-        group = interaction(bottleneck, ndd))
+        linetype = ndd,
+        group = interaction(bottleneck, ndd)),
+    size = 2
   ) +
   geom_ribbon(
     aes(ymin = wbar - 2 * sqrt(wvar / n.trials),
         ymax = wbar + 2 * sqrt(wvar / n.trials),
-        fill = ndd,
         group = interaction(bottleneck, ndd)),
     alpha = 0.2
   ) +
   geom_point(
-    aes(y = wbar),
-    shape = 22, size = 3, fill = 'white'
-    ) +
-  geom_point(
     aes(y = wbar,
-        fill = ndd,
-        alpha = p.extant),
-    shape = 22, size = 3
+        fill = 1 - p.extant),
+    shape = 22, size = 4
   ) +
-  scale_alpha_continuous(range = c(min(bign0.gt$p.extant)/2, 1)) +
-  scale_fill_manual(values = c('black', 'purple')) +
-  scale_colour_manual(values = c('black', 'purple')) +
-  theme(panel.background = element_blank())
+  geom_segment(
+    aes(x = 0, xend = 10, y = 1, yend = 1),
+    linetype = 3, colour = 'gray22'
+  ) +
+  scale_fill_viridis_c(option = 'B') +
+  theme(panel.background = element_blank(),
+        legend.position = 'bottom') +
+  labs(x = 'Generation', y = 'Mean intrisic fitness',
+       linetype = 'Density\ndependence',
+       fill = 'Extinction\nprobability')
 # Here, plotting fitness (w, wbar, w_i)
 # Darker color = fewer populations extinct (higher probability of a population being extant).
 
+bign0.gt %>%
+  ggplot(aes(x = gen)) +
+  geom_line(
+    aes(y = gbar, 
+        linetype = ndd,
+        group = interaction(bottleneck, ndd)),
+    size = 2
+  ) +
+  geom_ribbon(
+    aes(ymin = gbar - 2 * sqrt(gvar / n.trials),
+        ymax = gbar + 2 * sqrt(gvar / n.trials),
+        group = interaction(bottleneck, ndd)),
+    alpha = 0.2
+  ) +
+  geom_point(
+    aes(y = gbar,
+        fill = 1 - p.extant),
+    shape = 22, size = 4
+  ) +
+  geom_text(
+    x = 2.5, y = 0.5, label = 'High variation'
+  ) +
+  geom_text(
+    x = 8, y = 0.25, label = 'Low variation'
+  ) +
+  scale_x_continuous(breaks = 2*(1:5)) +
+  scale_fill_viridis_c(option = 'B') +
+  labs(x = 'Generation', y = 'Mean genotype',
+       linetype = 'Density\ndependence',
+       fill = 'Extinction\nprobability') +
+  theme(panel.background = element_blank(),
+        legend.position = 'bottom')
 ### Conclusions
 
 # Here, actually, there is no difference in rate of genotypic change.
