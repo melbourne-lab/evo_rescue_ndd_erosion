@@ -1094,4 +1094,36 @@ Okay... the discussion here is two paragraphs. What the heck? I can't rally inte
 
 Okay... I skimmed part (3) and skipped part (4). Good rundown of the moving optimum models. Go back to density dependence sections esp. for trait dependence. Look at reference for other population types. 
 
+### Gilpin, M.E., and Soul, M.E. 1986. Minimum Viable Populations: Processes of Species Extinction. Chapter in Conservaton Biology: The Science of Scarcity and Diversity (ed: Michael Soule).
 
+- Good background reading: Schaffer 1981
+	- Differentiates between deterministic and stochastic extinction
+		- Deterministic typically caused by something essential being removed/degraded or something lethal being added
+		- Stochastic typically due to normal random perturbations or environmental effects (~50)
+	- Also has MVP size for organisms with non-trivial life cycles
+- Extinction vortices: biological + ecological processes interaction to create feedback loops
+	- Can be determnistic extinctions
+	- Could also leave populations smaller and more susceptible to stochastic extinctions
+- *R vortex*: smaller $N$ means greater variance in r (growth rate)
+	- smaller population size means demographic stochasticity
+	- also changes in the population distrbution (e.g., age distribution, sex ratio)
+	- can cause multi-generational effects of small $N$ (where extinction risk is larger than the sum of per-generation extinction probabilities)
+- *D vortex*: increased framgentation means smaller populations $N$ in patches and smaller $N_e$ per patch
+	- more of a spatial process?
+- *F vortex*: smaller $N_e$ means genetic vortices
+	- inbreeding and/or changes in heterozygosity/fitness
+	- requires(?) manifestation of low $N_e$ on phenotype
+	- e.g., loss of heterozygosity influences fitness, influencing survival or fecundity
+- *A vortex*: smaller $N_e$ (and associated inbreeding, drift) means slower adaptation
+	- Thus populations are increasingly maladapted to their populations
+	- on this point see Frankel and Soule 1981 and Fukuyama 1983
+	- has the longest timescale so may be pre-empted by other cycles
+- Notably, different life histories are susceptible to different vortices
+	- e.g., a quickly, mass-reproducing species may be less susceptible to reductions in $N_e$ because there are so many offspring
+	- longer-lived organisms are less susceptible to vortices responsive to large environmental change
+
+Good stuff here about deterministic versus stochastic extinction - fits in with the phased framework I had earlier. Extinction is deterministic without adaptation and/or if adaptation is too slow. But then populations are left at a small size by the time they recover and are thus susceptible to extinction.
+
+Good thought here is that we should look at the minimum size and time of minimum size for surviving populations. It's also interesting to see how often extinctions occur after the expected trough of population size.
+
+These various types of cycles are not mutually exclusive, also are confusingly defined. Need to think about how they manifest themselves here. Off the top of my head, we have potential for *R* vortices based on populations being small/declining and NDD may make that worse. Look at var(r) perhaps? We also have *F* as inbreeding, etc. influence fitness. I love the inclusion of *A* - the rate of adaptation *should* be slowed down by drift. Think about what is needed to quantify each of these.
