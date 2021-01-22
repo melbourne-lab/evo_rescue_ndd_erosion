@@ -74,14 +74,66 @@ revive.popn = function(popn, params) {
   
 }
 
+# # Test:
+# revive.popn(sim1, pars)
+
 # Functon to revive sims.
 
-finish.revive.sim = function(a, popn, params) {
+# Try stuff out with globals:
+pop = sim1
+
+while(max(pop$gen) < pars$end.time) {
   
-  while(max(popn$gen) < params$end.time) {
+  if (!sum(pop$r_i[with(pop, gen %in% max(gen))])) {
     
+    revived.gen = revive.popn(pop, pars)
     
+    pop = pop %>%
+      filter(!gen %in% max(gen)) %>%
+      rbind(revived.gen)
+    
+    next.gen = propagate.sim(a = a, params = pars, popn = revived.gen)
+    
+  } else {
+    
+    next.gen = propagate.sim(a = a, params = pars, 
+                             popn = pop %>% filter(gen %in% max(gen)))
     
   }
   
+  print(max(pop$gen))
+  
+  popn = dim.add(df = pop, rows = pars$init.row, addition = next.gen)
+  
 }
+
+# generating isn't increasing...
+
+revive.finish.sim = function(a, popn, params) {
+  
+  while(max(popn$gen) < params$end.time) {
+    
+    if (!sum(popn$r_i[with(popn, gen %in% max(gen))])) {
+      
+      revived.gen = revive.popn(popn, params)
+      
+      popn = popn %>%
+        filter(!gen %in% max(gen)) %>%
+        rbind(revived.gen)
+      
+      next.gen = propagate.sim(a = a, params = params, popn = revived.gen)
+      
+    } else {
+      
+      next.gen = propagate.sim(a = a, params = params, 
+                               popn = popn %>% filter(gen %in% max(gen)))
+      
+    }
+   
+    popn = dim.add(df = popn, rows = params$init.row, addition = next.gen)
+     
+  }
+  
+}
+
+sim1.finish = revive.finish.sim(a = c(1/2, -1/2), popn = sim1, params = pars)
