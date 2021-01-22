@@ -82,9 +82,9 @@ revive.popn = function(popn, params) {
 # Try stuff out with globals:
 pop = sim1
 
-while(max(pop$gen) < pars$end.time) {
+while(max(pop$gen, na.rm = TRUE) < pars$end.time) {
   
-  if (!sum(pop$r_i[with(pop, gen %in% max(gen))])) {
+  if (!sum(pop$r_i[with(pop, gen %in% max(gen, na.rm = TRUE))])) {
     
     revived.gen = revive.popn(pop, pars)
     
@@ -97,13 +97,13 @@ while(max(pop$gen) < pars$end.time) {
   } else {
     
     next.gen = propagate.sim(a = a, params = pars, 
-                             popn = pop %>% filter(gen %in% max(gen)))
+                             popn = pop %>% filter(gen %in% max(gen, na.rm = TRUE)))
     
   }
   
-  print(max(pop$gen))
+  print(max(pop$gen, na.rm = TRUE))
   
-  popn = dim.add(df = pop, rows = pars$init.row, addition = next.gen)
+  pop = dim.add(df = pop, rows = pars$init.row, addition = next.gen)
   
 }
 
@@ -111,29 +111,37 @@ while(max(pop$gen) < pars$end.time) {
 
 revive.finish.sim = function(a, popn, params) {
   
-  while(max(popn$gen) < params$end.time) {
+  while(max(popn$gen, na.rm = TRUE) < params$end.time) {
     
-    if (!sum(popn$r_i[with(popn, gen %in% max(gen))])) {
+    if (!sum(popn$r_i[with(popn, gen %in% max(gen, na.rm = TRUE))])) {
       
       revived.gen = revive.popn(popn, params)
       
       popn = popn %>%
-        filter(!gen %in% max(gen)) %>%
-        rbind(revived.gen)
+        filter(!gen %in% max(gen, na.rm = TRUE)) %>%
+        rbind(revived.gen) %>%
+        arrange(i)
       
       next.gen = propagate.sim(a = a, params = params, popn = revived.gen)
       
     } else {
       
       next.gen = propagate.sim(a = a, params = params, 
-                               popn = popn %>% filter(gen %in% max(gen)))
+                               popn = popn %>% filter(gen %in% max(gen, na.rm = TRUE)))
       
     }
    
+    print(max(popn$gen, na.rm = TRUE))
+    
     popn = dim.add(df = popn, rows = params$init.row, addition = next.gen)
      
   }
   
+  return(popn)
+  
 }
 
 sim1.finish = revive.finish.sim(a = c(1/2, -1/2), popn = sim1, params = pars)
+
+sim1.finish
+# insanely slow.
