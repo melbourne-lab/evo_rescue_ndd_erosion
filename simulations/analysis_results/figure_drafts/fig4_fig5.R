@@ -17,7 +17,7 @@ all.v = all.data %>%
             n = n()) %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
-         alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
+         alpha = factor(alpha, labels = c("Density dependent", "Density independent")),
          low.var = factor(low.var, labels = c("High variance", "Low variance")))
 
 # Pooling by extinct/extant
@@ -74,13 +74,15 @@ ext.fix = all.data %>%
 ### Genetic variation plot
 
 comp.pool.plot = all.v %>%
+  mutate(alpha = relevel(alpha, "Density independent")) %>%
   ggplot(aes(x = gen)) +
   geom_line(
     aes(
       y = vbar,
       group = interaction(n.pop0, low.var, alpha),
       colour = alpha
-    )
+    ),
+    size = 1.25
   ) +
   geom_ribbon(
     aes(
@@ -92,8 +94,8 @@ comp.pool.plot = all.v %>%
     alpha = 0.1
   ) +
   scale_y_continuous(limits = c(0, 0.5)) +
-  scale_fill_manual(values = c('black', 'purple')) +
-  scale_colour_manual(values = c('black', 'purple')) +
+  scale_fill_manual(values = c('purple', 'black')) +
+  scale_colour_manual(values = c('purple', 'black')) +
   guides(colour = guide_legend("Growth form", nrow = 1),
          fill = guide_legend("Growth form", nrow = 1)) +
   labs(x = '', y = 'Genetic variation') +
@@ -175,7 +177,8 @@ ext.fix %>%
            (grepl('neg', fixtype.mean) & grepl('neg', fixtype.vars)) ) %>%
   mutate(fixtype = gsub('^p\\.', '', fixtype.mean)) %>%
   select(-c(fixtype.mean, fixtype.vars)) %>%
-  mutate(fixtype = factor(fixtype, labels = c('Maladaptive allele', 'Adaptive allele'))) %>%
+  mutate(fixtype = factor(fixtype, labels = c('Maladaptive allele', 'Adaptive allele')),
+         alpha = relevel(alpha, "Density dependent")) %>%
   ggplot(aes(x = gen)) +
   geom_line(
     aes(
@@ -193,21 +196,21 @@ ext.fix %>%
       group = interaction(n.pop0, low.var, alpha, fixtype, extinct),
       fill = alpha
     ),
-    alpha = 0.1
+    alpha = 0.2
   ) +
-  scale_colour_manual(values = c('black', 'purple')) +
-  scale_fill_manual(values = c('black', 'purple')) +
+  scale_colour_manual(values = c('purple', 'black')) +
+  scale_fill_manual(values = c('purple', 'black')) +
   scale_linetype(labels = c("Surviving", "Extinct")) +
   facet_wrap(reorder(fixtype, desc(fixtype)) ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   guides(linetype = guide_legend('', nrow = 1),
          colour = guide_legend('', nrow = 1),
          fill = guide_legend('', nrow = 1)) +
-  labs(x = 'Generation', y = 'Probability of fixation') +
+  labs(x = 'Generation', y = 'Proportion of loci at fixation') +
   theme(panel.background = element_blank(),
         panel.border = element_rect(fill = NA),
         legend.direction = 'horizontal',
         legend.position = 'bottom',
-        legend.text = element_text(size = 8),
+        legend.text = element_text(size = 12),
         strip.background = element_rect(colour = 'black'),
         strip.text = element_text(size = 12)) +
   ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_5_eight_line.pdf',

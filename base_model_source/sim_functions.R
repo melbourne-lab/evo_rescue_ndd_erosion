@@ -14,7 +14,7 @@ dim.add = function(df, rows, addition) {
   if (sum(is.na(df$i)) < nrow(addition)) {
     df = df %>%
       rbind(df %>%
-              sample_n(size = rows) %>%
+              sample_n(size = rows, replace = TRUE) %>%
               mutate_all(function(x) NA))
   }
   if (nrow(addition)) {

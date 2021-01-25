@@ -752,3 +752,378 @@ Use for some similarities to G&H - notably that initial population size is impor
 
 Sex is important, and within the realm of sexually reproducing populations genetic variation is important. Consider this for contrasting sex vs. asexual and also effects of bottlenecking. 
 
+### Pray, L.A., et al. 1996. The effect of population size on effective population size: an empiritcal study in the red flour beetle *Tribolium castaneum*. Genet. Res. Comb.
+
+##### Background
+- Nunney (1993) speculated that Ne/N > 0.5 in most populatons, including small ones (some empirical stuff cited here)
+- Frankham (1995) argues that Ne.N approx 0.1 is more likely common
+
+##### Study
+- Studied Ne in replicates of populations initiated from size 2, 4, ..., 48, 480, 960 (9 - 25 reps/each)
+	- each populaton was initiated with one cSM ++ genotype and remaining cSM bb (geno corresponds to color)
+	- Populations run for only one generation? Counting each geno
+	- among offspring generations, mean and varance of +b indviduals calculated
+- Some statistics and corrections used to estimate Ne
+- Ne/N appears to shrink logarithmically with N
+	- is approx 1 for N = 2, approx 0.8 for N = 960
+	- "a decrease in Ne/N is proportional to an increase in Va"
+	- "there is a significant increase in V_k with logN"
+
+##### Discussion
+- Decrease along large N-gradient is consistent with Husband and Barrett (1992) as well as recalculations from Nunney (1995). 
+
+### Lande, R., and Shannon, S. 1996. The role of genetic variation in adaptaton and population persistence in a changing environment. Evolution, 50(1): 434 - 437. 
+
+- "In the short term, genetic variability is often less critical than other determinants of population persistence (Lande 1988), but in the long-term, it can play the decisive role in allowing a population to persist and adapt in a changing environment."
+	- "However, gnetic variability is thought not to be the rate-limiting factor in long-term evolution... instead, long-term rates of evolution and adaptive radation are constrained by ecological opportunity [refs]"
+- Model: rate if increase, r, is the sum
+	r_max - (maladaptaton penalty) - density dependent term [(n.b. looks very similar to Lande 76/G&H)]
+	- Want: time-averaged fitness (rbar) > 1
+	- Note: the maladaptation penalty includes standing load and maladaptation load
+	- The relative sizes of maladaptation and standing load depends on the type of selection
+- In a constant environment, any amount of phenotypic variance will increase standing load and decrease growth rates
+- Under a directional change in fitness (deterministic), mean phenotype tracks optimum with a predictableevolutionary load
+	- the evolutionary load is more responsive to genotypic variation than to the rate of adaptation, so more variaton is good (closer tracking)
+- In a cyclically changing environment, more variance is good for slow, small-amplitude oscillations
+- Table gives evolutionary loads for randomly fluctuating and autocorrelated random environments
+	- In totally unpredictable envronment, additive genetic variation increases expected deviation from optimal environment
+	- In an autocorrelated environment, load decreases with additive variance as well as autocorrelation time
+- So, genetic variance is not always adaptive. t is maladaptive in cases where increasing adaptve capacity will lead it into evolutionary traps
+	- autocorrelation is helpful here for ensuring that adaptation doesn't end in traps
+
+Interesting but not necessarily relevant to us due to timescales and type of environmental change (although will give some intuition for more complex models).
+
+### Arnaud, L., Haubruge, E., and Gage, M.J.G. 2001. Morphology of Tribolium castaneum male genitalia and its possible role in sperm competition and cryptic female choice. Belgian Journal of Zoology, 132(2): 111 - 115.
+
+- Sexual selection post-copulation: when mating with multiple males females can select for certain sperm
+	- e.g. preferental uptake, directional movement into different storage organs
+- In *T. castaneum* the refs. suggesting that the last male to mate achives predcence (fertilizes 2/3 of ova)
+- Here, looking at male genetalia in reared *T. castaneum*
+	- They have an aedeagus, a scoop with hard spines, which trap and remove rival sperm
+	- Aedeagal length is correlated with body size!
+		- other studies have shown that rel. body size influences success in sperm competition
+	- The bristled hairs on the retractable brush may dislodge rival sperm
+		- or it may be used to signal to females
+
+So: the aedeagus (which may vary in size among individuals) is an organ that appears to have a scoop and brushes which can be used to remove rival sperm to increase fertilization potential for the most recent mate.
+
+### Pai, A., and Yan, G. 2020. Long-term study of female multple mating indicates direct benefits in *Triboleim castaneum*. Entomologia Experimentalis et Applicata, doi:10.1111/eea.12906
+
+- Polyandry (multiple-mating) - why could or would it be advantageous for females? 
+	- E.g., Multiple mating may allow sperm competition
+	- Protects from infertility in case first mate has bad sperm
+	- The inter-mating interval is important: short time periods allows sperm competition
+- Three hypothses for why periodic multiple mating may be good
+	- Fresh sperm means more offspring production
+		- either because old sperm is bad or because there's less of it
+		- females can have long mating periods (several months) although fertility typically is small after the first month
+		- Test: females who can mate at least once a month will have more offspring than less often
+	- Ejaculate contents (besides sperm?) may have effects
+		- e.g., what if it stimulates more egg production
+		- Test: ehanced survivorship and/or offspring for females with more mating opportunites
+	- Genetic benefits
+		- genetic mate compatbility? lots of matings are unsuccessful
+		- polyandry may increase odds of receiving compatible sperm
+		- Test: polyandrous offspring production higher than singly-mated female mating at similar rates
+- Experiment on *T. castaneum*
+	- Nine treatments
+		- Mating period (2wk, month, 1/3 months, 1/5 months)
+		- Distinct mates (distinct vs. multiple)
+	- Recording: n. mating opportunities, n. mates, n. offspring, lifespan
+	- ANOVA: sqrt(offspring) as respons
+	- Sperm replenishment test: paired t-test for offspring prod.
+	- Frequency test: ANOVA comparing offspr ~ mating freq.
+	- Ejaculate effect test: product limit survival analysis
+- Results
+	- Everyone produced offspring
+		- so n. mates does not affect offspring yes/no
+	- Remating frequency (but not n. distinct partners?) influenced n. offspring
+		- More frequent mating, but not more mates per se, increases n. offspring
+	- More offspring in younger mothers, and higher n. offspring after mating when mating every 3-5 months but not >=1/month
+		- I.e., females produce more offspring if second mating is ~3 months after initial mating
+	- Survival was not affected by mating
+	- Fig. 2 is good: n. offspring tails off after mating bout in all groups, but increases after extra mating, such that but mating even more frequently has big impact on n. offspring
+- Sperm replenishment: more frequent mating is good, because sperm apparnetly doens't stick around for very long (offspring tails off after mating)
+- Female longevity: no evidence supporting this in *T. castaneum* although it does in some species
+- Genetic compatibility: no evidence supporting this
+	- although n.b. it would be helpful for avoiding inbreeding
+
+In the context of our rescue study: Triboleum can mate wth multiple males (won't affect number of offspring). They can mate multple times over the course of their lifetimes.
+
+### Chevin, L, and Lande, R. 2010. When do adaptive plasticity and genetic evolution prevent extinction of a density-regulated population? Evolution, 64(4): 1143 - 1150.
+
+- Single environmental shift in an otherwise-stable environment
+- Phenotypic plasticity (see Hendry et al. 2008) which is itself evolvable
+- Similar to Lande 2009
+	- Lande '09 shows that w/ sufficient variation in plasticity, first step in rescue is rapid increase in plastcty then slow genetic change supplanting it
+- trait $z$ with a linear reaction norm, $z = a + beps + e$
+	- eps is environmental variable
+	- e residual variaton
+	- a is breeding value in (arb.) reference environment
+	- b is plasticity (slope, how much env. change affects pheno)
+	- sig_e, sig_a, sig_b are genetic variances assoc. with each var s/t sig^2_z = sig^2_e + sig^2_a + sig^2-b
+		- assume sig_a, sig_b constant over time
+- Fitness of individual with trait z, plasticity b, in pop. size N is
+	- R(z,b,N) = R0^{1 - f(N)/f(K0)} W(z) C(b)
+	- K0 carrying capacity in abs of plasticity and genetic load
+	- W(z) is gaussan selection, exp(-(z-Beps)^2 / (2 om_z^2))
+		- so fitness changes linearly with environment acc'd to B
+	- C(b) is cost of plasticity, exp(-b^2 / (w \om_b^2))
+- Selection first acts on b, then on z
+- Phase 1 of evolutionary process: rapid increase "mean plasticity" (mean of b)
+- Phase 2 of process: loss of plasticity compensated for by trait evoluton (increase in mean of height in reaction norms, a?)
+	- trait (z) not affected here
+- Density dependence: f(N) = N is Ricker model, f(N) = N^{th} is theta-logistic
+	- "By comparison [to GH95], density dependence accelerates the declining phase and slows the increasing phase, reducng population size at all phases"
+- More plasticity means less time to reach phenotypic optimum and higher population trough
+- Persistence: more plasticity means the initial population size required for persistence can be smaller (rel. to extinction threshold)
+	- for alpha > 0.5 persistence seems guaranteed?
+
+Main effects of NDD studied here are simply the obvious ones: steeper decline, slower ascent. Because plasticity is faster and then is replaced at rate by adaptation, more plasticity means more rapid adaptation and lower trough. Without plasticity the initial size needed to avert extinction (under NDD) is much larger.
+
+### Reznick, DN and Ghalambor, CK. 2001. The population ecology of contemporary adaptations: what empirical studies reveal about the conditions that promote adaptive evolution. Genetica, 112-113: 183 - 198.
+
+- "Recent reviews suggest that natural populations are capable of sustained rates of evolution many orders of magnitude higher than those observed in the fossil record [refs]"
+- Here: review of studies focusng on rapid adaptive evolution, phenotypic change, genetic basis for observed trait change
+##### Studies
+- Most empirical studies look at resp. to anthropogenic changes in environment (e.g., heavy metal tolerance)
+- 47 studies in all
+	- 36 with some genetic basis for change and 11 with only evidence of pheno change
+	- 38 with rapid evolution in animals (16 vertebrate species, 19 invert)
+	- Nine terrestral isects, five aquatic inverts
+- Traits under selection: morphology, phys, lfe history, phen, behavior
+- "almost all cases of contemporary adaptation were associated with 'colonization' events." (i.e. into new habitats)
+	- all but six studies had colonizaton components
+	- coloninies could be isolated, or could result from heterogeneity in environments allowing adaptation (e.g., metapopulations), i.e., is there gene flow possible between populatons
+- Adaptations
+	- use of novel resource/food source (e.g., soap bugs feeding on novel plants)
+	- bio-physical changes (e.g., metal tolerance)
+	- changes to mortality (interesting life history), mostly predation
+	- character dsplacement? competition?
+##### Discussion
+- Adaptations are typically polygenic and involve a suite of adaptations (e.g., life history of guppies, size at maturity, devo rate, fecundity, offspring size)
+- [...]
+
+So... uh, radid adaptation can occur, although usually in several traits.
+
+### Shaw, RG, and Etterson, JR. 2012. Rapid climate change and the rate of adaptation: insight from experimental quantitative genetics. New Phytologist 199: 752 - 765.
+
+- "a critcal outstanding queston of our time is the extent to which adaptve evoluton will ameliorate the detrimental effects of rapid contemporary climate change"
+- Migration: populations could "track" climate by moving polewards or up elevational gradients
+	- meta-analyses suggest range contraction in 60-90% of species in USDA Forest Inventory and only ~20% of these sp. show poleward expansion
+	- Habitat fragmentation makes dispersal polewards more difficult
+- Adaptaton and rescue
+	- grass species and metal tolerance (Antonovics refs)
+		- although many species by mines dd not adapt
+	- widespread angiosperm resistance to herbicide
+- Fitness links demography with evolutionary processes
+	- What influences the rate of adaptation? 
+		- Mutation, recombnation.
+		- Drft (random sampling) opposes by reducing VA(w)
+	- Lopez et al. 2009 on fragmentation and reduced population size and its effects on drift
+	- Gene flow: good by alleviating inbreeding and potentially bringing in useful genetic diversity (esp. for similar environments), bad if incoming genes are maladapted esp. in temporally stable environments
+	- See Pease et al. 1989, Polechova et al. 2009 for adaptation + migration + NDD
+- Experiments and predictions
+	- Traits which are/are not likely to be under selection pressure suggestng populations may have considerable genetic variation with heritability although some trats may have negative correlation (e.g., water-use efficiency and rosette size) (maybe use these refs?)
+- "To our knowledge, [VA(w) and mean absolute fitness W] have never been jointly estimated for any population in nature, perhaps largely because of the challenges of doing so"
+	- but you can use Aster mods for measuring mean lifetime fitness
+
+So: some stuff in here about how much genetic variation exists in wild populations, but also we lack joint estimation of these and don't have a thorough knowledge of which traits are actually under selection and/or what their variance+heritabilities are. This is all for plants. Good for overviews.
+
+### Godwin, JL, et al. 2020. Mating patterns influence vulnerability to the extinction vortex. Global Change Biology.
+
+- "the extinction vortex has proven to be an informative model for conceptualizing [...]" refs
+- "[...] ample evidence across a range of systems showing that individual or combined effects of envronmental stress and genetcs lead to reduced population size or even extinction" refs
+	- but, no explicit experimental tests of the vort model
+- This study: explicit experimental test of the vortex model, where resp. is "consquences for population viability"
+	- Trt 1: dietary restriction (restrain missing protein)
+	- Trt 2: environmental stress (heat wave)
+	- Trt 3: bottleneck
+	- Resp: # offspring produced after ~15 generations
+	- Also, trt 4? Mating patterns (monogamy vs. polyandry)
+		- sexual selection can create more btwn-individual variance in reproductive success potentially accentuating effects of vortex (due to adaptation loss?)
+- "Genic capture theory" - reproductive success in face of competton and choice depends on "wider conditon which is contingent on genome-wide variation" (??)
+	- sexual selection can reduce load by (1) making mutations more deleterous in males and (2) load ffects mating and fertilization s/t average father has less fitness load than average male (hmm...)
+	- under this theory (?) sexual selection may enhance population fate in the face of vortex by increasing overall condition (??)
+	- or, if sex selection operates in opposition to natural selection (e.g., antlers too big) or by creating different reproductive optima for males and females
+##### Experiment
+- Mating treatment: enforced monogamy vs. polyandrous (five males to one female) 
+	- three independent lines within each regme with 20 monogmous or 12 polyandrous groups per line (Ne approx 40)
+- Vorte: 95 generations of experimentl evolution wth strong vs. weak selection
+	- 15 generations inside the vortex
+	- in each line, nine replicate populations initiated with non-sib virgin pairs (9 pop'ns x 3 lines x 2 sexual selection treatments = 54 populations)
+	- populations initiated... somehow
+	- in each treatment: generation initiated wth 5m + 5f, after mating 10 pupae sexed and used for initiating next gen while remaining pupae are usd to calculate population fitness
+	- then run through five three-generation cycles of stress (nutrents then thermal then or genetic)
+		- nutrients: replicate small popn's of 5m and 5f in single sex groups w/ nutrient-poor food for 10 days then placed together for 7; some pupae taken for next generation and remainder counted for pop'n fitness
+		- thermal: small populations (Ne = 10) exposed to 5 day heat wave during mating stage; heat will damage male fertility
+		- bottleneck: inbreeding depresson based on restricting population to size Ne = 2
+##### Analysis
+- Responses: 
+	- time to extinction (accelerated failure time model; ext. time ~ ss)
+	- population ftness (neg. bin; offspring by all adults averaged over populations and lines ~ ss + gen)
+	- per female fitness (total number of offspring divided by two)
+	- relative population fitness (per pop'n fitness per regime-x-gen divided by baseline fitness for pattern
+##### Results
+- in control condition, total reproductive output of small populations did not vary by ss
+	- in pairs, small but sign. difference; monog > polya
+	- per female, fewer offspring in small groups than in pairs for both ss treatments (could be due to group oviposition)
+- extinctions more likely in monogamous treatments than in polyandrous ones (100% after 15 gens vs 40%)
+	- suggests poly survived 2.65x longer than monog
+- fitness: more rapid decline in mean fitness for monogamy compared to poly
+	- divergence happened after generation four (in second cycle)
+	- no strong differences among stressor types on fitn decline
+##### Discussion
+- prev. work in Triboleum has shown sexual selection -> more male reproductive competitiveness (?), more female abilty to handle sexual conflict (???), increases ability to cope with inbreeding stress, stronger competitors with conspecifics
+- could the difference in performance be explained by differences in inbreeding? evidence suggests no (what the heck is going on in this paragraph?)
+- support for the genic capture theory, s/t reproductive success in face of competition is achieved by individuals in better condition (what the heck does this mean? genome-wde variation across traits?)
+	- sexual selection + genic capture would counter the cost of making males who don't reproduce in polyandry (because the most fit male would reproduce meaning on sum offspring is more fit?)
+- para on the vortex: two predictions of the EV model (logarithmic scaling time of pop size to extincton and also increasing rate of decline closer to extinction) not supported (sigmoidal rate of extinction and flattening of fitness declines)
+	- could be genetic purging
+
+Okay... this paper is very confusing. Will need a re-read. Extinction vortex plays only a small role it seems; the sexual selection stuff seems to be more important. Were the 95 generations just to establish an evolutionary history? The part about sexual selection and implications of competition among males (this genic capture stuff?) may be related to intraspecific competition. At least there is some stuff about the extinction vortex and predictions of that model (which do not come true here). Does the experimental procedure really fit in with the idea of the vortex? Seems convoluted and confusing, esp. the way individuals are sampled in founding the next generation.
+
+### Yamada, Y. (???) Tribolium as a biological model in quantitative genetics. (???)
+
+###### Trib. mating and genetics, etc.
+- 10 (small) chromosomes incl. XY sex chromosome
+- "mating is polygamous in nature"
+- Quantitative traits include: larval weight, pupal weight, adult weight, development tme, egg number
+	- heritability of egg number: "low to medium", high heterosis
+	- egg number +correlated with larval weight
+- Cite Orozco 1969: heritability for egg laying about 20%, responds to environment
+
+Hmm... weird, where was this even published? Consider the Orozco 1969 piece. Beyond that probably no use.
+
+### Lavie, B, Ritte, U, and Moav, R. 1978. The genetic basis of egg lay response to conditioned medium in the flour betle, Tribolium castaneum. Theoretical and Applied Genetics, 52, 193 - 199.
+
+- Is rate of egg laying in Tc an "independent genetic character"?
+- Krause and Bell 1972 say that 75-80% of penotypic variation in fitness is from egg production (so selection should favor higher rates)
+	- but, we would expect egg production to be involved in adapting to changing environments and thus it may be good to have fewer eggs in certain cases (e.g., overcrowding)
+
+Is this going in the right direction? This seems to be about selection and treats that differently than the assertion that egg numbers is a quantitative trait... maybe first consider Orazco above. Maybe return to this.
+
+### Fagan, W.F., and Holmes, E.E. 2006. Quantifying the extinction vortex. Ecology letters.
+
+- Observation studies during actual extinction events are rare (but see, Belovsky et al. 1999 and Schoener et al. 2003)
+- This study: compiled studies looking at vertebrate extinctions (publshed and unpublished), testing two predctions
+	1. In extinct populatons, lifetimes scale logarithmically with populaton size (see Lande et al. 2003)
+	2. Extinction vortex characteristics, feedbacks,
+		a. proportionately larger declines in abundance as population nears extinction
+		b. increase in inter-annual variability in changes in population size for smaller populations (isn't this just stochasticity?)
+- Dataset: 10 annual time serieses 12-21 years long of vertebrate population declining to extinction
+	- note that the short time-frame may bias extinction times to be sooner compared to pool of all extinct populations
+- Metrics from each dataset:
+	- smallest size from which an increase occurred
+	- population size from which smallest decline occurred
+	- population size one year before extinction
+	- n.b. when calculating growth rates N_final = 1 (good idea!)
+- EV tests:
+	- (1) did year-to-year rates of decline increase as extinction neared
+		- i.e. dd ln(N_t / N_{t+1}) depend on t?
+		- if positive slope with t, supported
+		- also does it depend on N_{t+1}
+	- (2) did year-to-year rates of decline become more variable closer to extincton
+		- variability is square of residuals from regression above
+	- (3) did the "value" of a population ??
+		- time greater than/less than 10 to see if dynamics are different closer to extinction
+##### Results
+- In four populatons, no increases once populations went < 50
+	- in two populations, increases < 10
+- Rate of decline to extinction from population peak did not vary by population size (no dens. dep.?)
+- Last peak was 70 (incl. salmon)/ 49 (not incl. salmon)
+	- mean last census size before extinction was 8 (2-26)
+- Population size: logarithm of pop size prop. to time to extinction (i.e., time to extinction exponential with pop size)
+	- initial populaton size also log. relationship w/ time to extinction
+- Year to year population decline grow larger closer to extinction
+- More variable population size changes closer ot extinction
+- The slope in the log curve for tau < 10 steeper than tau > 10 (i.e., steeper decline closer to extinction)
+
+Interesting. EV hypothesis supported here. For our purposes, looking at log(N_t / N_{t+1}) and regressing it against time to extincton seems like a good idea. Some difficulty in here because our model also has rates of adaptation that will change the population growth rate... Can also think about regressing change in genotypes. Extinct/surviving - would this work as a predictor?
+
+### Rogers, A., and Prugel-Bennett, A. 2000. Evolving populations with overlapping generations. Theoretical Population Biology.
+
+- One-locus models of adaptation with overlapping generations: Moran 1958, Ewens 1979
+- Multi-locus models of overlapping generations using cumulants or momnts of population efficacy distributon: Woodcock and Higgs 1996, Prugel-Bennett 1997
+	- analytical solutions for weak selection
+	- effects of genetic drift are twice as large with overlapping generations compared to non-overlapping ("extra randomness with which population members die")
+##### Model
+- N haploid organisms, L genes with positive/negative alleles s/t efficacy is E = \sum_i^L S_i for S_i = -1 or 1
+- Individuals are included in the next generation according to W_j = exp(b E_j) / Z where b is selection pressure (b = log(1+s)), Z is selection pressure-weighted sum of fitnesses
+- (not that b' = b / sqrt(L) to scale by number of loci... same scaling as our model)
+- Each time step, population member selected to reproduce asexually (offspring identical genotype?) and another population member randomly selected to die (uniformly?)
+- Mutations occur - bdirectional at rate g
+- Track dynamics using cumulants of the distribution of E
+	- Prugel-Bennett and Shapiro 1997 use cumulants to model non-oerlapping generations
+- Expressions given for both overlapping and non-overlapping generations, first four cumulants
+	- the overlapping generation equations have an extra factor of N in denominator (due to extra reproductive event?)
+- Uh... the cumulants are slightly different over time. I guess K1 reaches a smaller steady state and K2 is always slightly smaller...
+- Some stuff on mutations...
+
+Okay... the discussion here is two paragraphs. What the heck? I can't rally interpret what's going on here. Very strange. But I like the idea of studying the cumulants. Is this easy to do? Is it amenable to our model? Note the efficacy here is a haploid version of our genetic model although selection is handled slightly differently.
+
+### Klausmeier, C.A., et al. 2020. Ecological limits to evolutionary rescue. Phil Trans R Soc B.
+
+- Review of moving-optimum models: Kopp and Matuszewski and supplements to (this) text
+	- Needed for rescue: populaton phenotype closely tracks environment
+- Missing from the optimum model: density dependence, species interactions, non-quadratic relationships between phenotype and fitness, limits to the niche
+- In continuous models, fitness r is defined by r = r_max - (x-E)^2/(2*s^2) (discrete models have W = e^r)
+	- trait value \bar{x} evolves as product (dr/dx)V_g (for V_g genetic variance) from Lande 1976
+- for constant rate of change, d, environmnt is E(t) = E0 + dt
+	- for x1 = E - \bar{x}, dx1/dt = d - V_g(dr/dx)
+	- equibrium lag has V_g(dr/dx) = d i.e. adaptation rate tracking the environmental change
+		- can derive conditions for persistence from this
+		- although note that a relaxed assumption of constant environmental variance complicates things... see Burger and Lynch 1995
+##### Complication 1: non-quadratic fitness functions
+- Quadratic phenotypic-fitness relationship comes from a Taylor expansion of fitness around the optimum, which isn't guaranteed to hold up when populations are far from phenotypic optimum
+- Osmond and Klausmeier (2017?) show that non-quadratic fitness functions will cause deviaton from expectation (e.g., evolutionary tipping points)
+	- (Fig. 2 - having trouble relating panels b, c)
+	- Will want to check out Cotto et al., 2019 for some of this stuff with stage-structured populations (GODDAMNIT)
+##### Complication 2: population dynamics
+- Some models looking at NDD in moving optimum models: B&L 1995, Polchova et al., 2009, Osmond et al. 2017
+- "Ecological quantitative genetics": N' = r(x,E,N) * N (see Klausmeier et al., 2020, Geritz t al., 1998)
+- Also, trait-dependence on births and deaths (note: not included in our modl)
+- oh my god I'm having a breakdown this shit is important but I just can't follow along with it... my career is over. It's over. I'm done. I'm never going anywhere. It's over.
+##### Complication 3: Community context
+- Prior moving optimum models have considered competition and predaton, no mutualisms yet
+- No study of community adaptation yt
+##### Complication 4: limits to the fundamental niche
+- Central assumption of moving optimum models: the fitness landscape doesn't change shape ever
+	- But there may be fundamental limits to how much/far populations can adapt [...]
+	- The shape of the fitness landscape likely depends on environmental variables
+
+Okay... I skimmed part (3) and skipped part (4). Good rundown of the moving optimum models. Go back to density dependence sections esp. for trait dependence. Look at reference for other population types. 
+
+### Gilpin, M.E., and Soul, M.E. 1986. Minimum Viable Populations: Processes of Species Extinction. Chapter in Conservaton Biology: The Science of Scarcity and Diversity (ed: Michael Soule).
+
+- Good background reading: Schaffer 1981
+	- Differentiates between deterministic and stochastic extinction
+		- Deterministic typically caused by something essential being removed/degraded or something lethal being added
+		- Stochastic typically due to normal random perturbations or environmental effects (~50)
+	- Also has MVP size for organisms with non-trivial life cycles
+- Extinction vortices: biological + ecological processes interaction to create feedback loops
+	- Can be determnistic extinctions
+	- Could also leave populations smaller and more susceptible to stochastic extinctions
+- *R vortex*: smaller $N$ means greater variance in r (growth rate)
+	- smaller population size means demographic stochasticity
+	- also changes in the population distrbution (e.g., age distribution, sex ratio)
+	- can cause multi-generational effects of small $N$ (where extinction risk is larger than the sum of per-generation extinction probabilities)
+- *D vortex*: increased framgentation means smaller populations $N$ in patches and smaller $N_e$ per patch
+	- more of a spatial process?
+- *F vortex*: smaller $N_e$ means genetic vortices
+	- inbreeding and/or changes in heterozygosity/fitness
+	- requires(?) manifestation of low $N_e$ on phenotype
+	- e.g., loss of heterozygosity influences fitness, influencing survival or fecundity
+- *A vortex*: smaller $N_e$ (and associated inbreeding, drift) means slower adaptation
+	- Thus populations are increasingly maladapted to their populations
+	- on this point see Frankel and Soule 1981 and Fukuyama 1983
+	- has the longest timescale so may be pre-empted by other cycles
+- Notably, different life histories are susceptible to different vortices
+	- e.g., a quickly, mass-reproducing species may be less susceptible to reductions in $N_e$ because there are so many offspring
+	- longer-lived organisms are less susceptible to vortices responsive to large environmental change
+
+Good stuff here about deterministic versus stochastic extinction - fits in with the phased framework I had earlier. Extinction is deterministic without adaptation and/or if adaptation is too slow. But then populations are left at a small size by the time they recover and are thus susceptible to extinction.
+
+Good thought here is that we should look at the minimum size and time of minimum size for surviving populations. It's also interesting to see how often extinctions occur after the expected trough of population size.
+
+These various types of cycles are not mutually exclusive, also are confusingly defined. Need to think about how they manifest themselves here. Off the top of my head, we have potential for *R* vortices based on populations being small/declining and NDD may make that worse. Look at var(r) perhaps? We also have *F* as inbreeding, etc. influence fitness. I love the inclusion of *A* - the rate of adaptation *should* be slowed down by drift. Think about what is needed to quantify each of these.

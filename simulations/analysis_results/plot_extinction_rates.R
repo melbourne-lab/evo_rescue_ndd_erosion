@@ -218,7 +218,7 @@ ins.probs = ggplot(all.d, aes(x = gen)) +
   ) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
-  facet_wrap( ~ interaction(n.pop0, bottleneck), ncol = 1) +
+  facet_wrap( ~ paste(n.pop0, bottleneck, sep = ', '), ncol = 1) +
   labs(x = 'Generation', y = 'Probability of extinction') +
   theme(legend.position = 'none',
         panel.background = element_blank())
@@ -234,7 +234,8 @@ cum.probs = ggplot(all.d, aes(x = gen)) +
     alpha = 0.1
   ) +
   scale_fill_manual(values = c('black', 'purple')) +
-  facet_wrap( ~ interaction(n.pop0, bottleneck), ncol = 1) +
+  labs(x = 'Generation') +
+  facet_wrap( ~ paste(n.pop0, bottleneck, sep = ', '), ncol = 1) +
   theme(legend.position = 'none',
         panel.background = element_blank())
 
