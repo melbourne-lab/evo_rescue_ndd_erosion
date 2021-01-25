@@ -52,14 +52,18 @@ for (i in 1:nrow(pars)) {
               wbar = mean(w_i))
   
   gene.summ = sim.output %>%
-    select(-c(i, g_i, z_i, w_i, r_i, fem)) %>%
-    gather(key = loc.copy, value = val, -gen) %>%
+    select(-c(g_i, z_i, w_i, r_i, fem)) %>%
+    gather(key = loc.copy, value = val, -c(i, gen)) %>%
     mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
+    group_by(i, gen, locus) %>%
+    mutate(heter = !sum(val)) %>%
     group_by(gen, locus) %>%
-    summarise(p = mean(val > 0)) %>%
+    summarise(p = mean(val > 0),
+              f = 1 - (mean(heter) / (2 * p * (1-p)))) %>%
     group_by(gen) %>%
     summarise(p.fix.pos = mean(p == 1),
               p.fix.neg = mean(p == 0),
+              f = mean(f, na.rm = TRUE),
               v = sum(2 * p * (1 - p)) / pars$n.loci[1])
   
   liszt[[i]] = cbind(demo.summ, gene.summ %>% select(-gen)) 
