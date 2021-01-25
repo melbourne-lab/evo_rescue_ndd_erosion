@@ -143,7 +143,7 @@ for (trial in 1:100) {
 
 htrials = unroller(htrials)
 
-hn = htrials %>% group_by(gen, trial) %>% summarise(n = n())
+hn = htrials %>% group_by(gen, trial) %>% summarise(n = n(), g = mean(g_i))
 
 hf = htrials %>%
   select(-c(g_i, z_i, w_i, r_i, fem)) %>%
@@ -153,14 +153,9 @@ hf = htrials %>%
   mutate(heter = !sum(val)) %>%
   group_by(gen, locus, trial) %>%
   summarise(p = mean(val > 0),
-            h = mean(heter),
-            pq2 = 2 * p * (1-p)) %>%
+            f = 1 - (mean(heter) / (2 * p * (1-p)))) %>%
   group_by(gen, trial) %>%
-  summarise(hbar = mean(h),
-            hvar = var(h),
-            pbar = mean(pq2),
-            pvar = var(pq2),
-            nobs = n())
+  summarise(f = mean(f, na.rm = TRUE))
 
 hall = merge(hf, hn, by = c('trial', 'gen'))
 
@@ -173,24 +168,20 @@ hall %>%
 
 hall %>%
   ggplot() +
-  geom_line(aes(x = gen, y = hbar, group = trial))
+  geom_line(aes(x = gen, y = f, group = trial))
+
+hall = hall %>% group_by(trial) %>% mutate(extinct = max(gen) < 15) %>% ungroup()
 
 hall %>%
   ggplot() +
-  geom_line(aes(x = gen, y = 1 - hbar/pbar, group = trial))
-
-hall = hall %>% group_by(trial) %>% mutate(extinct = max(gen) < 15)
-
-hall %>%
-  ggplot() +
-  geom_line(aes(x = gen, y = 1 - hbar/pbar, group = trial, colour = extinct)) +
+  geom_line(aes(x = gen, y = f, group = trial, colour = extinct)) +
   scale_color_manual(values = c('black', 'red'))
 
 hall %>%
   group_by(trial) %>%
   mutate(tau = max(gen) - gen + 1 + as.numeric(extinct & all(n > 1))) %>%
   ggplot() +
-  geom_line(aes(x = tau, y = 1 - hbar/pbar, group = trial, colour = extinct), size = 0.5) +
+  geom_line(aes(x = tau, y = f, group = trial, colour = extinct), size = 0.5) +
   scale_color_manual(values = c('black', 'red')) +
   scale_x_reverse()
 
@@ -198,15 +189,197 @@ hall %>%
   group_by(trial) %>%
   mutate(tau = max(gen) - gen + 1 + as.numeric(extinct & all(n > 1))) %>%
   group_by(extinct, tau) %>%
-  summarise(fisbar = mean(1 - (hbar / pbar)),
-            fisvar = var(1 - (hbar / pbar)),
+  summarise(fbar = mean(f),
+            fvar = var(f),
             n = n()) %>%
   ggplot() +
   geom_ribbon(aes(tau, 
-                  ymin = fisbar - 2*sqrt(fisvar/n),
-                  ymax = fisbar + 2*sqrt(fisvar/n),
+                  ymin = fbar - 2*sqrt(fvar/n),
+                  ymax = fbar + 2*sqrt(fvar/n),
                   group = extinct),
               alpha = 0.2) +
-  geom_line(aes(tau, fisbar, group = extinct, linetype = extinct)) +
+  geom_line(aes(tau, fbar, group = extinct, linetype = extinct)) +
   scale_x_reverse()
+
+# lookng great
+# too great...?
+
+hall %>% filter(extinct) %>% 
+  arrange(trial, desc(gen)) %>% 
+  distinct(trial, .keep_all = TRUE) %>%
+  summarise(fbar = mean(f)) # uh??? is this wrong?
+
+# ohhh this will have all n = 1 at f = -1 yes?
+# wat wtf is happening with negative f values..
+
+htrials %>% filter(trial %in% 1 & gen %in% 7)
+# uhh????? there's a ton of heterzygosity here...
+
+htrials %>% 
+  filter(trial %in% 1 & gen %in% 6) %>%
+  select(-c(gen, g_i, z_i, w_i, r_i, fem, trial)) %>%
+  gather(key = loc.copy, value = val, -i) %>%
+  mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
+  group_by(i, locus) %>%
+  mutate(heter = !sum(val)) %>%
+  group_by(locus) %>%
+  summarise(p = mean(val > 0),
+            f = 1 - (mean(heter) / (2 * p * (1-p))))
+
+ htrials %>% 
+    filter(trial %in% 1) %>%
+    select(-c(g_i, z_i, w_i, r_i, fem, trial)) %>%
+    gather(key = loc.copy, value = val, -c(i, gen)) %>%
+    mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
+    group_by(i, locus, gen) %>%
+    mutate(heter = !sum(val)) %>%
+    group_by(locus, gen) %>%
+    summarise(p = mean(val > 0),
+              h = mean(heter),
+              f = 1 - (mean(heter) / (2 * p * (1-p)))) %>%
+   ggplot() +
+   geom_line(aes(x = gen, y = h), colour = 'blue') +
+   geom_line(aes(x = gen, y = p), colour = 'red') +
+   facet_wrap(~ locus)
+ 
+ htrials %>% 
+   filter(trial %in% 1) %>%
+   select(-c(g_i, z_i, w_i, r_i, fem, trial)) %>%
+   gather(key = loc.copy, value = val, -c(i, gen)) %>%
+   mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
+   group_by(i, locus, gen) %>%
+   mutate(heter = !sum(val)) %>%
+   group_by(locus, gen) %>%
+   summarise(p = mean(val > 0),
+             h = mean(heter),
+             f = 1 - (mean(heter) / (2 * p * (1-p)))) %>%
+   ggplot() +
+   geom_segment(aes(x = 0, xend = 7, y = 0, yend = 0), 
+                linetype = 2) +
+   geom_line(aes(x = gen, y = 1 - h/(2*p*(1-p))), colour = 'blue') +
+   geom_line(aes(x = gen, y = p), colour = 'red') +
+   facet_wrap(~ locus)
+
+ htrials %>%
+   filter(trial %in% 1) %>%
+   select(i, gen, a14, b14, a19, b19, a20, b20) %>%
+   gather(key = loc.copy, value = val, -c(i, gen)) %>%
+   mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
+   group_by(i, locus, gen) %>%
+   mutate(heter = !sum(val)) %>%
+   group_by(locus, gen) %>%
+   summarise(p = mean(val > 0),
+             h = mean(heter),
+             f = 1 - (mean(heter) / (2 * p * (1-p))))
+   
+hf2 = htrials %>%
+   select(-c(g_i, z_i, w_i, r_i, fem)) %>%
+   gather(key = loc.copy, value = val, -c(i, gen, trial)) %>%
+   mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
+   group_by(i, gen, locus, trial) %>%
+   mutate(heter = !sum(val)) %>%
+   group_by(gen, locus, trial) %>%
+   summarise(p = mean(val > 0),
+             f = 1 - (mean(heter) / (2 * p * (1-p))),
+             f = ifelse(is.nan(f), 1, f)) %>%
+   group_by(gen, trial) %>%
+   summarise(f = mean(f, na.rm = TRUE))
+
+hf2 %>% 
+  group_by(trial) %>%
+  filter(max(gen) < 15) %>% 
+  ungroup() %>%
+  arrange(trial, desc(gen)) %>% 
+  distinct(trial, .keep_all = TRUE) %>%
+  summarise(fbar = mean(f))
+
+hall2 = merge(hn, hf2, by = c('trial', 'gen'))
+
+hall2 %>%
+  group_by(trial) %>%
+  mutate(extinct = max(gen) < 15,
+         tau = max(gen) - gen + 1 + as.numeric(extinct & all(n > 1))) %>%
+  group_by(extinct, tau) %>%
+  summarise(fbar = mean(f),
+            fvar = var(f),
+            n = n()) %>%
+  ggplot() +
+  geom_ribbon(aes(tau, 
+                  ymin = fbar - 2*sqrt(fvar/n),
+                  ymax = fbar + 2*sqrt(fvar/n),
+                  group = extinct),
+              alpha = 0.2) +
+  geom_line(aes(tau, fbar, group = extinct, linetype = extinct)) +
+  scale_x_reverse()
+
+hall2 %>%
+  group_by(trial) %>%
+  mutate(extinct = max(gen) < 15) %>%
+  group_by(extinct, gen) %>%
+  summarise(fbar = mean(f),
+            fvar = var(f),
+            n = n()) %>%
+  ggplot() +
+  geom_ribbon(aes(gen, 
+                  ymin = fbar - 2*sqrt(fvar/n),
+                  ymax = fbar + 2*sqrt(fvar/n),
+                  group = extinct),
+              alpha = 0.2) +
+  geom_line(aes(gen, fbar, group = extinct, linetype = extinct))
+
+# These latter plots are interesting but may just be weighted averages of F and 1...
+
+# Above we may have detected patterns with mean(h) / mean(2pq)
+
+hf3 = htrials %>%
+  select(-c(g_i, z_i, w_i, r_i, fem)) %>%
+  gather(key = loc.copy, value = val, -c(i, gen, trial)) %>%
+  mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
+  group_by(i, gen, locus, trial) %>%
+  mutate(heter = !sum(val)) %>%
+  group_by(gen, locus, trial) %>%
+  summarise(p = mean(val > 0),
+            h = mean(heter),
+            exph = 2 * mean(p * (1-p))) %>%
+  group_by(gen, trial) %>%
+  summarise(f = 1 - (mean(h) / mean(exph)))
+
+# This also seems bad... averaging over proportions.
+# (although we're also sorta averaging ovr proportions by taking mean of h across loci)
+
+hall3 = merge(hn, hf3, by = c('trial', 'gen'))
+
+hall3 %>%
+  group_by(trial) %>%
+  mutate(extinct = max(gen) < 15,
+         tau = max(gen) - gen + 1 + as.numeric(extinct & all(n > 1))) %>%
+  group_by(extinct, tau) %>%
+  summarise(fbar = mean(f),
+            fvar = var(f),
+            n = n()) %>%
+  ggplot() +
+  geom_ribbon(aes(tau, 
+                  ymin = fbar - 2*sqrt(fvar/n),
+                  ymax = fbar + 2*sqrt(fvar/n),
+                  group = extinct),
+              alpha = 0.2) +
+  geom_line(aes(tau, fbar, group = extinct, linetype = extinct)) +
+  scale_x_reverse()
+
+# seems to be same issue as above...
+
+### Synthesis:
+# Okay a couple of potntially bad problems here. First, for some reason, there's
+# consistently more heterozygosity than expected here. WTAF. Over the summer
+# there was an issue with inheritance. I don't know if that's what's happening
+# here. This may require doing some sort of extra checking of sorts... But even
+# still, F_{IS} may not be good to use here. There are two different ways to
+# estimate mean heterozygosity here... One is to get mean h over all loci and
+# mean 2pq over all loci, then tak that ratio. That may be missing some info,
+# though, I feel. There's also the issue of averaging over ratios which seems
+# problematic (would bias results somehow). If we instead calculated mean F_{IS}
+# at each locus, we also may have the ratio problem... but more importantly,
+# F_{IS} is undefined for allles at fixation because 2*p*(1-q) is zero. Taking
+# these alleles out may be biasing, especially at low populaton size (I think).
+# It may be better instead to use fixation and/or genetic variation.
 
