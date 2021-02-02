@@ -79,7 +79,7 @@ all.summ = all.data %>%
   ungroup() %>%
   filter(!(extinct & gen %in% 15))
 
-all.summ %>%
+all.summ %>% # filter(!low.var) %>%
   ggplot(aes(x = n.bar, y = v.bar)) +
   geom_path(
     aes(
@@ -88,13 +88,14 @@ all.summ %>%
       colour = factor(alpha)
       )
     ) +
-  # geom_point(
-  #   aes(
-  #     colour = factor(alpha)
-  #   ),
-  #   size = 5,
-  #   alpha = 0.1
-  # ) +
+  geom_point(
+    aes(
+      colour = factor(alpha)
+    ),
+    size = 5,
+    shape = 21,
+    fill = 'white'
+  ) +
   geom_text(
     aes(
       colour = factor(alpha),
