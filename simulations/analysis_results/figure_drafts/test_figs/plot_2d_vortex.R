@@ -60,9 +60,14 @@ steps.all %>%
 ### Try with summary
 
 all.summ = all.data %>%
-  group_by(trial, alpha, low.var, n.pop0) %>%
-  mutate(tau = max(gen) - gen + 1 - as.numeric(any(n < 2) & extinct)) %>%
-  group_by(alpha, low.var, n.pop0, extinct, tau) %>%
+  group_by(n.pop0, low.var, alpha, trial) %>%
+  arrange(desc(gen)) %>%
+  distinct(n.pop0, low.var, alpha, trial, .keep_all = TRUE) %>%
+  uncount(weight = 15 - gen) %>%
+  mutate(n = 0, gen = gen + (1:(15-gen[1]))) %>%
+  ungroup() %>% 
+  rbind(all.data) %>%
+  group_by(alpha, low.var, n.pop0, extinct, gen) %>%
   summarise(n.bar = mean(n),
             n.var = var(n),
             v.bar = mean(v),
@@ -71,7 +76,8 @@ all.summ = all.data %>%
             w.var = var(wbar),
             nobs = n()
   ) %>%
-  ungroup()
+  ungroup() %>%
+  filter(!(extinct & gen %in% 15))
 
 all.summ %>%
   ggplot(aes(x = n.bar, y = v.bar)) +
@@ -82,9 +88,17 @@ all.summ %>%
       colour = factor(alpha)
       )
     ) +
-  geom_point(
+  # geom_point(
+  #   aes(
+  #     colour = factor(alpha)
+  #   ),
+  #   size = 5,
+  #   alpha = 0.1
+  # ) +
+  geom_text(
     aes(
-      colour = factor(alpha)
+      colour = factor(alpha),
+      label = gen
     )
   ) +
   # geom_ribbon(
@@ -255,3 +269,159 @@ plot.vw = all.summ %>%
 plot_grid(plot.nv, plot.nw, plot.vw, 
           nrow = 3, rel_heights = c(1, 1, 1))
 
+### Try Pr(extinct | x) plots
+
+binned.pext = all.data %>%
+  mutate(n.round = ifelse(n > 100, 101, n),
+         v.round = round(v / .05) * .05,
+         w.round = round(wbar / .05) * .05) %>%
+  group_by(n.pop0, low.var, alpha, n.round, v.round, w.round) %>%
+  summarise(pext = mean(extinct),
+            n = n())
+
+binned.nv = all.data %>%
+  mutate(n.round = ifelse(n > 100, 101, 5 * round(n/5)),
+         v.round = round(v / .05) * .05) %>%
+  group_by(n.pop0, low.var, alpha, n.round, v.round) %>%
+  summarise(pext = mean(extinct),
+            n = n()) %>%
+  uncount(weights = 5) %>%
+  group_by(n.pop0, low.var, alpha, v.round) %>%
+  mutate(n.round = n.round + 0:4)
+
+binned.vw = all.data %>%
+  mutate(v.round = round(v / .05) * .05,
+         w.round = round(wbar / .05) * .05) %>%
+  group_by(n.pop0, low.var, alpha, v.round, w.round) %>%
+  summarise(pext = mean(extinct),
+            n = n())
+
+binned.nw = all.data %>%
+  mutate(n.round = ifelse(n > 100, 101, 5 * round(n/5)),
+         w.round = round(wbar / .05) * .05) %>%
+  group_by(n.pop0, low.var, alpha, n.round, w.round) %>%
+  summarise(pext = mean(extinct),
+            n = n()) %>%
+  uncount(weights = 5) %>%
+  group_by(n.pop0, low.var, alpha, w.round) %>%
+  mutate(n.round = n.round + 0:4)
+
+binned.nv %>%
+  ggplot() +
+  geom_raster(
+    aes(
+      x = v.round,
+      y = n.round,
+      fill = pext #> 0.5
+    )
+  ) +
+  scale_fill_viridis_b(option = 'B') +
+  #scale_fill_manual(values = c('black', 'red')) +
+  facet_wrap(paste(n.pop0, low.var, sep = ', ') ~ alpha, nrow = 4)
+
+binned.nw %>%
+  ggplot() +
+  geom_raster(
+    aes(
+      x = w.round,
+      y = n.round,
+      fill = pext #> 0.5
+    )
+  ) +
+  scale_fill_viridis_b(option = 'B') +
+  #scale_fill_manual(values = c('black', 'red')) +
+  facet_wrap(paste(n.pop0, low.var, sep = ', ') ~ alpha, nrow = 4)
+
+binned.vw %>%
+  ggplot() +
+  geom_raster(
+    aes(
+      x = w.round,
+      y = v.round,
+      fill = pext #> 0.5
+    )
+  ) +
+  scale_fill_viridis_b(option = 'B') +
+  #scale_fill_manual(values = c('black', 'red')) +
+  facet_wrap(paste(n.pop0, low.var, sep = ', ') ~ alpha, nrow = 4)
+
+### What would capture hte vortex more is... arrows!
+
+# First need to add in ones:
+
+all.data.ones = all.data %>%
+  select(n.pop0, low.var, alpha, trial, gen, n, v, wbar, extinct) %>%
+  group_by(n.pop0, low.var, alpha, trial) %>%
+  arrange(desc(gen)) %>%
+  distinct(n.pop0, low.var, alpha, trial, .keep_all = TRUE) %>%
+  filter(extinct & (n > 1)) %>%
+  mutate_at(vars(wbar, v), list(~ NA)) %>%
+  mutate(n = 1, gen = gen + 1) %>%
+  ungroup() %>%
+  rbind(all.data %>% select(n.pop0, low.var, alpha, trial, gen, n, v, wbar, extinct)) %>%
+  arrange(n.pop0, low.var, alpha, trial, gen)
+
+all.deltas = all.data.ones %>%
+  group_by(n.pop0, low.var, alpha, trial) %>%
+  mutate(n_tp1 = c(n[2:n()], NA),
+         v_tp1 = c(v[2:n()], NA),
+         w_tp1 = c(wbar[2:n()], NA))# c(exp(diff(log(v))), NA)
+# this takes a long time to run... never seen anything like this.
+# takes literally minutes!!! Wht the fuck
+# there must be a faster way... oh well.
+
+nv.slopes = all.deltas %>%
+  mutate(n.round = ifelse(n > 100, 101, 5 * round(n / 5)),
+         v.round = round(v / .05) * .05) %>%
+  group_by(n.pop0, low.var, alpha, n.round, v.round) %>%
+  summarise(ntp1bar = mean(n_tp1, na.rm = TRUE),
+            vtp1bar = mean(v_tp1, na.rm = TRUE)) 
+
+nw.slopes = all.deltas %>%
+  mutate(n.round = ifelse(n > 100, 101, 5 * round(n / 5)),
+         w.round = round(wbar / .05) * .05) %>%
+  group_by(n.pop0, low.var, alpha, n.round, w.round) %>%
+  summarise(ntp1bar = mean(n_tp1, na.rm = TRUE),
+            wtp1bar = mean(w_tp1, na.rm = TRUE)) 
+
+vw.slopes = all.deltas %>%
+  mutate(v.round = round(v / .05) * .05,
+         w.round = round(wbar / .05) * .05) %>%
+  group_by(n.pop0, low.var, alpha, v.round, w.round) %>%
+  summarise(vtp1bar = mean(v_tp1, na.rm = TRUE),
+            wtp1bar = mean(w_tp1, na.rm = TRUE)) 
+
+nv.slopes %>%
+  ggplot() +
+  geom_segment(aes(x = n.round, xend = ntp1bar,
+                   y = v.round, yend = vtp1bar,
+                   colour = ntp1bar > n.round),
+               size = 0.8, 
+               arrow = arrow(length = unit(0.01, "npc"))) +
+  scale_color_manual(values = c('blue', 'red')) +
+  scale_x_continuous(limits = c(0, 100)) +
+  facet_wrap(n.pop0 + low.var ~ alpha, ncol = 4) +
+  ggsave('~/Dropbox/rescue_ndd_paper_2020/figures/ex_n-v_slopes.pdf')
+
+nw.slopes %>%
+  ggplot() +
+  geom_segment(aes(x = n.round, xend = ntp1bar,
+                   y = w.round, yend = wtp1bar,
+                   colour = ntp1bar > n.round),
+               size = 0.8, 
+               arrow = arrow(length = unit(0.01, "npc"))) +
+  scale_color_manual(values = c('blue', 'red')) +
+  scale_x_continuous(limits = c(0, 100)) +
+  facet_wrap(n.pop0 + low.var ~ alpha, ncol = 4) +
+  ggsave('~/Dropbox/rescue_ndd_paper_2020/figures/ex_n-w_slopes.pdf')
+  
+vw.slopes %>%
+  ggplot() +
+  geom_segment(aes(x = v.round, xend = vtp1bar,
+                   y = w.round, yend = wtp1bar),
+               size = 0.8, 
+               arrow = arrow(length = unit(0.01, "npc"))) +
+  facet_wrap(n.pop0 + low.var ~ alpha, ncol = 4)
+
+
+  
