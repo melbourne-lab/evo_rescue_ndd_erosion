@@ -1,4 +1,5 @@
 library(ggplot2)
+library(cowplot)
 library(dplyr)
 library(tidyr)
 
@@ -125,6 +126,15 @@ all.summ %>%
   geom_point(
     aes(
       colour = factor(alpha)
+    ),
+    size = 5,
+    shape = 21,
+    fill = 'white'
+  ) +
+  geom_text(
+    aes(
+      colour = factor(alpha),
+      label = gen
     )
   ) +
   # geom_ribbon(
@@ -150,6 +160,15 @@ all.summ %>%
   geom_point(
     aes(
       colour = factor(alpha)
+    ),
+    size = 5,
+    shape = 21,
+    fill = 'white'
+  ) +
+  geom_text(
+    aes(
+      colour = factor(alpha),
+      label = gen
     )
   ) +
   # geom_ribbon(
@@ -424,5 +443,289 @@ vw.slopes %>%
                arrow = arrow(length = unit(0.01, "npc"))) +
   facet_wrap(n.pop0 + low.var ~ alpha, ncol = 4)
 
+### Okay try actual semi-serious plots in cowplot
 
-  
+nv.hivar = all.summ %>%  
+  filter(!low.var) %>%
+  mutate(n.pop0 = factor(n.pop0, labels = c("Small", "Large"))) %>%
+  ggplot(aes(x = n.bar, y = v.bar)) +
+  geom_path(
+    aes(
+      group = interaction(alpha, extinct), 
+      linetype = extinct, 
+      colour = factor(alpha)
+    )
+  ) +
+  geom_point(
+    aes(
+      colour = factor(alpha),
+      shape = extinct
+    ),
+    size = 4.5,
+    fill = 'white'
+  ) +
+  geom_text(
+    aes(
+      colour = factor(alpha),
+      label = gen
+    ),
+    size = 3
+  ) +
+  scale_color_manual(values = c('black', 'purple')) +
+  scale_shape_manual(values = 21:22) +
+  scale_x_log10(breaks = c(0.1, 10, 100), labels = c(0.1, 10, 1000)) +
+  labs(x = 'Population size', y = 'Genetic variance') +
+  facet_wrap(n.pop0 ~ ., ncol = 2) +
+  theme(legend.position = 'none',
+        panel.background = element_blank())
+
+nw.hivar = all.summ %>%  
+  filter(!low.var) %>%
+  mutate(n.pop0 = factor(n.pop0, labels = c("Small", "Large"))) %>%
+  ggplot(aes(x = n.bar, y = w.bar)) +
+  geom_path(
+    aes(
+      group = interaction(alpha, extinct), 
+      linetype = extinct, 
+      colour = factor(alpha)
+    )
+  ) +
+  geom_point(
+    aes(
+      colour = factor(alpha),
+      shape = extinct
+    ),
+    size = 4.5,
+    fill = 'white'
+  ) +
+  geom_text(
+    aes(
+      colour = factor(alpha),
+      label = gen
+    ),
+    size = 3
+  ) +
+  scale_color_manual(values = c('black', 'purple')) +
+  scale_shape_manual(values = 21:22) +
+  scale_x_log10(breaks = c(0.1, 10, 100), labels = c(0.1, 10, 1000)) +
+  labs(x = 'Population size', y = 'Intrinsic fitness') +
+  facet_wrap(n.pop0 ~ ., ncol = 2) +
+  theme(legend.position = 'none',
+        panel.background = element_blank())
+
+vw.hivar = all.summ %>%  
+  filter(!low.var) %>%
+  mutate(n.pop0 = factor(n.pop0, labels = c("Small", "Large"))) %>%
+  ggplot(aes(x = v.bar, y = w.bar)) +
+  geom_path(
+    aes(
+      group = interaction(alpha, extinct), 
+      linetype = extinct, 
+      colour = factor(alpha)
+    )
+  ) +
+  geom_point(
+    aes(
+      colour = factor(alpha),
+      shape = extinct
+    ),
+    size = 4.5,
+    fill = 'white'
+  ) +
+  geom_text(
+    aes(
+      colour = factor(alpha),
+      label = gen
+    ),
+    size = 3
+  ) +
+  scale_color_manual(values = c('black', 'purple')) +
+  scale_shape_manual(values = 21:22) +
+  labs(x = 'Additive genetic variance', y = 'Intrinsic fitness') +
+  facet_wrap(n.pop0 ~ ., ncol = 2) +
+  theme(legend.position = 'none',
+        panel.background = element_blank())
+
+save_plot('~/Dropbox/rescue_ndd_paper_2020/figures/eg_vortex_hivar.pdf',
+          plot_grid(nv.hivar, nw.hivar, vw.hivar, nrow = 3),
+          base_height = 11, base_width = 8)
+
+# Low variance vortex
+
+nv.lovar = all.summ %>%  
+  filter(low.var) %>%
+  mutate(n.pop0 = factor(n.pop0, labels = c("Small", "Large"))) %>%
+  ggplot(aes(x = n.bar, y = v.bar)) +
+  geom_path(
+    aes(
+      group = interaction(alpha, extinct), 
+      linetype = extinct, 
+      colour = factor(alpha)
+    )
+  ) +
+  geom_point(
+    aes(
+      colour = factor(alpha),
+      shape = extinct
+    ),
+    size = 4.5,
+    fill = 'white'
+  ) +
+  geom_text(
+    aes(
+      colour = factor(alpha),
+      label = gen
+    ),
+    size = 3
+  ) +
+  scale_color_manual(values = c('black', 'purple')) +
+  scale_shape_manual(values = 21:22) +
+  scale_x_log10(breaks = c(0.1, 10, 100), labels = c(0.1, 10, 1000)) +
+  labs(x = 'Population size', y = 'Genetic variance') +
+  facet_wrap(n.pop0 ~ ., ncol = 2) +
+  theme(legend.position = 'none',
+        panel.background = element_blank())
+
+nw.lovar = all.summ %>%  
+  filter(low.var) %>%
+  mutate(n.pop0 = factor(n.pop0, labels = c("Small", "Large"))) %>%
+  ggplot(aes(x = n.bar, y = w.bar)) +
+  geom_path(
+    aes(
+      group = interaction(alpha, extinct), 
+      linetype = extinct, 
+      colour = factor(alpha)
+    )
+  ) +
+  geom_point(
+    aes(
+      colour = factor(alpha),
+      shape = extinct
+    ),
+    size = 4.5,
+    fill = 'white'
+  ) +
+  geom_text(
+    aes(
+      colour = factor(alpha),
+      label = gen
+    ),
+    size = 3
+  ) +
+  scale_color_manual(values = c('black', 'purple')) +
+  scale_shape_manual(values = 21:22) +
+  scale_x_log10(breaks = c(0.1, 10, 100), labels = c(0.1, 10, 1000)) +
+  labs(x = 'Population size', y = 'Intrinsic fitness') +
+  facet_wrap(n.pop0 ~ ., ncol = 2) +
+  theme(legend.position = 'none',
+        panel.background = element_blank())
+
+vw.lovar = all.summ %>%  
+  filter(low.var) %>%
+  mutate(n.pop0 = factor(n.pop0, labels = c("Small", "Large"))) %>%
+  ggplot(aes(x = v.bar, y = w.bar)) +
+  geom_path(
+    aes(
+      group = interaction(alpha, extinct), 
+      linetype = extinct, 
+      colour = factor(alpha)
+    )
+  ) +
+  geom_point(
+    aes(
+      colour = factor(alpha),
+      shape = extinct
+    ),
+    size = 4.5,
+    fill = 'white'
+  ) +
+  geom_text(
+    aes(
+      colour = factor(alpha),
+      label = gen
+    ),
+    size = 3
+  ) +
+  scale_color_manual(values = c('black', 'purple')) +
+  scale_shape_manual(values = 21:22) +
+  labs(x = 'Additive genetic variance', y = 'Intrinsic fitness') +
+  facet_wrap(n.pop0 ~ ., ncol = 2) +
+  theme(legend.position = 'none',
+        panel.background = element_blank())
+
+save_plot('~/Dropbox/rescue_ndd_paper_2020/figures/eg_vortex_lowvar.pdf',
+          plot_grid(nv.lovar, nw.lovar, vw.lovar, nrow = 3),
+          base_height = 11, base_width = 8)
+
+### Try to get slope fields
+
+nv.slopes = all.deltas %>%
+  mutate(n.round = ifelse(n > 100, 101, 5 * round(n / 5)),
+         v.round = round(v / .05) * .05) %>%
+  group_by(n.pop0, low.var, alpha, n.round, v.round) %>%
+  summarise(nbar = mean(n),
+            vbar = mean(v),
+            ntp1bar = mean(n_tp1, na.rm = TRUE),
+            vtp1bar = mean(v_tp1, na.rm = TRUE)) 
+
+nw.slopes = all.deltas %>%
+  mutate(n.round = ifelse(n > 100, 101, 5 * round(n / 5)),
+         w.round = round(wbar / .1) * .1) %>%
+  group_by(n.pop0, low.var, alpha, n.round, w.round) %>%
+  summarise(nbar = mean(n),
+            wbar = mean(wbar),
+            ntp1bar = mean(n_tp1, na.rm = TRUE),
+            wtp1bar = mean(w_tp1, na.rm = TRUE)) 
+
+nv.slope.hivar = nv.slopes %>%
+  ungroup() %>%
+  filter(!low.var) %>%
+  mutate(n.pop0 = factor(n.pop0, labels = c("Large", "Small")),
+         ndd = ifelse(alpha > 0, "dens. dep.", "dens. dep.")) %>%
+  ggplot() +
+  geom_segment(aes(x = nbar, xend = ntp1bar,
+                   y = vbar, yend = vtp1bar),
+               size = 0.8, 
+               arrow = arrow(length = unit(0.02, "npc"))) +
+  scale_x_continuous(limits = c(0, 100), oob = scales::squish) +
+  facet_wrap(n.pop0 ~ alpha, ncol = 2) 
+
+nw.slope.hivar = nw.slopes %>%
+  ungroup() %>%
+  filter(!low.var) %>%
+  mutate(n.pop0 = factor(n.pop0, labels = c("Large", "Small"))) %>%
+  ggplot() +
+  geom_segment(aes(x = nbar, xend = ntp1bar,
+                   y = wbar, yend = wtp1bar),
+               size = 0.4, 
+               arrow = arrow(length = unit(0.02, "npc"))) +
+  scale_x_continuous(limits = c(0, 100), oob = scales::squish) +
+  facet_wrap(n.pop0 ~ alpha, ncol = 2)  
+
+plot_grid(nv.slope.hivar, nw.slope.hivar, nrow = 2)
+
+nv.slope.hivar = nv.slopes %>%
+  ungroup() %>%
+  filter(low.var) %>%
+  mutate(n.pop0 = factor(n.pop0, labels = c("Large", "Small"))) %>%
+  ggplot() +
+  geom_segment(aes(x = nbar, xend = ntp1bar,
+                   y = vbar, yend = vtp1bar),
+               size = 0.8, 
+               arrow = arrow(length = unit(0.02, "npc"))) +
+  scale_x_continuous(limits = c(0, 100), oob = scales::squish) +
+  facet_wrap(n.pop0 ~ alpha, ncol = 2) 
+
+nw.slope.hivar = nw.slopes %>%
+  ungroup() %>%
+  filter(low.var) %>%
+  mutate(n.pop0 = factor(n.pop0, labels = c("Large", "Small"))) %>%
+  ggplot() +
+  geom_segment(aes(x = nbar, xend = ntp1bar,
+                   y = wbar, yend = wtp1bar),
+               size = 0.4, 
+               arrow = arrow(length = unit(0.02, "npc"))) +
+  scale_x_continuous(limits = c(0, 100), oob = scales::squish) +
+  facet_wrap(n.pop0 ~ alpha, ncol = 2) 
+
+plot_grid(nv.slope.hivar, nw.slope.hivar, nrow = 2)
