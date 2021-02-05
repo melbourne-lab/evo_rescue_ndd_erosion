@@ -666,7 +666,8 @@ nv.slopes = all.deltas %>%
   summarise(nbar = mean(n),
             vbar = mean(v),
             ntp1bar = mean(n_tp1, na.rm = TRUE),
-            vtp1bar = mean(v_tp1, na.rm = TRUE)) 
+            vtp1bar = mean(v_tp1, na.rm = TRUE),
+            norm.ds = sqrt((ntp1bar - nbar)^2 + (vtp1bar - vbar)^2)) 
 
 nw.slopes = all.deltas %>%
   mutate(n.round = ifelse(n > 100, 101, 5 * round(n / 5)),
@@ -729,3 +730,99 @@ nw.slope.hivar = nw.slopes %>%
   facet_wrap(n.pop0 ~ alpha, ncol = 2) 
 
 plot_grid(nv.slope.hivar, nw.slope.hivar, nrow = 2)
+
+# maybe it would be better to do logs...
+
+nv.log.slopes = all.deltas %>%
+  mutate(n = log(n), n_tp1 = log(n_tp1)) %>%
+  mutate(n.round = round(n / .25) * .25,
+         v.round = round(v / .05) * .05) %>%
+  group_by(n.pop0, low.var, alpha, n.round, v.round) %>%
+  summarise(nbar = mean(n),
+            vbar = mean(v),
+            wbar = mean(wbar),
+            ntp1bar = mean(n_tp1, na.rm = TRUE),
+            vtp1bar = mean(v_tp1, na.rm = TRUE),
+            norm.ds = sqrt((ntp1bar - nbar)^2 + (vtp1bar - vbar)^2)) 
+
+nw.log.slopes = all.deltas %>%
+  mutate(n = log(n), n_tp1 = log(n_tp1)) %>%
+  mutate(n.round = round(n / .25) * .25,
+         w.round = round(wbar / .05) * .05) %>%
+  group_by(n.pop0, low.var, alpha, n.round, w.round) %>%
+  summarise(nbar = mean(n),
+            wbar = mean(wbar),
+            ntp1bar = mean(n_tp1, na.rm = TRUE),
+            wtp1bar = mean(w_tp1, na.rm = TRUE),
+            norm.ds = sqrt((ntp1bar - nbar)^2 + (wtp1bar - wbar)^2)) 
+
+# Slope: log(n) vs. variance
+
+nv.log.slopes %>%
+  ungroup() %>%
+  filter(!low.var) %>%
+  mutate(n.pop0 = factor(n.pop0, labels = c("Large", "Small")),
+         ndd = ifelse(alpha > 0, "dens. dep.", "dens. dep.")) %>%
+  ggplot() +
+  geom_segment(aes(x = vbar, xend = vtp1bar,
+                   y = nbar, yend = ntp1bar,
+                   colour = wbar),
+               size = 0.8, 
+               arrow = arrow(length = unit(0.02, "npc"))) +
+  scale_y_continuous(limits = log(c(1, 100)),
+                     breaks = log(c(1, 10, 100)),
+                     labels = c(1, 10, 100)) +
+  scale_color_gradient2(low = 'red', mid = 'white',
+                        midpoint = 1, high = 'blue') +
+  #scale_color_manual(values = c('black', 'purple')) +
+  facet_wrap(n.pop0 ~ alpha, ncol = 2) +
+  theme(panel.background = element_rect(fill = 'black'),
+        panel.grid = element_blank())
+
+# maybe animate through time
+
+### Animating the above.
+
+nv.log.slopes = all.deltas %>%
+  mutate(n = log(n), n_tp1 = log(n_tp1)) %>%
+  mutate(n.round = round(n / .25) * .25,
+         v.round = round(v / .05) * .05) %>%
+  group_by(n.pop0, low.var, alpha, n.round, v.round, gen) %>%
+  summarise(nbar = mean(n),
+            vbar = mean(v),
+            wbar = mean(wbar),
+            ntp1bar = mean(n_tp1, na.rm = TRUE),
+            vtp1bar = mean(v_tp1, na.rm = TRUE)) 
+
+for (timest in 1:15) {
+  
+  nv.log.slopes %>%
+    ungroup() %>%
+    filter(!low.var) %>%
+    filter(gen %in% timest) %>%
+    mutate(n.pop0 = factor(n.pop0, labels = c("Large", "Small")),
+           ndd = ifelse(alpha > 0, "dens. dep.", "dens. dep.")) %>%
+    ggplot() +
+    geom_segment(aes(x = vbar, xend = vtp1bar,
+                     y = nbar, yend = ntp1bar,
+                     colour = wbar),
+                 size = 0.8, 
+                 arrow = arrow(length = unit(0.02, "npc"))) +
+    scale_x_continuous(limits = c(0, 0.5)) +
+    scale_y_continuous(limits = log(c(1, 100)),
+                       breaks = log(c(1, 10, 100)),
+                       labels = c(1, 10, 100)) +
+    scale_color_gradient2(low = 'red', mid = 'white',
+                          midpoint = 1, high = 'blue') +
+    #scale_color_manual(values = c('black', 'purple')) +
+    facet_wrap(n.pop0 ~ alpha, ncol = 2) +
+    theme(panel.background = element_rect(fill = 'black'),
+          panel.grid = element_blank()) +
+    ggtitle(paste0('Generation ', timest))
+    ggsave(
+      paste0('simulations/analysis_results/figure_drafts/test_figs/slope_field_draft/',
+             timest, 'slope_field.pdf'
+            )
+    )
+  
+}
