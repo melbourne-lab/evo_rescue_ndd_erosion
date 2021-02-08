@@ -38,3 +38,26 @@ Because added variation in the phenotypic change changes the expected change in 
 
 This alone would not necessarily change the rate of adaptation, just the (instantaneous) population growth rate. Perhaps a more evolutionarily-relevant and straightforward way that sampling variation would affect the rate of genotypic variation is to cause genetic drift, which will lower the rate of adaptation. Argh... but this is what we've been having so much trouble demonstrating!
 
+### Reasoning through fitness changes
+
+The hypothesis this model is testing is: populations held at smaller size will lose fitness more quickly and thus will have less fitness over time. The best way to answer this is to look at mean fitness across time in density dependent/independent populations and compare.
+
+This hypothesis would be supported if we saw, over/across time, mean fitness in NDD populations was lower than DI populations (all else equal). However, this is complicated by extinctions.
+
+The in a case with no extinctions (e.g., if populations are not discrete and can go below 1) if the hypothesis is correct is that the curve of fitness over time (W_t) for NDD populations will be below that of DI populatons. 
+
+The converse of this (W_t the same for both groups over time) can be caused by at least two things: (1) no difference in fitness between groups or (2) differences in fitness that are masked by extinctions (which change respective sample sizes).
+
+How would (1) be falsified? Seems like you could first remove any possible influences of (2) - i.e., look at cases *before* extincton occurs. 
+
+### Some thoughts on writing and figures (the vortex)
+
+Thinking about presenting summaries - when is it good to show the mean of state variables themselves (e.g., population size) versus normalized rates of change (e.g., log lambda). Looking at the state variables by themselves in the context of the extinction vortex potentially catches some variation in time to extinction. Because genotype and amount of genetic variance change monotonically on average, populations going extinct at different times may have different values for each of these two variables. 
+
+Relative rates of change can be expressed by $\lambda$, the rate of load/maladaptation reduction, and the proportional loss in genetic variance. The second of these (rate of maladaptation reduction, $k$) comes from the theoretical result that genotypes approach their optimum geometrically (Lande 1976) following the formula $d_{t+1} = k d_t$. Thinking about losses in genetic variance as a percentage normalizes for effects of initial variance and also is intuitive if thinking about genetic variance as a quantity reduced over time. These are normalized to account for state variables at any given point in time.
+
+These could be expressed as functions of time/generation, but I think they actually may make more sense as functions of tau/time to extinction. Conditioning on tau instead of time is will show patterns in relative rates of change in the lead up to extinction (it would likely be a good exercise to compare the variances in all of these variables when conditioned on time versus conditioned on tau). Another quite large benefit is conditioning on tau removes issues in propagating forward the values of extinct populations. Propagating forward extinction values introduces several zeros/ones into the rates of change that will produce bias. Plotting lambda over time with zeros added will show this.
+
+These tau plots will show us the shape of the vortex, but it may not tell us anything about the approach to the vortex (is this true?). Perhaps plotting tau greater than ~5 only will show the approach to the vortex... The state variable plots conditioned on generation may show this approach better. At the very least, the state variables ~ time plot give a good idea of what the expectation of each variable over time is. This may supplant other variable plots, e.g., I can see it supplanting the plot of fitness ($\bar{W}_t$) over time, and possibly the genetic variance over time (although the fish-scale plot of variance in the lead up to extinction is very read).
+
+
