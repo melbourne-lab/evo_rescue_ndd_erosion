@@ -14,14 +14,12 @@ source('base_model_source/sim_functions.R')
 pars = data.frame(
   init.row = 2e4,
   end.time = 15,
-  n.pop0 = 50,
   n.loci = 25,
   w.max = 2,
   theta = 2.775,
   wfitn = sqrt(1 / 0.14 / 2),
   sig.e = sqrt(0.5),
-  pos.p = 0.5,
-  alpha = 0
+  pos.p = 0.5
 )
 
 # Read in source populations
