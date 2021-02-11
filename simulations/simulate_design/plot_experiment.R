@@ -4,6 +4,8 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 
+rm(list = ls())
+
 d1 = read.csv('simulations/simulate_design/output/design1_summary.csv')
 d2 = read.csv('simulations/simulate_design/output/design2_summary.csv')
 d3 = read.csv('simulations/simulate_design/output/design3_summary.csv')
@@ -121,7 +123,7 @@ rbind(design1, design2, design3) %>%
 
 ### Average population size
 
-rbind(design1, design2, design3) %>%
+design.means = rbind(design1, design2, design3) %>%
   filter(design > 0) %>%
   group_by(trial, design, n.pop0, alpha, evolve) %>%
   arrange(desc(gen)) %>%
@@ -135,7 +137,9 @@ rbind(design1, design2, design3) %>%
   summarise(nbar = mean(n),
             nvar = var(n),
             nobs = n()) %>%
-  ungroup() %>%
+  ungroup()
+  
+design.means %>%
   filter(nbar > 0) %>%
   mutate(n.pop0     = factor(n.pop0 > 20, labels = c('small', 'large')),
          alpha      = factor(alpha  > 0,  labels = c('dens indep', 'dens dep')),
@@ -148,8 +152,16 @@ rbind(design1, design2, design3) %>%
       size     = evolve,
     )
   ) +
+  # geom_ribbon(
+  #   aes(
+  #     ymin = nbar - 2 * sqrt(nvar / nobs),
+  #     ymax = nbar + 2 * sqrt(nvar / nobs),
+  #     group = interaction(n.pop0, evolve, design)
+  #   ),
+  #   alpha = 0.1
+  # ) +
   scale_linetype_manual(values = 2:1) +
   scale_size_manual(values = c(0.25, 0.75)) +
   scale_y_log10() +
-  facet_wrap(n.pop0 ~ paste(alpha, design), nrow = 4) +
+  facet_wrap(~ paste(n.pop0, alpha, design, sep = ', '), nrow = 4) +
   theme(legend.position = 'bottom')
