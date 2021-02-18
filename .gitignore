@@ -5,3 +5,5 @@
 *nohup.out
 *.html
 *.Rmd
+
+*.Rproj
