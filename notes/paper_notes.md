@@ -1127,3 +1127,34 @@ Good stuff here about deterministic versus stochastic extinction - fits in with 
 Good thought here is that we should look at the minimum size and time of minimum size for surviving populations. It's also interesting to see how often extinctions occur after the expected trough of population size.
 
 These various types of cycles are not mutually exclusive, also are confusingly defined. Need to think about how they manifest themselves here. Off the top of my head, we have potential for *R* vortices based on populations being small/declining and NDD may make that worse. Look at var(r) perhaps? We also have *F* as inbreeding, etc. influence fitness. I love the inclusion of *A* - the rate of adaptation *should* be slowed down by drift. Think about what is needed to quantify each of these.
+
+### Kulbaba, M. W., et al. 2019. Additive genetic variance for lifetime fitness and the capacity for adaptation in an annual plant. Evolution, 73-9: 1746 - 1758. 
+
+- Fisher's FTNS says rate of adaptation (in current environment) is V_A(W) / \bar{W}
+	- studies quantifying V_A(W) are rare, although we know rapid adaptation exists in nature
+	- rapid adaptation and evolutionary rescue require sufficent V_A(W)
+	- what amount of V_A(W) is sufficient for rapid adaptation?
+- Why would/would not there be high natural variation in additive variance?
+	- Theoretical arguments about "incessant" selection and fixation
+	- but, fixation likely takes a very long time in natural populations
+	- Estimates of heritability often suggest that heritability is low
+	- but, low heritability may be a result of high environmntal variation
+	- Difficulty: fully pedigreed individuals are needed to avoid confounding environmental and genetic effects
+- Here, measuring V_A(W) in *Chamaecrista fascculata* (annual) growing in native location
+- 2-3 fruits from 200 maternal plants (each 10m apart) collected from three populations (two in MN, one in IA)
+	- get a pedgree, planting seeds from respective populations into common garden in MN (no mowing, grazing, etc.)
+	- five seeds per family, 15-24 replications of half-sib fam per block, [...]
+- Fitness is number of seeds collected at end of yar
+	- also recording: emergence, flowering, fruit (incl. elongated but immature), fruits on ground in vicinity, pedicels from dehisced fruits on plant
+- Aster model: emergence, flowering, fruit production (pois), seed production (pois)
+	- going out to seeds but only measuring from certain seeds... scaling up, not quite sure what to make of this, se Stanton-Geddes et al. 2012
+	- somehow asters are also estimating V_A(W)...? not quite sure how this works either! is it just variance in the fitness response?
+- Significant V_A(W) (as in significantly non-zero?) in all three years of planting, in all three populations
+	- significant variation among years suggests parental genetic effects varying among years
+- increasing in \bar{W} ranging from 0.83 to 6.12
+	- two cases of rescue where \bar{W} went from < 1 to > 1
+	- what are they adapting to??? or is this just fluctuation?
+- Finding more V_A(W) here than elsewhere - maybe because the varous components of fitness are compounding
+
+[need to finish]
+
