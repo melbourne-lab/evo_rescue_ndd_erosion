@@ -60,4 +60,13 @@ These could be expressed as functions of time/generation, but I think they actua
 
 These tau plots will show us the shape of the vortex, but it may not tell us anything about the approach to the vortex (is this true?). Perhaps plotting tau greater than ~5 only will show the approach to the vortex... The state variable plots conditioned on generation may show this approach better. At the very least, the state variables ~ time plot give a good idea of what the expectation of each variable over time is. This may supplant other variable plots, e.g., I can see it supplanting the plot of fitness ($\bar{W}_t$) over time, and possibly the genetic variance over time (although the fish-scale plot of variance in the lead up to extinction is very read).
 
+### Thinking about P(extinction)
+
+It would be really nice to get some measure of probability of extinction conditioned on some value (e.g., probability of extinction). Our current plots do not show probability of extinction given a value, it shows in a sense probability of the value given extinction. These are slightly different. 
+
+One idea for a plot (implementation unsure and to follow): maybe a plot where the x axis is tau or generation and the y axis is the variable of interest (log lambda, e.g.). Then, have a grid where shading is the probability of extinction conditioned on having that variable at that point in time/tau. This can perhaps be informed by a linear modeling approach (not exactly sure how this would work). It would be great to include in this figure some form of predictive accuracy here - you can see how soon/late you can tell that a population will go extinct with a reasonable amount of uncertainty. One problem here is that a modeling approach with a binary outcome can't use $R^2$ as this metric... maybe we could use a confusion table where predicted extinction greater than/less than 0.5 is turned into predicted extinct/surviving.
+
+So how should this model be set up? To answer the question of "how soon before extinction can we tell if a population will go extinct" - here we'd maybe run a different model for each step of $\tau$. The question is - what data exactly would be fed in to each model? Specifically, what will the "failures" be? For the surviving populations, really any point in time could be $\tau$ steps away from a hypothetical extinction... We could include repeated measures for each population with all observations up until some point (determined by $\tau$) but this seems awfully contrived to explain. Note: does this call in to question the way the tau-plots are currently constructed?
+
+An alternative is to condition on generation. But here the question being answered slightly different (what is it?) and it may return a "well duh" kind of answer. 
 
