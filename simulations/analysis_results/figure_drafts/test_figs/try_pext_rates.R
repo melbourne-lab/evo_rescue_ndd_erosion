@@ -84,3 +84,27 @@ ll.plot %>%
   scale_fill_viridis_b(option = 'A') +
   theme(panel.grid = element_blank(),
         panel.background = element_blank())
+
+### Try a plot that compares NDD and DI in one panel
+
+ll.linpreds = lapply(llmods, function(x) predict.glm(object = x, newdata = ll.blank)) %>%
+  do.call(what = cbind) %>%
+  cbind(ll.blank, .) %>%
+  gather(key = gen, value = p.ext, -c(loglam, low.var, n.pop0, alpha)) %>%
+  mutate(gen = as.numeric(gen)) %>%
+  spread(key = alpha, value = p.ext) %>%
+  mutate(d.alpha = `0.0035` - `0`) %>%
+  select(-c(`0`, `0.0035`))
+
+ggplot(ll.linpreds) +
+  geom_tile(
+    aes(
+      x = gen,
+      y = loglam,
+      fill = d.alpha
+    )
+  ) +
+  facet_wrap(~ n.pop0 + low.var, nrow = 4) +
+  scale_fill_viridis_c()
+
+# Scale here is whack.
