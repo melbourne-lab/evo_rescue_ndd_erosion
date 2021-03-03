@@ -273,6 +273,9 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL, evolve = TRUE) {
   init.row = params$init.row
   # How many loci there are for the allele.
   n.loci = params$n.loci
+  # Threshold above which to stop simulation
+  size.thresh = ifelse('size.thresh' %in% names(params), params$size.thresh, Inf)
+  
   
   # A character (string) array for handy indexing
   names.array = paste0(c('a', 'b'), rep(1:n.loci, each = 2))
@@ -314,20 +317,21 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL, evolve = TRUE) {
   
   for (time.step in 2:end.time) {
     if(nrow(prev.gen)) {
-      pop = propagate.sim(a = a,
-                          params = params,
-                          popn = prev.gen,
-                          evolve = evolve)
-      all.pop = dim.add(df = all.pop,
-                        rows = init.row,
-                        addition = pop)
-      prev.gen = pop
+      if (sum(prev.gen$r_i) < size.thresh) {
+        pop = propagate.sim(a = a,
+                            params = params,
+                            popn = prev.gen,
+                            evolve = evolve)
+        all.pop = dim.add(df = all.pop,
+                          rows = init.row,
+                          addition = pop)
+        prev.gen = pop
+      }
+      else return(all.pop %>% filter(!is.na(i)))
     }
   }
   
-  all.pop = all.pop %>% filter(!is.na(i))
-  
-  return(all.pop)
+  return(all.pop %>% filter(!is.na(i)))
   
 }
 
