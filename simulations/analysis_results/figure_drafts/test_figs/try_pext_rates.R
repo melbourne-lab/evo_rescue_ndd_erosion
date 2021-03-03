@@ -16,7 +16,8 @@ all.tau = all.data %>%
          k = c(NA, exp(diff(log(d)))),
          varred = c(NA, exp(diff(log(v))))) %>%
   mutate(tau = max(gen) - gen + 1 - as.numeric(any(n < 2)),
-         ext = max(gen) < 15 | any(n < 2)) %>%
+         ext = max(gen) < 15 | any(n < 2),
+         ext5 = tau < 5) %>%
   filter(!is.na(loglam), gen > 1) %>%
   ungroup() %>%
   mutate(n.pop0 = factor(n.pop0),
@@ -30,8 +31,9 @@ ll.blank = expand.grid(
 )
 
 llmods = all.tau %>%
+  filter(gen < 11) %>%
   split(.$gen) %>%
-  map(~ glm(ext ~ low.var * n.pop0 * alpha * loglam,
+  map(~ glm(ext5 ~ low.var * n.pop0 * alpha * loglam,
             data = .,
             family = 'binomial'))
 
@@ -59,16 +61,16 @@ ll.r2 = llmods %>%
   do.call(what = rbind) %>%
   mutate(pred.ext = p.ext > 0.5) %>%
   group_by(gen, n.pop0, low.var, alpha) %>%
-  summarise(prob.correct = mean(pred.ext == ext))
+  summarise(prob.correct = mean(pred.ext == ext5))
 
 ll.plot = merge(ll.preds, ll.r2)
 
 ll.plot %>% 
   filter(gen < 15) %>%
-  mutate(low.var = factor(low.var, labels = c('low div.', 'high div.')),
+  mutate(low.var = factor(low.var, labels = c('high div.', 'low div.')),
          n.pop0 = factor(n.pop0, labels = c('small', 'large')),
          alpha = factor(alpha, labels = c('dens. indep.', 'dens. dep.'))) %>%
-ggplot() +
+  ggplot() +
   geom_tile(
     aes(
       x = gen,
@@ -78,7 +80,7 @@ ggplot() +
     )
   ) +
   facet_wrap(paste(n.pop0, low.var, sep = ', ') ~ alpha, nrow = 4) +
-  scale_alpha_continuous(range = c(0.5, 1)) +
-  scale_fill_viridis_c(option = 'C') +
+  scale_alpha_continuous(range = c(min(ll.r2$prob.correct), 1)) +
+  scale_fill_viridis_b(option = 'A') +
   theme(panel.grid = element_blank(),
         panel.background = element_blank())
