@@ -201,3 +201,120 @@ ext.data %>%
   spread(key = alpha, value = pext) %>%
   mutate(incr = `0.0035` / `0`)
 
+### Try a figure with opposite direction of paneling
+
+size.plot.row = all.data %>%
+  filter(trial < 26) %>%
+  mutate(n.pop0 = factor(ifelse(n.pop0 %in% 100, "Large", "Small")),
+         alpha = factor(ifelse(alpha > 0, "Density dependent", "Density independent")),
+         low.var = factor(ifelse(low.var, "Low diversity", "High diversity"))) %>%
+  ggplot(aes(x = gen)) +
+  geom_line(
+    aes(
+      x = gen, 
+      y = n, 
+      colour = factor(alpha), 
+      linetype = extinct, 
+      group = interaction(alpha, trial)
+    ),
+    size = 0.6) +
+  geom_line(
+    aes(
+      x = gen, 
+      y = n, 
+      colour = factor(alpha), 
+      linetype = extinct, 
+      group = interaction(alpha, trial),
+      alpha = factor(alpha)
+    ),
+    size = 0.5) +
+  labs(x = 'Generation', y = '') +
+  scale_y_log10() +
+  scale_alpha_manual(values = c(0, 1)) +
+  scale_fill_manual(values = c('purple', 'black')) +
+  scale_color_manual(values = c('purple', 'black')) +
+  facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
+  theme(legend.position = 'none',
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'),
+        strip.background = element_rect(colour = 'black'))
+
+inst.plot.row = all.extinctions.long %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  mutate(n.extant = 1000 - c(0, cumsum(n.extinctions)[-50]),
+         p.instant.extinct = n.extinctions / n.extant) %>%
+  ggplot(aes(x = gen)) +
+  geom_ribbon(
+    aes(
+      ymin = p.instant.extinct - 2 * sqrt(p.instant.extinct*(1-p.instant.extinct) / n.extant),
+      ymax = p.instant.extinct + 2 * sqrt(p.instant.extinct*(1-p.instant.extinct) / n.extant),
+      fill = factor(alpha)
+    ),
+    alpha = 0.2
+  ) +
+  geom_line(
+    aes(
+      y = p.instant.extinct,
+      group = factor(alpha),
+      colour = factor(alpha)
+    ),
+    size = 1
+  ) +
+  labs(x = 'Generation', y = '') +
+  scale_fill_manual(values = c('purple', 'black')) +
+  scale_color_manual(values = c('purple', 'black')) +
+  facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
+  theme(legend.position = 'none',
+        strip.text = element_blank(),
+        strip.background = element_blank(),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'))
+
+# Cumulative extinction plot (b)
+cuml.plot.row = all.extinctions.long %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  mutate(p.extinct = cumsum(n.extinctions / 1000)) %>%
+  ggplot(aes(x = gen)) +
+  geom_ribbon(
+    aes(
+      xmin = 0, xmax = 50,
+      ymin = 0, ymax = p.extinct,
+      group = interaction(n.pop0, low.var, alpha),
+      fill = factor(alpha)
+    ),
+    alpha = 0.5
+  ) +
+  scale_fill_manual(values = c('purple', 'black')) +
+  labs(x = 'Generation', y = 'Probability of extinction') +
+  facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
+  theme(legend.position = 'none',        
+        strip.text = element_blank(),
+        strip.background = element_blank(),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'))
+
+geno.plot.row = geno.ext.preds %>%
+  ggplot() +
+  geom_line(
+    aes(
+      x = gbar, y = p, group = factor(alpha),
+      colour = factor(alpha)
+    )
+  ) +
+  labs(x = 'Initial genotype', y = '') +
+  scale_color_manual(values = c('purple', 'black')) +
+  facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
+  theme(legend.position = 'none',
+        strip.text = element_blank(),
+        strip.background = element_blank(),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'))
+
+data.plots.row = plot_grid(size.plot.row, cuml.plot.row, 
+                           inst.plot.row, geno.plot.row, 
+                           labels = c('(A)', '(B)', '(C)', '(D)'),
+                           nrow = 4)
+
+plot_grid(data.plots.row, extinct.legend, ncol = 1, rel_heights = c(1, .1)) %>%
+  save_plot(filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_2_long_rows.pdf',
+            base_width = 8, base_height = 8)
