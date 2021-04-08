@@ -288,6 +288,53 @@ all.data %>%
   scale_color_manual(values = c('black', 'red')) +
   facet_wrap(n.pop0 + low.var ~ alpha, ncol = 4)
 
+all.data %>%
+  filter(trial < 26) %>%
+  ggplot() +
+  geom_line(aes(x = gen, y = n, colour = factor(alpha), 
+                linetype = extinct, group = interaction(alpha, trial)),
+            size = 0.4) +
+  scale_y_log10() +
+  scale_color_manual(values = c('black', 'purple')) +
+  facet_wrap(n.pop0 + low.var ~ ., ncol = 1) +
+  theme(legend.position = 'none')
+
+all.data %>%
+  filter(trial < 26) %>%
+  mutate(n.pop0 = factor(ifelse(n.pop0 %in% 100, "Large", "Small")),
+         alpha = factor(ifelse(alpha > 0, "Density dependent", "Density independent")),
+         low.var = factor(ifelse(low.var, "Low diversity", "High diversity"))) %>%
+  ggplot(aes(x = gen)) +
+  geom_line(
+    aes(
+      x = gen, 
+      y = n, 
+      colour = factor(alpha), 
+      linetype = extinct, 
+      group = interaction(alpha, trial)
+    ),
+  size = 0.6) +
+  geom_line(
+    aes(
+      x = gen, 
+      y = n, 
+      colour = factor(alpha), 
+      linetype = extinct, 
+      group = interaction(alpha, trial),
+      alpha = factor(alpha)
+    ),
+  size = 0.6) +
+  labs(x = 'Generation', y = '') +
+  scale_y_log10() +
+  scale_alpha_manual(values = c(0, 1)) +
+  scale_fill_manual(values = c('purple', 'black')) +
+  scale_color_manual(values = c('purple', 'black')) +
+  facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 1) +
+  theme(legend.position = 'none',
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'),
+        strip.background = element_rect(colour = 'black'))
+
 # Do some visualizations of g, v for extinction risk
 
 all.data %>%
