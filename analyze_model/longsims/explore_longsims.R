@@ -423,3 +423,351 @@ ggplot(ll.preds) +
         panel.grid = element_blank(),
         panel.background = element_rect(fill = 'black'))
 
+###
+
+# Assessing time until original size is reached (>3 generations)
+
+which.diff = function(x, lag) {
+  if(length(x) >= lag) { x[which.min(diff(x, lag = (lag - 1)) == (lag-1))] 
+  } else { 0 }
+}
+
+rescue.summ = all.data %>%
+  filter(n > n.pop0, gen > 1) %>%
+  group_by(trial, n.pop0, low.var, alpha) %>%
+  summarise(rescue.time = which.diff(gen, 3)) %>%
+  filter(rescue.time > 0)
+
+rescue.summ %>%
+  ggplot() +
+  geom_histogram(aes(x = rescue.time, fill = factor(alpha)), 
+                 position = 'identity', alpha = 0.5,
+                 binwidth = 1) +
+  facet_wrap(n.pop0 ~ low.var) 
+
+rescue.summ %>%
+  ggplot() +
+  geom_histogram(aes(x = rescue.time, fill = factor(alpha)), 
+                 position = 'identity', alpha = 0.5,
+                 binwidth = 0.1) +
+  scale_x_log10() +
+  facet_wrap(n.pop0 ~ low.var) 
+
+# rescue probably more likely in small populations with a large amount of drift
+# confine to the middle 80% of the distributon of large population genotypes
+
+rescue.summ.censor = all.data %>%
+  # Getting the middle 80th percentiles of the large populations in each group
+  filter(n.pop0 > 20) %>%
+  distinct(trial, low.var, alpha, .keep_all = TRUE) %>%
+  group_by(low.var, alpha) %>%
+  summarise(g10 = quantile(gbar, 0.1),
+            g90 = quantile(gbar, 0.9)) %>%
+  ungroup() %>%
+  merge(y = all.data,
+        by = c("low.var", "alpha")) %>%
+  # Filter out the outlier populations
+  group_by(trial, n.pop0, low.var, alpha) %>%
+  filter(gbar[1] < g90 & gbar[1] > g10) %>%
+  select(-c(g10, g90)) %>%
+  # Estimate the rescue times
+  filter(n > n.pop0, gen > 1) %>%
+  group_by(trial, n.pop0, low.var, alpha) %>%
+  summarise(rescue.time = which.diff(gen, 3)) %>%
+  filter(rescue.time > 0)
+
+nrow(rescue.summ) - nrow(rescue.summ.censor)
+
+rescue.summ.censor %>%
+  ggplot() +
+  geom_histogram(aes(x = rescue.time, fill = factor(alpha)), 
+                 position = 'identity', alpha = 0.5,
+                 binwidth = 1) +
+  facet_wrap(n.pop0 ~ low.var) 
+
+rescue.summ.censor %>%
+  ggplot() +
+  geom_histogram(aes(x = rescue.time, fill = factor(alpha)), 
+                 position = 'identity', alpha = 0.5,
+                 binwidth = 0.1) +
+  scale_x_log10() +
+  facet_wrap(n.pop0 ~ low.var) 
+
+merge(x = all.data %>% distinct(trial, n.pop0, low.var, alpha),
+      y = rescue.summ %>% ungroup(),
+      by = c('trial', 'n.pop0', 'low.var', 'alpha'),
+      all.x = TRUE, all.y = TRUE) %>%
+  mutate(rescued = !is.na(rescue.time)) %>%
+  glm(formula = rescued ~ factor(n.pop0) * low.var * factor(alpha) - 1,
+      family = 'quasibinomial') %>%
+  summary()
+
+wescue.summ = all.data %>%
+  mutate(rbar = wbar * exp(-alpha * n)) %>%
+  filter(rbar > 1, gen > 1) %>%
+  group_by(trial, n.pop0, low.var, alpha) %>%
+  summarise(rescue.time = which.diff(gen, 3)) %>%
+  filter(rescue.time > 0)
+
+wescue.summ
+
+wescue.summ %>%
+  ggplot() +
+  geom_histogram(aes(x = rescue.time, fill = factor(alpha)), 
+                 position = 'identity', alpha = 0.5,
+                 binwidth = 1) +
+  facet_wrap(n.pop0 ~ low.var) 
+
+
+merge(x = all.data %>% distinct(trial, n.pop0, low.var, alpha),
+      y = wescue.summ %>% ungroup(),
+      by = c('trial', 'n.pop0', 'low.var', 'alpha'),
+      all.x = TRUE, all.y = TRUE) %>%
+  mutate(rescued = !is.na(rescue.time)) %>%
+  glm(formula = rescued ~ factor(n.pop0) * low.var * factor(alpha) - 1,
+      family = 'quasibinomial') %>%
+  summary()
+
+wescue.summ %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(p = n() / 1000,
+            g = mean(rescue.time))
+
+### Rescue mods with initial genotypes
+
+p.wescue = merge(x = all.data %>% 
+                   distinct(trial, n.pop0, low.var, alpha, .keep_all = TRUE) %>%
+                   select(trial, n.pop0, low.var, alpha, gbar),
+                 y = wescue.summ %>% ungroup(),
+                 by = c('trial', 'n.pop0', 'low.var', 'alpha'),
+                 all.x = TRUE, all.y = TRUE) %>%
+  mutate(rescued = !is.na(rescue.time))
+
+# Four way model
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) * gbar,
+    data = p.wescue,
+    family = 'quasibinomial') %>%
+  summary()
+
+# All three-way combos
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              factor(n.pop0) * low.var * gbar +
+              factor(n.pop0) * factor(alpha) * gbar +
+              low.var * factor(alpha) * gbar,
+    data = p.wescue,
+    family = 'quasibinomial') %>%
+  summary()
+
+# Remove variance-alpha-gbar term
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              factor(n.pop0) * low.var * gbar +
+              factor(n.pop0) * factor(alpha) * gbar,
+    data = p.wescue,
+    family = 'quasibinomial') %>%
+  summary()
+
+# Remove size-variance-gbar
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              factor(n.pop0) * factor(alpha) * gbar +
+              low.var * gbar,
+    data = p.wescue,
+    family = 'quasibinomial') %>%
+  summary()
+
+# Remove size-alpha-gbar
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              factor(n.pop0) * gbar +
+              factor(alpha) * gbar +
+              low.var * gbar,
+    data = p.wescue,
+    family = 'quasibinomial') %>%
+  summary()
+
+# Remove size-gbar 
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              factor(alpha) * gbar +
+              low.var * gbar,
+    data = p.wescue,
+    family = 'quasibinomial') %>%
+  summary()
+
+# Remove alpha-gbar
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              low.var * gbar,
+    data = p.wescue,
+    family = 'quasibinomial') %>%
+  summary()
+
+# At alpha of 0.1, remove lowvar-gbar
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) + gbar,
+    data = p.wescue,
+    family = 'quasibinomial') %>%
+  summary()
+# This is good.
+
+final.wescue.mod = glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) + gbar,
+                       data = p.wescue,
+                       family = 'quasibinomial')
+
+# Wescue genotype plots:
+
+geno.wes.preds = expand.grid(gbar = (-5:5)/10,
+                             alpha = c(0, 0.0035),
+                             n.pop0 = factor(c(20, 100)),
+                             low.var = c(TRUE, FALSE)) %>%
+  (function(x) cbind(x, p = predict(final.wescue.mod, x, type = 'response'))) %>%
+  mutate(n.pop0 = factor(ifelse(n.pop0 %in% 100, "Large", "Small")),
+         alpha = factor(ifelse(alpha > 0, "Density dependent", "Density independent")),
+         low.var = factor(ifelse(low.var, "Low diversity", "High diversity")))
+
+geno.wes.preds %>%
+  ggplot() +
+  geom_line(
+    aes(
+      x = gbar, y = p, group = factor(alpha),
+      colour = factor(alpha)
+    )
+  ) +
+  labs(x = 'Initial genotype', y = '') +
+  scale_color_manual(values = c('purple', 'black')) +
+  facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 1) +
+  theme(legend.position = 'none',
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'),
+        strip.background = element_rect(colour = 'black'))
+
+### Do same plot but for rescue (original size reached)
+# (results should be very similar)
+
+p.rescue = merge(x = all.data %>% 
+                   distinct(trial, n.pop0, low.var, alpha, .keep_all = TRUE) %>%
+                   select(trial, n.pop0, low.var, alpha, gbar),
+                 y = rescue.summ %>% ungroup(),
+                 by = c('trial', 'n.pop0', 'low.var', 'alpha'),
+                 all.x = TRUE, all.y = TRUE) %>%
+  mutate(rescued = !is.na(rescue.time))
+
+
+# Four way model
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) * gbar,
+    data = p.rescue,
+    family = 'binomial') %>%
+  summary()
+
+# All three-way combos
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              factor(n.pop0) * low.var * gbar +
+              factor(n.pop0) * factor(alpha) * gbar +
+              low.var * factor(alpha) * gbar,
+    data = p.rescue,
+    family = 'binomial') %>%
+  summary()
+
+# All three-way combos
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              factor(n.pop0) * low.var * gbar +
+              factor(n.pop0) * factor(alpha) * gbar +
+      low.var * factor(alpha) * gbar,
+    data = p.rescue,
+    family = 'binomial') %>%
+  summary()
+
+# Remove var-alpha-gbar
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              factor(n.pop0) * low.var * gbar +
+              factor(n.pop0) * factor(alpha) * gbar,
+    data = p.rescue,
+    family = 'binomial') %>%
+  summary()
+
+# Remove size-var-gbar (p = 0.035, alpha = 0.01)
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              factor(n.pop0) * factor(alpha) * gbar +
+              low.var * gbar,
+    data = p.rescue,
+    family = 'binomial') %>%
+  summary()
+
+# Remove size-alpha-gbar (p = 0.030, alpha = 0.01)
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              factor(n.pop0) * gbar +
+              factor(alpha) * gbar +
+              low.var * gbar,
+    data = p.rescue,
+    family = 'binomial') %>%
+  summary()
+
+# Remove size-gbar
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              factor(alpha) * gbar +
+              low.var * gbar,
+    data = p.rescue,
+    family = 'binomial') %>%
+  summary()
+
+# Remove alpha-gbar
+glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+              low.var * gbar,
+    data = p.rescue,
+    family = 'binomial') %>%
+  summary()
+
+# This is it, chief.
+final.rescue.mod = glm(rescued ~ factor(n.pop0) * low.var * factor(alpha) +
+                                 low.var * gbar,
+                       data = p.rescue,
+                       family = 'binomial')
+
+# Make the predictions
+geno.res.preds = expand.grid(gbar = (-5:5)/10,
+                             alpha = c(0, 0.0035),
+                             n.pop0 = factor(c(20, 100)),
+                             low.var = c(TRUE, FALSE)) %>%
+  (function(x) cbind(x, p = predict(final.rescue.mod, x, type = 'response'))) %>%
+  mutate(n.pop0 = factor(ifelse(n.pop0 %in% 100, "Large", "Small")),
+         alpha = factor(ifelse(alpha > 0, "Density dependent", "Density independent")),
+         low.var = factor(ifelse(low.var, "Low diversity", "High diversity")))
+
+# Make the plot.
+geno.res.preds %>%
+  ggplot() +
+  geom_line(
+    aes(
+      x = gbar, y = p, group = factor(alpha),
+      colour = factor(alpha)
+    )
+  ) +
+  labs(x = 'Initial genotype', y = '') +
+  scale_color_manual(values = c('purple', 'black')) +
+  facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 1) +
+  theme(legend.position = 'none',
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'),
+        strip.background = element_rect(colour = 'black'))
+
+# Combined:
+merge(geno.res.preds, geno.wes.preds,
+      by = c('gbar', 'alpha', 'n.pop0', 'low.var'),
+      suffixes = c('.size', '.fitn')) %>%
+  ggplot() +
+  geom_line(
+    aes(
+      x = gbar, y = p.fitn, group = factor(alpha),
+      colour = factor(alpha)
+    ),
+    linetype = 2, size = 1.1
+  ) +
+  geom_line(
+    aes(
+      x = gbar, y = p.size, group = factor(alpha),
+      colour = factor(alpha)
+    ),
+    linetype = 1
+  ) +
+  labs(x = 'Initial genotype', y = '') +
+  scale_color_manual(values = c('purple', 'black')) +
+  facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 2) +
+  theme(legend.position = 'none',
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'),
+        strip.background = element_rect(colour = 'black'))
