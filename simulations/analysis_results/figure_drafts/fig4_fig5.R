@@ -18,7 +18,7 @@ all.v = all.data %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density dependent", "Density independent")),
-         low.var = factor(low.var, labels = c("High variance", "Low variance")))
+         low.var = factor(low.var, labels = c("High diversity", "Low diversity")))
 
 # Pooling by extinct/extant
 
@@ -30,7 +30,7 @@ ext.v = all.data %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("High variance", "Low variance")))
+         low.var = factor(low.var, labels = c("High diversity", "Low diversity")))
 
 
 # Pooling by extant/extinct generation
@@ -43,7 +43,7 @@ gen.v = all.data %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("High variance", "Low variance")))
+         low.var = factor(low.var, labels = c("High diversity", "Low diversity")))
 
 # Fixation probabilities, unconditional
 
@@ -55,7 +55,7 @@ all.fix = all.data %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("High variance", "Low variance")))
+         low.var = factor(low.var, labels = c("High diversity", "Low diversity")))
 
 # Fixation probabilities by extinction
 
@@ -69,7 +69,7 @@ ext.fix = all.data %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("High variance", "Low variance")))
+         low.var = factor(low.var, labels = c("High diversity", "Low diversity")))
 
 ### Genetic variation plot
 
@@ -98,7 +98,7 @@ comp.pool.plot = all.v %>%
   scale_colour_manual(values = c('purple', 'black')) +
   guides(colour = guide_legend("Growth form", nrow = 1),
          fill = guide_legend("Growth form", nrow = 1)) +
-  labs(x = '', y = 'Genetic variation') +
+  labs(x = '', y = 'Genetic variance') +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   theme(panel.background = element_rect(fill = 'white'),
         panel.grid = element_line(colour = 'gray88'),
@@ -149,7 +149,7 @@ gent.pool.plot = gen.v %>%
   # scale_fill_gradient(low = 'lightpink1', high = 'darkred') +
   guides(colour = guide_legend("Extinction\ngeneration"),
          fill = guide_legend('Extinction\ngeneration')) +
-  labs(x = 'Generation', y = 'Genetic variation') +
+  labs(x = 'Generation', y = 'Genetic variance') +
   facet_wrap(alpha ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   theme(panel.background = element_blank(),
         panel.border = element_rect(fill = NA),
@@ -215,6 +215,126 @@ ext.fix %>%
         strip.text = element_text(size = 12)) +
   ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_5_eight_line.pdf',
          width = 8, height = 5)
+
+### Combined figure 4 where panel (a) is genetic variation, (b) is fixation rates
+
+variance.plot = ext.v %>%
+  mutate(alpha = relevel(alpha, "Density independent"),
+         extinct = ifelse(extinct, 'Extinct', 'Surviving')) %>%
+  ggplot(aes(x = gen)) +
+  geom_line(
+    aes(
+      y = vbar,
+      group = interaction(n.pop0, low.var, alpha, extinct),
+      colour = alpha,
+      linetype = extinct
+    ),
+    size = 1.25
+  ) +
+  geom_ribbon(
+    aes(
+      ymin = vbar - 2 * sqrt(vvar / n),
+      ymax = vbar + 2 * sqrt(vvar / n),
+      group = interaction(n.pop0, low.var, alpha, extinct),
+      fill = alpha
+    ),
+    alpha = 0.1
+  ) +
+  scale_y_continuous(limits = c(0, 0.5)) +
+  scale_colour_manual(values = c('black', 'purple')) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  scale_linetype_manual(values = c(2, 1)) +
+  labs(x = '', y = 'Genetic variance') +
+  facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
+  theme(panel.background = element_rect(fill = 'white'),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(fill = NA),
+        strip.background = element_rect(colour = 'black'),
+        legend.position = 'none')
+
+fixation.pos.plot = ext.fix %>%
+  ggplot(aes(x = gen)) +
+  geom_line(
+    aes(
+      y = p.pos,
+      group = interaction(n.pop0, low.var, alpha, extinct),
+      linetype = extinct,
+      colour = alpha
+    ),
+    size = 1.5
+  ) +
+  geom_ribbon(
+    aes(
+      ymin = p.pos - 2 * sqrt(v.pos / n),
+      ymax = p.pos + 2 * sqrt(v.pos / n),
+      group = interaction(n.pop0, low.var, alpha, extinct),
+      fill = alpha
+    ),
+    alpha = 0.2
+  ) +
+  ylim(c(0, 0.5)) +
+  scale_colour_manual(values = c('black', 'purple')) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
+  guides(linetype = guide_legend('', nrow = 1),
+         colour = guide_legend('', nrow = 1),
+         fill = guide_legend('', nrow = 1)) +
+  labs(x = 'Generation', y = 'Loci at positive fixation') +
+  theme(panel.background = element_blank(),
+        panel.border = element_rect(fill = NA),
+        legend.position = 'none',
+        strip.background = element_rect(colour = 'black'),
+        strip.text = element_text(size = 12))
+
+fixation.neg.plot = ext.fix %>%
+  ggplot(aes(x = gen)) +
+  geom_line(
+    aes(
+      y = p.neg,
+      group = interaction(n.pop0, low.var, alpha, extinct),
+      linetype = extinct,
+      colour = alpha
+    ),
+    size = 1.5
+  ) +
+  geom_ribbon(
+    aes(
+      ymin = p.neg - 2 * sqrt(v.neg / n),
+      ymax = p.neg + 2 * sqrt(v.neg / n),
+      group = interaction(n.pop0, low.var, alpha, extinct),
+      fill = alpha
+    ),
+    alpha = 0.2
+  ) +
+  ylim(c(0, 0.5)) +
+  scale_colour_manual(values = c('black', 'purple')) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
+  guides(linetype = guide_legend('', nrow = 1),
+         colour = guide_legend('', nrow = 1),
+         fill = guide_legend('', nrow = 1)) +
+  labs(x = 'Generation', y = 'Loci at negative fixation') +
+  theme(panel.background = element_blank(),
+        panel.border = element_rect(fill = NA),
+        legend.position = 'none',
+        strip.background = element_rect(colour = 'black'),
+        strip.text = element_text(size = 12))
+
+
+varn.legend = get_legend(
+  variance.plot + 
+    guides(fill = guide_legend(''), colour = guide_legend(''), linetype = guide_legend('')) +
+    theme(legend.position = 'bottom',
+          legend.box.margin = margin(1, 0, 0, 0))
+)
+
+save_plot(plot_grid(variance.plot, fixation.pos.plot, fixation.neg.plot, 
+                    varn.legend, rel_heights = c(1, 1, 1, 0.1), ncol = 1), 
+          #varn.legend,
+          #rel_heights = c(1, 0.1),
+          filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_4.pdf',
+          base_width = 8, base_height = 6)
 
 # Summary stats of above:
 
