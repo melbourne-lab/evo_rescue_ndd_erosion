@@ -142,11 +142,11 @@ k.vr = all.tau %>%
 
 tau.loglam = all.tau %>%
   ungroup() %>%
-  mutate(n.pop0  = factor(n.pop0 > 20, labels = c('small', 'large')),
-         low.var = factor(low.var, labels = c('hi div.', 'lo div.'))) %>%
+  mutate(n.pop0  = factor(n.pop0 > 20, labels = c('Small', 'Large')),
+         low.var = factor(low.var, labels = c('High diversity', 'Low diversity'))) %>%
   ggplot(aes(x = tau, y = ll)) +
   geom_segment(
-    aes(x = 1, xend = 15, y = 0, yend = 0),
+    aes(x = 1, xend = 14, y = 0, yend = 0),
     linetype = 3
   ) +
   geom_line(
@@ -164,25 +164,32 @@ tau.loglam = all.tau %>%
     ),
     alpha = 0.1
   ) +
-  scale_x_reverse(labels = NULL) +
+  scale_x_reverse(breaks = (0:4)*3, labels = NULL) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap(~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
   labs(x = '', y = 'Log lambda') +
   theme(legend.position = 'none',
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'),
+        axis.ticks.x = element_blank(),
         plot.margin = margin(b = 0, r = 5, l = 5, unit = 'pt'),
-        axis.ticks.x = element_blank())
+        strip.background = element_rect(colour = 'black'))
 
 tau.varred = all.tau %>%
   ungroup() %>%
-  mutate(n.pop0  = factor(n.pop0 > 20, labels = c('small', 'large')),
-         low.var = factor(low.var, labels = c('hi div.', 'lo div.'))) %>%
+  mutate(n.pop0  = factor(n.pop0 > 20, labels = c('Small', 'Large')),
+         low.var = factor(low.var, labels = c('High diversity', 'Low diversity'))) %>%
   ggplot(aes(x = tau, y = 1 - vr)) +
   geom_line(
     aes(
       colour = factor(alpha),
       linetype = ext
     )
+  ) +
+  geom_segment(
+    aes(x = 1, xend = 14, y = 0, yend = 0),
+    linetype = 3
   ) +
   geom_ribbon(
     aes(
@@ -194,21 +201,25 @@ tau.varred = all.tau %>%
     alpha = 0.1
   ) +
   labs(x = '', y = 'Prop. of variance lost') +
-  scale_x_reverse(labels = NULL) +
+  scale_x_reverse(breaks = (0:4)*3, labels = NULL) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap(~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
   theme(legend.position = 'none',
+        strip.text = element_blank(),
+        strip.background = element_blank(),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'),
         axis.ticks.x = element_blank(),
         plot.margin = margin(t = 0, b = 0, r = 5, l = 5, unit = 'pt'))
 
 tau.malada = all.tau %>%
   ungroup() %>%
-  mutate(n.pop0  = factor(n.pop0 > 20, labels = c('small', 'large')),
-         low.var = factor(low.var, labels = c('hi div.', 'lo div.'))) %>%
+  mutate(n.pop0  = factor(n.pop0 > 20, labels = c('Small', 'Large')),
+         low.var = factor(low.var, labels = c('High diversity', 'Low diversity'))) %>%
   ggplot(aes(x = tau, y = 1 - kt)) +
   geom_segment(
-    aes(x = 1, xend = 15, y = 0, yend = 0),
+    aes(x = 1, xend = 14, y = 0, yend = 0),
     linetype = 3
   ) +
   geom_line(
@@ -226,21 +237,28 @@ tau.malada = all.tau %>%
     ),
     alpha = 0.1
   ) +
-  scale_x_reverse() +
+  scale_x_reverse(breaks = (0:4)*3) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap(~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
-  labs(x = 'Time to extinction (tau)', y = 'Maladaptation reduced') +
+  labs(x = 'Time to extinction (tau)', y = 'Rate of adaptation') +
   theme(legend.position = 'none',
+        strip.text = element_blank(),
+        strip.background = element_blank(),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'),
         plot.margin = margin(t = 0, r = 5, l = 5, unit = 'pt'))
 
 cowplot::plot_grid(
   tau.loglam,
   tau.varred,
   tau.malada,
+  labels = c('(A)', '(B)', '(C)'),
+  label_x = c(-0.015, -0.015, -0.015),
+  label_y = c(1, 1.12, 1.12),
   nrow = 3
 ) %>%
-  cowplot::save_plot(filename = 'simulations/analysis_results/figure_drafts/test_figs/onevar_tau.pdf',
+  cowplot::save_plot(filename = 'simulations/analysis_results/figure_drafts/test_figs/fig3.pdf',
                      base_width = 8, base_height = 6)
 
 ### Looking at rates by generation instead of tau
