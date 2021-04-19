@@ -40,7 +40,7 @@ all.n = all.data %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Initially small", "Initially large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("Low genetic variance", "High genetic variance")))
+         low.var = factor(low.var, labels = c("Low genetic diversity", "High genetic diversity")))
 
 all.n %>%
   ggplot(aes(x = gen)) +
@@ -85,7 +85,7 @@ all.n %>%
   scale_linetype(# _manual(
     # values = c(1, 5),
     name = "",
-    labels = c("High variation", "Low variation")
+    labels = c("High diversity", "Low diversity")
   ) +
   labs(x = 'Generation', y = 'Mean population size') +
   scale_y_log10() +
@@ -113,7 +113,7 @@ ext.n = all.data %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Initially small", "Initially large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("High genetic variance", "Low genetic variance")))
+         low.var = factor(low.var, labels = c("High genetic diversity", "Low genetic diversity")))
 
 ### Plot
 
@@ -202,7 +202,7 @@ all.ext = all.data %>%
   ungroup() %>%
   mutate(n.pop0 = factor(n.pop0, labels = c("Small", "Large")),
          alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
-         low.var = factor(low.var, labels = c("Low variance", "High variance")))
+         low.var = factor(low.var, labels = c("Low diversity", "High diversity")))
 
 ### Get genotype vs. extinction risk
 
@@ -220,7 +220,7 @@ predicted.surv = expand.grid(low.var = c(TRUE, FALSE),
                              gbar = (-5:5)/10) %>%
   cbind(logit.extinct = predict(all.ext.glm.3, newdata = .)) %>%
   mutate(p.extinct = logit.extinct %>% (function(x) exp(x) / (1 + exp(x)))) %>%
-  mutate(low.var = factor(low.var, labels = c("High variance", "Low variance")),
+  mutate(low.var = factor(low.var, labels = c("High diversity", "Low diversity")),
          n.pop0 = factor(n.pop0, labels = c("Small", "Large")))
 
 # Instant probability of extinction
