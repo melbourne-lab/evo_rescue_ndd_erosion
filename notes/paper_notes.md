@@ -1094,7 +1094,7 @@ Okay... the discussion here is two paragraphs. What the heck? I can't rally inte
 
 Okay... I skimmed part (3) and skipped part (4). Good rundown of the moving optimum models. Go back to density dependence sections esp. for trait dependence. Look at reference for other population types. 
 
-### Gilpin, M.E., and Soul, M.E. 1986. Minimum Viable Populations: Processes of Species Extinction. Chapter in Conservaton Biology: The Science of Scarcity and Diversity (ed: Michael Soule).
+### Gilpin, M.E., and Soule, M.E. 1986. Minimum Viable Populations: Processes of Species Extinction. Chapter in Conservaton Biology: The Science of Scarcity and Diversity (ed: Michael Soule).
 
 - Good background reading: Schaffer 1981
 	- Differentiates between deterministic and stochastic extinction
@@ -1157,4 +1157,78 @@ These various types of cycles are not mutually exclusive, also are confusingly d
 - Finding more V_A(W) here than elsewhere - maybe because the varous components of fitness are compounding
 
 [need to finish]
+
+### Hufbauer, R.A. et al. 2015. Three types of rescue can avert extinction in a changing environment. 
+
+- Brown and Kodric-Brown's rescue effect: immigration (esp. human-facilitated) averting extinction in small threatened populations (esp. if inbred or in degraded hab)
+- **Demographic rescue** more individuals in population (more resistant to stochastic fluctuations, fewer Allee effects)
+	- fitness effects: may allow for more time for adaptation, or may introduce maladaptation
+- **Genetic rescue** increased population fitness du to contributions from immigrants (less inbreeding, more genetic variation)
+- **Evolutionary rescue** is the result of a population adapting on its own from standing variation
+	- however immigrants can enhance the speed of adaptation
+- What are relative strengths of these? Demographic vs./in addition to genetic processes
+- This study: experimental partition of demographic and genetic effects in a challenging environment
+	- Size treatment: 50 vs. 150
+	- Treatments:
+		- Evolutionary (no migrants)
+		- Demographic (population size increased - same source pop)
+		- Genetic (genetic variation added - demographic substitution)
+##### Results
+- Only large populations to go extinct were evolutionary ones (i.e. no immigration)
+- More extinctions in small populations (as expected) including in all treatments
+- In early generations, slight population growth rate advantage to demographic-treatment populations (avoiding Allee effects)
+	-  in subsequent gnerations, demographic advantage fell (compared to evolutionary rescue treatment)
+	- in subsequent generations, genetic effects led to substantial increases in growth rate esp. for larger populations
+	- notably genetic populations had same growth rates as demographic + genetic effects
+##### Discussion
+- So both of these contribute to lessened extinction risk (compared to evolutonary rescue alone)
+- Demographic treatment did enhance persistence with the most substantial affects immediately after the migration
+	- long-term effects on population size for large (but not small) pops
+- Genetic effects: lower extinction risk and also higher intrinsic fitness (pop growth) in final generation (less inbreeding depression enhanced adaptive capacity)
+- D + G reduced extinction risk rel. to D alone or G alone but did not increase final size or fitness
+	- demographic rescue could swamp effects of genetic rescue (weakly supported here - observed in one generation)
+	- no effects of size here - similar responses of small and large pops (interpretation is here but I don't buy it)
+
+Here, uses are (1) some empirical demonstration of rescue esp. differences between large and small popultions and (2) showing additional strategies/effects mainly from interactions with other populations.
+
+### Stewart, G.S., et al. 2017. The power of volutionary rescue is constrained by genetic load. Evolutionary applications.
+
+- Here: evolutionary rescue is from standing variation and no migration
+- Genetic load: higher in haploids than diploids b/c deleterious alleles are subject to selection (note: not applicable in our model b/c of dominance - deleterious alleles are acted on by selection)
+- Genetic load: drift load + inbreeding load
+	- inbreeding is estimated through comparing fitness with random mating in population at large
+	- drift load is estimated through comparing fitness with outcrossing with (other?) populations
+	- inbreeding turns to drift as heterozygosity is lost
+##### Methods
+- Trib studies: favorable and unfavorabl environments
+- Two founding sizes: N_0 = 10, N_0 = 40
+	- sex ratio not controlled
+- Non-evolving and evolving treatments
+- Measuring load: H is that by gen 8 inbreeding and genetic load combat effects of evolution
+	- test this by mixing individuals among popultions for mating and comparing with unmixed evolving populations
+	- (high difference here is heterosis, evidence of drift load)
+	- didn't measure inbreeding load (can't know sibs)
+	- able to do this for evolution treatment but not by size
+- Extinction analysis: binomial GLM
+	- data augmentation for favorable environment (add one extinct trial) because three of four treatment groups did not go extinct
+	- analysis: popsize x evolving x environment + fixed block
+- Of surviving populations, evaluated population size (repeated measures w/ previous size as predictor) in all time steps?
+	- also looked at log growth rates using ...
+##### Results
+- >50% of poor environment populations went extinct
+	- no interactions (power?) but env., fsize, evolution influence extinction risk
+	- small populations have 5x greater chanc of extinction compared to 40
+	- evolving populations have ~1/5 extinction risk of smaller ones
+- Poor environments: large populations quickly returned to smaller size, evolving populations larger than non-evolving ones in most time steps
+	- in favorable environmnts, evolving populations were only larger for first few generations before shrinking to approx. same size as large pops
+- Admixture: environment mixed populatons performed better than evolving and control populations in both treatments (save for unfavorable evolving population for which there were insufficient pops)
+	- suggests heterosis present in all environment types
+- What's happening here: in the evolving populations, populations evolve at first but disappear ~7 generations fter founding du to non-adaptive genetic processes e.g. inbreding and drift (esp. due to small size)
+	- supported by heterosis study, where the isolated populations likely had different alleles reach fixation
+	- similar results by Agashe et al. 2011 (Evolution)
+	- may also be due to epigenetics or grand-maternal environmental effects
+
+Okay notably not rescue (and the evidence of adaptation sems kinda weak) but good empirical demonstration of accumulation of load during the adaptation process, limiting adaptive capacity.
+
+
 
