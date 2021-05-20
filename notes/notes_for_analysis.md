@@ -70,3 +70,18 @@ So how should this model be set up? To answer the question of "how soon before e
 
 An alternative is to condition on generation. But here the question being answered slightly different (what is it?) and it may return a "well duh" kind of answer. 
 
+### More on Pr(extinction | x)
+
+Duh... Bayes's rule. Why did this take me over a year to figure out.
+
+We're looking at P(x | extinct). We want to look at P(extinct | x).
+
+P(extinct | x) = P(x | extinct) P(extinct) / P(x).
+
+But P(x) is actually equal to P(x | extinct) P(extinct) + P(x | not extinct) P(not extinct).
+
+We'd need to do something like P(x_t) and we would lose info in later time steps when there are few simulations (and the distribution is poorly defined or undefined). But we could instead just look at the first 10 time steps? This would still give us the ability to predict probability of extinction in each.
+
+There should even be a way to do NDD in these expressions no?
+
+
