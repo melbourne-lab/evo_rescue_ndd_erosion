@@ -1230,5 +1230,103 @@ Here, uses are (1) some empirical demonstration of rescue esp. differences betwe
 
 Okay notably not rescue (and the evidence of adaptation sems kinda weak) but good empirical demonstration of accumulation of load during the adaptation process, limiting adaptive capacity.
 
+### Yun, L., and Agrawal, A.F. 2014. Variation in the strength of inbreeding depression across environments: Effects of stress and density dependence. Evolution.
 
+- Strength of inbreeding depression is variable... why?
+	- this can include multiple measurements of the same population producing different values
+	- in this case, if degree of inbreeding F and polymorphism degree p are constant, h or s would cause differences in strength of inbreeding (why is h not constant?)
+- Is inbreeding selection stronger in harsher environments?
+	- Agrawal and Whitlock 2010 suggest that density dependence should influence fitness
+	- density dependence and intraspecific compettion has effects that disproportionately affect the weak
+		- e.g. with food scarcity stronger genotypes may be better able to find food, weaker genotypes search longer, more predation risk
+	- **note: this is density-dependent fitness, no?**
+- Here: measure Drosophila melanogaster in lab experiments with varying stress and density dependence
+##### Methods 
+- 90 lines of *D. melanogaster* with 22 environment types (thermal regime, chemical compositon, food abundance, water availability, substrate texture)
+- Four assays:
+	- 130 outbred + 130 competitors (DsRed) (normal density + outbred - FO)
+	- 130 inbred + 130 competitors (normal density + inbred - FI)
+	- 100 outbred + 100 competitors (low density + outbred - LO)
+	- 160 outbred + 160 competitors (high densty + outbred)
+	- Inbred flies have F = 0.4
+- Assays x environment allow quantification of stress, density dependence, inbreeding depression
+	- Stress: absolute reduction in absolute fitness below maximum (calculated here for focal value)
+	- Density dependence: reduction in fitness with increasing density (calculated here with regression)
+	- in all cases fitness is survival
+- Differences evaluated by standard parametric testing and also likelihood analyses
+##### Results
+- NDD and stress non-significantly correlated (p = 0.47)
+- Correlation between inbreeding and stress was non-significant (p = 0.18)
+- Inbreeding depression was significantly correlated with NDD
+- In a joint model, stress x density dependence interaction 
+##### Discussion
+- Inbreeding depression is stronger where NDD is stronger
+	- this may be by increasing the *mean* strength of selection
+	- could also be by reducing dominance (?) or covariances between genotypes
+- Could be due to NDD caused by increasing competition, where 
+genotypic differences are accentuated
+	- Weiner 1985 says at high density, competition leaves losers with relatively fewer resources
+	- Phenotypic variability (Waller et al. 2008) - inbreding depression greatest where there is more phenotypic variability (??)
+	- Long et al. 2013: variation within groups predicts variation between groups (outbred vs. outbred compared to inbred vs. outbred)
+- Fox and Reed 2010 found a significant relationship between stress and inbreeding depression, but this study did not. Why?
+	- could just be because they were not accounting for NDD
+- Stress vs. novelty
+	- past selection reducng polymorphism at sites strongly selected for in normal environment
+	- past selection will not reduce polymorphism at sites neutral/weakly selected n normal environment means there will be more varaton here
+	- this means higher inbreding depression in novel environments? Presumably because bad stuff in the novel environment has not been purged yet and it can be revealed through inbreeding
+- But not all stressful environments are novel
+	- maybe there is complexity in envronment types requiring either few genes (simple stress) versus more of hte genome (more complex)
 
+Interesting paper. Argues that NDD (via stress increasing competition) increases the severity of inbreeding depression. This is because the good genotypes are good at excluding poorer genotypes (which inbred individuals are more likely to be) under intense competition. Note that inbreeding depression applies to individuals and not necessarily at the population scale.
+
+I don't think this applies to our model because competition affects all individuals equally. I'm not immediately what would be the case if our model did have this. Would inbred individuals just be purged and the population would be fine so long as there were fit indivduals? Ugh - think about this and consult with group.
+
+In general this looks like it's all about density-dependent fitness which is not quite how our model operates. Worth having a paragraph on this?
+
+### Frankham, R., et al. 1999. Do population size bottlenecks reduce evolutionary potential? Animal Conservation. 
+
+- Pop gen theory: a single generation bottleneck reduces heterozygosity by 1/(2Ne) for Ne effective population size
+	- single pair bottleneck reduces heterozygosty by 1/4 (also applies to quantitative traits)
+	- heterozygosity as measure of genetic variation for evolutionary potential
+- Can there be cases of higher genetc variation in bottlenecked vs. non-bottlenecked populations?
+	- non-additive genetic variation
+	- although, bottlenecks could expose rare deleterious alleles that are partially recessive so this variation exposed may be non-adaptive
+- Do population bottlenecks influence evolutionary potential (in a changing and challenging environment?) and if so how?
+##### Methods
+- *D. melanogaster*: in single pair bottlenecks for one (1B treatment) and three generations (3B)
+	- 1B: 15 reps, increased from single pair to size 500 for 18 gens
+	- 3B: 5 reps increased to 500 for 18 gens
+	- Inbred: 5 reps with 35 generations (!) of full-sib mating and inbreeding coefficient of 0.999
+- Evolvability: 250 pairs of flies (w/in a line) in a standard medium cage for two weeks then several weeks of successivel saltier media
+	- continually changing environment
+	- extinction: two successive weeks with no larvae in plots
+	- salt concentration in first of two weeks w/ no larvae is concentration of extinction
+	- terminal test to evaluate if adaptation occurred by taking some of the experimental stocks (?) in medium with no stocks and compared to an unevolved stock (counting egg laying)
+- Statistical comparisons
+	- outbred base pops versus single pair bottlenecks
+	- outbred base pops against eachother
+	- single pair bottleneck versus three-generation bottleneck
+	- between bottlnecked populations after size restriction versus 18 gens after
+##### Results
+- 1B had more extinctions than outbred populations
+- No differences among wild populations
+- No differences between 1B3 and 1B18 (after/late after size reduction)
+- Relationship between extinction concentrations and proportion of genetic variation remainng (how was gnetic variation determined??): increasing genetic variation means increased concentration of extinction
+- Longer bottlneck/more inbreeding means quicker extinction (and lower extinction concentration)
+	- i.e. no bottleneck means can withstand lower levels of change
+- Unevolved populations unable to produce viable offspring at 6% salt while the evolved populations could (at 10% of the salt-free concentrations)
+##### Discussion
+- The 1B treatment did have the 25% expected reducton in heterozygosity (again - how measured?) but the 3B treatmnt only had 29% reduction - far less than the expected 50%
+	- could just be that bottlenecking is noisy and there were few reps
+	- selection opposing fixation (interesting... how? at what stage?)
+	- also happened in another study cited here
+- "Population bottlenecks should be avoided whenever possble in managing populations"
+	- "populations shown to have suffred bottlenecks, such as island populations, should be recognized as having a reduced ability to response to novel environmental threats"
+
+Bottlenecking hastens extinction and lowers the amount of tolerable environmental change. Note the environmental change regime here is similar to that of Burger and Lynch, not G&H.
+
+Uses to us: helpful in thinking about the extinction vortex. Populations shrinking too much are likely to enter the vortex, which has inbreeding/bottlenecks. This reduces their adaptive capacity.
+
+Worth also thinking about how the vortex may affect initially small populations and/or low diversity more. Do they face additonal additive effects of bottlenecking, compounded effects, or have they already suffered the worst genetic effects simply by virtue of their size/diversity? I think this would be a good angle to use in Discussion that would link together ideas of the vortex and our treatments. 
+
+### 
