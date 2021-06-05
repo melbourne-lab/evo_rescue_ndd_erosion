@@ -1329,4 +1329,30 @@ Uses to us: helpful in thinking about the extinction vortex. Populations shrinki
 
 Worth also thinking about how the vortex may affect initially small populations and/or low diversity more. Do they face additonal additive effects of bottlenecking, compounded effects, or have they already suffered the worst genetic effects simply by virtue of their size/diversity? I think this would be a good angle to use in Discussion that would link together ideas of the vortex and our treatments. 
 
-### 
+### Hansson, B., Morales, H., and van Oosterhout, C. Comment on "Individual heterozygosity predicts..." Science.
+
+- Comment on Scott et al. 2020 about translocation of desert tortoises over 18 years 
+	- 10K tortoises released, of survivors there is much higher genome-wide heterozygosity
+	- Scott et al. suggest that we should prioritize heterozygosity in managemnt/cons
+- Hansson et al. are arguing here:
+	- This is oversimplifying
+	- Advice may not be best way to establish viable pops
+	- Translocation should also include assessment of genetic load
+- Positive correlation btwn heterozygosty and fitness are found in a number of taxa
+	- Pop viability is influenced by load but also by expression of recessive deleterious alleles in homozygosity ("exposure of genetic loads")
+	- study cited looking at genetic load vs. demographic history and extinction risk in IUCN
+- Metapopulation simulations under the advice to maimize genomic variability and heterozygosity	
+	- translocating individuals with high diversity does increase fitness
+	- but, benefits are transient, increasing load
+	- translocating those with the smallest load produces both initial and sustained high fitness because deleterious mutations have been purged
+	- can strike a balance by combining individuals with lowest load and highest "genetic uniqueness"
+- Also the heterozygosity advice ignores cological heterogeneity and local adaptation
+	- here rather than prioritzing heterozygosity it would be better to consider closely-located donors
+
+Sims... not really sure how to interpret although admittedly I didn't look at very hard. Seems like a lot of this is due to good performance of the "random" selection of individuals for translocation. Load + drift seems optimal. Two-step strategy.
+
+Translocation is something akin to rescue (colonization of a novel habitat)? Suppose how this would happen in our model is heterozygosity/diversity increases speed, but reducing load reduces distance so speed is less important. The heterozygosity without reduced drift increases the odds of maladaptive alleles reaching fixation - during rescue this is especially important due to the chance of populations becoming small.
+
+Fascinating stuff!
+
+
