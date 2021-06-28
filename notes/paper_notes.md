@@ -1355,4 +1355,60 @@ Translocation is something akin to rescue (colonization of a novel habitat)? Sup
 
 Fascinating stuff!
 
+### Pauls, S.U., et al. 2013. The impact of global climate change on genetic diversity within populations of species. Molecular Ecology.
+
+- How climate change will/can influence genetic diversity:
+	- change the distributions of genetic variants (due to species range changes)
+	- change levels of phenotypic plasticity
+	- influence adaptation
+	- (in most cases we expect reduced variation)
+- Species avert climate change impacts through plasticity or adaptation
+- In context of range shifts
+	- Leading edge tends to have low neutral diversity (recurring founder effects)
+	- Leading edge also though has most persistent alleles (trailing edge has alleles more likely to go extinct)
+	- Leading edge: can have selective sweeps for newly advantageous alleles, including sweeps on diversity
+	- Gene surfing can happen: drift means that certain alleles are over-represented
+	- Range contractions should decrease effective population size and introduce bottlenecks
+		- speed of contractions: Arenas et al. 2012 shows slower range contractions may have lower diversity (not sure why)
+	- Climate change could cause hybridization events (possibly through moving ranges)
+- Micro-evolutionary responses in stationary populations (e.g., local adaptation)
+	- see Riddle et al. 2008, Hoffman and Sgro 2011, Peischel and Kirkpatrick 2012
+	- not only could reduced genetic variation at certain loci occur, but reduced variation at other hitchhiking parts of the genome (see Charlesworth et al. 1997)
+	- see Vogt et al. 2007 showing exposure to stress can reduce neutral diversity through adaptation and drift (see also Nowak et al. 2009, Vogt et al. 2010)
+- Speed of adaptation and climate change
+	- Global climate change is rapid and requires strong selection pressures
+	- Not only mean trends in climate but changes in variance will have influences on variation
+	- See Drake 2005 for something about climate change and population growth rates
+	- Avolio et al. 2012: genotypic diversity in a prairie grass decreased appreciably with a decade of increased variation in precipitation
+		- but also possibly an increase in plot-level genotypic diversity? possibly due to increased spatial and temporal variation in moisture condition in plots
+		- one conclusion is that with sufficiently high initial variation, more climate variation can cause genetic differentiation through spatial and temporal variation
+	- Another possibility is that climate change selects for dispersal which ultimately homogenizes populations and reduces drift, increasing genetic diversity
+- Feedbacks and multiple stressors
+	- Reductions in effective population size through diminished census population size, changing sex ratio, reduced fecundity, increased mortality (Lande 1988, Reed 2005)
+		- This will further reduce diversity through drift, inbreeding (Nowak et al. 2009)
+	- Yes - reference to the extinction vortex here
+[Some applied stuff I skimmed]
+- Neutral and non-neutral diversity and adaptive capacity
+	- "There is an inherent link between the standing genetic variation in a population and their potential for adaptation, but this link is not well documented in the [climate change] literature"
+	- Jensen et al. 2008 (trout) and Fischer and Karl 2010 (butterflies) showing life history trait responses on an environmental gradient...
+- Phenotypic plasticity as a pathway for "adapting" to changing conditions
+	- Can be done by maximizing an individual's ability to respond to changing environments, even if coming at a cost to some other function such as reproduction
+	- Phenotypic plasticity should be highest in longest-lived organisms with long generations (Canale and Henry 2010) and low annual reproduction
+		- (but see trees as a counter example? Petit and Hampe 2006; argument is I guess that population sizes are typically very large)
+	-  Canale and Henry find that a lot of adaptive capacity is due to plasticity rather than genomic adaptation??
+- Gene expression: some empirical examples (re-check?)
+- Next steps/improvements
+	- Neutral variation is good, but it would be better to get a more functional genomic understanding, get candidate loci and assess their genetic diversity
+	- Space-for-time substitutions are currently widely used, but maybe we can use natural archives w/ DNA, museum collections, cryobanking etc. for climatic variation
+
+Lots of good stuff in here.
+
+Most important is some empirical refs looking at loss of genetic variation in certain contexts. Nowak et al. 2007, and the Vogt. et al. papers look useful here. Drake 2005, Riddle et al. 2008, Hoffman and Sgro 2011, Peischel and Kirkpatrick 2012 also are useful here.
+
+The range shift and life history pieces were interesting for other projects. General rule seems to be that diversity will shift throughout a range when there are range shifts. Also the idea that slower-growth, longer-lived species are more likely to rely on plasticity and have less genomic capacity for adaptation to global change. 
+
+Very intrigued by this idea of selection for more dispersal (to escape bad habitats) and ultimate homogenization. Drawing this out slightly, if there's selection for dispersal, then presumably that will happen in sites that are low-quality? Would one expect to see selection for dispersal in high-quality sites? Dynamics here? Interesting to think about in context of the assisted migratino study.
+
+Would also be good to cite in introduction, making case for why changing genetic diversity is important to incorporate into models.
+
 
