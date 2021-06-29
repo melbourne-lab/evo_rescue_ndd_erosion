@@ -1412,3 +1412,28 @@ Very intrigued by this idea of selection for more dispersal (to escape bad habit
 Would also be good to cite in introduction, making case for why changing genetic diversity is important to incorporate into models.
 
 
+### Nowak, C., et al. 2009. Rapid genetic erosion in pollutant-exposed experimental chironomid populations. Environmental Pollution.
+
+- Predictions that chemical exposure would reduce genetic variation - is it so?
+	- Some refs of "reported" genetic erosion, but these don't show strong evidence of it as a result of stress
+	- Genetic diversity is influenced not only by past and present selection but also by migration and chance and field studies do not necessarily control for these
+- Here: does exposing midges (*Chironomus riparius*) to a biocide (TBT = tributylin) at an environmentally relevant concentration cause reduced genetic variation at neutral loci in a short timespan? Are there changes to life history?
+##### Stats
+- Larval mortality ~ TBT and Mean emergence time ~ TBT tested with nested two-way ANOVA (repeated measures)
+- Lienar trends in life history (mortality, emergence time, fertile egg ropes (?) per female, population growth rate) and pop gen parameters assessed with a Mann-Kendall test
+- Heterozygosity, alleles per locus, polymorphic loci, and deviations from Hardy-Weinberg tested (microsatellite markres involved here)
+##### Results
+- Overall mortality w/ TBT: 44%, w/o TBT: 28%
+	- mortality was only higher in TBT groups in 4/10 generations
+- Higher emergence in TBT groups in all but two generations
+- Fewer clutches per female in TBT groups
+- Allelic richness did decline in control populations over time
+- No temporal trends in any of the life history groups (i.e. no selection)
+- Number of alleles decreased from 3 to 2 in both stressed treatments (trend looks similar in controls though?)
+	- monomorphy (fixation?) at one locus in one control group, while TBT groups had monomorphy at 3/5
+- Observed heterozygosity decreased in both stressed groups, no corresponding trend in controls
+	- loss of (expected) heterozygosity was slower in controls, ending with higher degree of heterozygosity
+- Because there was no evidence of a trend in any LH trait and therefore no selection, most likely culprit for loss of diversity is reduced effective population size (because fewer offspring in each generation)
+	- Gene flow would have increased N_e
+
+Use for this paper: good controlled evidence that loss of diversity happens in populations exposed to a stressor in a setting where all else (incl. especially gene flow) is controlled. This appears to be due to the lowered effective population size associated with the reductions in fecundity (it looks like actual census population size was held constant over time though). It's possible that selection is occurring but there isn't enough statistical power to detect it. Good empirical demonstration of link between stress/conditions and genetic variation!
