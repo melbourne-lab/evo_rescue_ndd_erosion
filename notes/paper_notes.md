@@ -1437,3 +1437,92 @@ Would also be good to cite in introduction, making case for why changing genetic
 	- Gene flow would have increased N_e
 
 Use for this paper: good controlled evidence that loss of diversity happens in populations exposed to a stressor in a setting where all else (incl. especially gene flow) is controlled. This appears to be due to the lowered effective population size associated with the reductions in fecundity (it looks like actual census population size was held constant over time though). It's possible that selection is occurring but there isn't enough statistical power to detect it. Good empirical demonstration of link between stress/conditions and genetic variation!
+
+### Rego, A., Messina, F.J., and Gompert, Z. 2019. Dynamics of genomic change during evolutionary rescue in the seed beetle *Callosobruchus maculatus*. Molecular Ecology.
+
+- Probability of evolutionary rescue under varying conditions has been well-established, but evolutionary dynamics and genomic consequences are less well-known
+	- Some previous work suggests that mutations of large effect (could) have a large influence on rescue during early stages (b/c of distance to phenotypic optimum)
+	- Some work showing that standing variation is helpful but also soft selective sweeps could be occurring during rescue
+- Some outstanding questions:
+	- Does rescue depend on a few, or many loci?
+	- Is selection on loci consistent throughout the process? (not quite sure what this means)
+	- Does selection cause alleles to fix? Or are the changes more subtle?
+	- Answer these questions with a legume-eating beetle moved to a marginal host
+##### Study
+- Focus on one line; other attempts to establish on lentil hosts failed
+	- but three independently derived long-established lines (L1-L3) and another failed line (L11) can be used
+	- L14 is a new line (?)
+	- All lines established from the same ancestral population, reared at first on mung bean for >300 generations
+	- L1-3 had rapidly increasing survival over a few generations along with other life history changes
+	- Genomic analysis of L1-3 in Gompert and Messina 2016) but only after ~80 generations on new host
+	- L14 is one extinct population on lentils that did experience a transient rapid increase in population size
+	- L15 placed in each of 40 petri dishes with 100 lentil seeds, then seeds with a hatched egg were isolated for emergence over F5, F10, F20 generations
+		- Survival analysis?
+- Genetic data from above: 48 beetles per generation in L14 founders and F1-4
+	- then L14 line split in to sublines (A and B) and generations subsampled from each...
+	- Look at >21K SNPs - not necessarily finding loci responsible for adaptation, but yes finding SNPs affected by selection through linkage disequilibrium in causal variants (how??)
+	- SNPs in L1-3 described in Gompert and Messina 2016
+- Estimate N_e for L14, use that to parameterize and test a null model of evolution solely by drift
+	- here: identifies SNPs most likely to be affected even if indirectly through LD
+	- This yielded 198 focal SNPs (of which 188 were available for L1-3)
+- Selection strength estimated for a few generations for L14 (didn't read carefully)
+- Also estimating genomic change on L1-3 and L11 to see if these patterns of initial change (L11) and final outcome (L1-3) look similar to those of L14's rescue process
+	- if yes: repeatability of dynamics in genome
+##### Results
+- (Skipped for time being)
+##### Discussion
+- In 198 focal loci, strong selection occurring
+	- different loci associated with early versus later stages of adaptation (i.e. selection acts differently during different periods of rescue process)
+- Strong selection in 10 generations causing huge increase in survival (1% to 90%)
+	- during this time population went through bottleneck where N_e < 10
+	- strong selection in >100 SNP markers in 6-16 high LD clusters
+	- results are consistent with some previous results (Orr 2005, Bell and Gonzalez 2009) as well as theory suggesting mutations of large effect have disproportionate impact
+- For >100 SNPs, a minor allele reached frequency > 90% within 16 generations
+	- results here differ from other eukaryotic studies, mostly on *Drosophila*, showing subtle shifts in allele frequencies and not selective sweeps
+	- may be result of the very strong selection pressure and the fact that many of the other studies did not feature strong enough selection for there to be decline
+- Varying selection strength on loci... could be due to
+	- rapid fixation occurring, after which selection on these loci may have ceased
+	- epistasis
+	- direct selection on causal variants could still be constant but this study wasn't looking at causal variants
+- The patterns in allele frequency and selection in the 198 focal SNPs in L14 looked different than those of L1-3, L11
+	- suggests that evolution is not "repeated" (same/similar path) during adaptation to new plant
+	- high sensitivity to initial conditions? chaotic dynamics...
+
+Very cool. Rapid adaptation and fixation occurring on some loci, esp. during bottleneck. Supports some of the genomic results of our model. 
+
+### Bijlsma, R., and Loeschcke, V. 2011. Genetic erosion empedes adaptive responses to stressful environments. Evolutionary Applications.
+
+- Ability to cope with changing and stressful environments relies on individual phenotypic change (e.g. plasticity) and also genetic diversity available for adaptation
+	- Possible empirical examples of rescue? See Roberts and Andre 1994 (DDT) and Dahlgaard et al. 2001 (temperature stress)
+	- migration of course also a response to environmental change
+	- plasticity also a response to rescue (although not always adaptive?)
+	- of course this response relies on having sufficient necessary genetic variation in a population - often not present
+		- Orr and Unckless 2008 and Teotonio et al. 2009 - adaptation relying on standing beneficial variants and not necessarily production of new variants?
+##### Habitat fragmentation and reduced population size
+- Population losses (and isolation) increase drift and inbreeding
+	- "because the force of genetic drift increases with decreasing population size, the potential to respond to natural selection will, in general, decrease with decreasing population size"
+	- Selection coefficients below (1/2N_e) drift is stronger than selection and genetic dynamics determined by genetic variation rather than the alleles themselves (Kimura...)
+	- but also purging will happen for deleterious alleles with large effects on fitness
+	- because alleles becoming fixed through drift is equal to its initial frequency, stress-avoidance/coping alleles that are rare under beneficial conditions are unlikely to reach fixation
+##### Inbreeding, plasticity, and stress tolerance
+- "The magnitude of inbreeding depression generally increases under adverse environmental conditions"
+	- increasing inbreeding depression in Drosophila under different types of stress (Kristensen et al. 2008, Joubert and Bijlsma 2010)
+	- Fox and Reed 2011 has a metaanalysis on this
+	- Genotype x environment interactions proposed: could be due to fixation of maladaptive alleles when the environment is favorable that gets worse when the environment is unfavorable (would have likely been purged otherwise)
+	- Also, potentially more variation in fitness among inbred individuals, meaning a greater proportion of them would not be viable under hard selection where minimum viability is needed to survive
+	- Biljsma et al. 2000 showed experimentally that extinction was more likely in small populations under stress conditions
+- Plasticity has a genetic basis and there is genetic variation for plasticity (i.e. plasticity as a trait)
+	- Individuals in small populations may have less plastic response
+	- Mixed results of inbreeding on plasticity (negative effects but also little effects)
+	- Genetic erosion may hamper plasticity, then
+##### Genetic effects
+- Some empirical stuff about loss of neutral diversity in experimental and natural populations: Frankham et al. 2002, Johnson et al. 204, DiBattista 2008, Hoeck et al. 2010
+- Genetic erosion can be countered by increasing gene flow (esp. in fragmented populations) and mutations in local population
+	- new mutations require large population sizes (remember N_e is smaller than N typically)
+- Adaptive response in smaller populations is slower due to drift and inbreeding
+- Rescue process means smaller populations which contributes to genetic erosion... (our argument!)
+
+Good review that should absolutely be used to highlight the reduction in genetic diversity that occurs in (1) stressful environments and (2) small populations. Would go well even in introduction.
+
+The stress-inbreeding argument is interesting and new (GxE interactions). Different way of thinking about it than what I had been thinking previously. Here and throughout hte paper the inbreeding here is more mechanistic than our model. 
+
