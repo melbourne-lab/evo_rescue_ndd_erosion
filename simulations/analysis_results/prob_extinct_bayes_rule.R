@@ -340,3 +340,52 @@ p.ext.fn %>%
   theme(legend.position = 'bottom') +
   ggsave('~/Dropbox/rescue_ndd_paper_2020/figures/p_extinct_pn_negfix.pdf',
        width = 6, height = 6)
+
+###
+
+p.ext.n = all.data %>%
+  mutate(nr = round(n / 5) * 5) %>%
+  group_by(n.pop0, low.var, alpha, gen, extinct) %>%
+  mutate(n.ex = n()) %>%
+  group_by(n.pop0, low.var, alpha, gen, extinct, nr) %>%
+  summarise(n.n.ex = n(),
+            n.n = n.ex[1],
+            p.n.ex = n.n.ex / n.n) %>%
+  merge(y = pext) %>%
+  group_by(n.pop0, low.var, alpha, gen, nr) %>%
+  filter(any(extinct) & any(!extinct)) %>%
+  summarise(p1 = (p.n.ex[extinct] * p.ext[1]),
+            p2 = (p.n.ex[!extinct] * (1 - p.ext[1])),
+            p.n.n = p1 / (p1 + p2),
+            n.ex = n.n.ex[extinct],
+            n.sv = n.n.ex[!extinct])
+
+p.ext.n %>% 
+  ungroup() %>%
+  filter(gen %in% (c(2, 5, 8)), 
+         n.ex > 5 & n.sv > 5) %>%
+  mutate(n.pop0 = factor(ifelse(n.pop0 > 50, 'large', 'small')),
+         low.var = factor(ifelse(low.var, 'low diversity', 'high diversity'))) %>%
+  ggplot(aes(x = nr, y = p.n.n)) +
+  geom_line(
+    aes(
+      group = interaction(gen, alpha),
+      colour = factor(alpha)
+    ),
+    size = 0.75
+  ) +
+  geom_point(
+    aes(
+      colour = factor(alpha),
+      shape = factor(gen)
+    ),
+    size = 2
+  ) +
+  scale_shape_manual(values = c(16, 17, 15),
+                     'Generation') +
+  scale_color_manual(values = c('black', 'purple'),
+                     'Alpha') +
+  facet_wrap(~ paste(n.pop0, low.var, sep = ', '), nrow = 2) +
+  labs(x = 'Loci at fixation (negatve)', y = 'Prob. extinct') +
+  theme_bw() +
+  theme(legend.position = 'bottom')
