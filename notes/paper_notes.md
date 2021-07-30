@@ -1526,3 +1526,52 @@ Good review that should absolutely be used to highlight the reduction in genetic
 
 The stress-inbreeding argument is interesting and new (GxE interactions). Different way of thinking about it than what I had been thinking previously. Here and throughout hte paper the inbreeding here is more mechanistic than our model. 
 
+### Hao, Y., Brockhurst, M.A., Petchey, O.L., and Zhang, Q. 2015. Evolutionary rescue can be impeded by temporary environmental amelioration. Ecology Letters.
+
+- Most rescue studies look at monotonic environmental deterioration, but fluctuations are important too
+	- Could act as "temporal refuge" slowing down environmental decline
+	- Or, could relax selection for stress tolerance, slowing the fixation of beneficial mutations
+	- Note that "later steps of adaptation are contingent on the success of earlier ones" so genetic effects would be compounding (both would be)
+- Here: looking at rescue in a lytic bacteriophage previously demonstrated to have adaptive capaity in face of high temperatures
+	- here: experimental evolution in gradually warming environment with/without "amelioration" via lowered temperatures
+	- also looking for size interaction here
+		- hypothesis: positive effects of amelioration would be better for small populations avoiding demographic stochasticity
+##### Methods
+- Phage, typically failes to reproduce above 30C but can adapt, grown in microcosms that form plaques w/ 10^7 bacterial cells (in an ancestral state)
+- Study: phage populations either have 
+	- no amelioration: temperature increasing in stepwise fashion from 29 to 31.4C in six steps
+		- each temperature has three transfers/passages
+	- periodic amelioration: second transfer in each temperature block is 0.4C lower
+	- Four incubators for each regime, 12 lines in each incubator
+		- six have 1% of phage cultures transferred in each step, six with 0.1% transferred in each step (large vs. small bottlenecks)
+- Analysis of time to extinction analyzed with a survival regression model
+	- demographic recovery: look at change in population size for each chapter
+##### Results
+- More extinctions, and quicker extinctions, in the amelioration treatment
+	- In early stages of experiment ameliorations led to increased population sizes, but had worse decline in later stages
+- Progressive/multi-step adaptation study... not sure I 100% follow but basically populations tolerant to a mildly stressful temperature to a more stressful environment didn't grow
+	- so... multiple beneficial mutations required in this case?
+	- conclusion here is that the amelioration means less opportunity for some of the mutations to reach fixation, slowing adaptation
+- No evidence that the beneficial mutations to stress incur a cost in the benign environment
+	- so amelioration relaxes but does not reverse adaptation
+##### Discussion
+- In this study, early demographic recovery due to amelioration is outweighed by later evolutionary shortcomings
+	- (wait... demographic benefits would transfer over during the transfers of 0.1-1%, right?)
+- Amelioration could be an evolutionary trap akin to Ferriere and Legendre 2013
+- Temporal genetic rescue... large population size in ameliorated periods provide a demographic source (relatively at least) but also impede fixation through maladaptation
+
+Really like the framing here - great interesting contrast between demography and evolution. Also thinking about the early vs. later stages in adaptation... does it seem similar to other patterns that early stages are disproportionately important (does it? geometric/multiplicative process?).
+
+The successive evolution is interesting. Does it matter in our model? I guess not because loci are iid and not sequential? Does this sytem have sequential evolution...? Hard to think about in terms of our model because we have a single shift - here the effect of the amelioration would depend on its direction/magnitude in relation to the current state of the population.
+
+I wonder if here the fact that the amelioration led to two successive increases rather than one had any impact here? 
+
+The demographic recovery - would provide more benefit through increased mutations, but also, does it depend on the population size? The recovery for populations that are currently very small would be very helpful, one would thing. Come to mention it - I'm not really sure what the result involving size is/was here? I guess the difference between proportions of ameliorated/static populations is smaller for small populations than large ones... but the figure shows no survival past generation 15 for small ameliorated populations in a 21 (?) generation experiment?
+
+NDD here - not sure what effect it has here. Maybe makes populations smaller such that the effects of amelioration would be (better? worse?) than DI populations... populations may be smaller during the ameliorated time periods. Hmm...
+
+The Willi et al. 2006 paper looks useful. What's up with the Kirkpatrick and Peischl paper? Mutations, space and time, interesting but perhaps less relevant than some?
+
+
+
+
