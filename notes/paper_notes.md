@@ -1572,6 +1572,36 @@ NDD here - not sure what effect it has here. Maybe makes populations smaller suc
 
 The Willi et al. 2006 paper looks useful. What's up with the Kirkpatrick and Peischl paper? Mutations, space and time, interesting but perhaps less relevant than some?
 
+### Schluter, D., Price, T.D., and Grant, P.R. 1985. Ecological character displacement in Darwin's finches. Science.
+
+- "Ecological character displacyement occurs when morphological differences between coexisting species are enhanced as a result of competitive interactions between them"
+	- presumably phenotypic differences within a population as well?
+- Darwin's Galapagos finches (Geospiza fortis, G. fuliginosa) are sympatric
+	- varying beak size on shared islands, beak sizes intermediate where alone
+- (1) Assess character displacement by comparing morphology in sympatry and allopatry, while controling for differences in food supply)
+	- quantitative description of food characteristics to create an adaptive landscape (for beak morphology phenotypes)
+	- using this landscape one can predict what food supply would be on various islands based on food supply alone; deviation from this (greater morphological differences in sympatry) is evidence as character displacement
+	- adaptive landscape: estimate expected density of a population as a function of beak depth
+		- identify seeds in a sp's diet given beak depth, get density of seeds within these limits on island, estimate finches that can be supported by that density of seeds (how is explained)
+- (2) Assess character displacement by observing selection pressures on species in allopatry
+	- differential survival of phenotypes (w/in sp?) affected by use of foods by other species... (?)
+- Look at eight sympatric islands and a singleton island for each species
+	- population density curves show distinct peak on several islands, but often distributions are polymodal
+	- (wait... why is the expected density in Fig. 1 not necessarily the expected one for G. fuliginosa... last para on first page probably explains)
+	- Fig. 1 - on sympatric island there is a greater difference between two species beak depths with at least G. fortis further off its expected peak... not as convinced for G. fuliginosa
+	- Fig. 2 - single (no competition) G. fortis population is closest to its expected peak but for sympatric populations are displaced by more
+	- Fig. 2 - G. fuliginosa has much larger beak than expected in single population and other populations are closer to expectation? but somehow this is also evidence of displacement...?
+	- I'm a little confused by the directionality here... or at least, how is the food supply and predicted density factoring in here? This only makes sense to me by thinking about the sympatric populations in relationship to the single allopatric ones, but one sympatric is basically where it is expected based on the food supply (and the other populations aren't!) while the other species's sympatric is much larger than expected
+		- oh - G. fuliginosa actually is observed at the larger peak when alone but I guess when paired with G. fortis it is shunted in to the smaller part... why is the expected allopatric density at the lower peak though??
+- Analysis under drought: severe drought in 1977 with mass mortality; regression shows that the survivors were able to eat large seeds (larger beaks... second density peak?)
+	- but a small number with small beaks did survive by exploiting what few small seeds were present
+- G. fortis size arises from trade-off on seed size; when G. fuliginosa is present, then small seeds are not available in the dry season (due to competition)
+	- so, G. fortis individuals experience selection for larger beaks (larger seeds) where the competitor is present
+	- likewise G. fortis on Daphne (allopatric island) are more likely to eat the smaller seeds in the absence of competition
+
+(read last two paras)
+also think about this in the context of our model. The fitness landscape is monotonic... but NDD changes it I guess? There isn't a case where the less fit individuals are favored - it's just a matter of them not being disfavored I suppose?
+
 
 
 
