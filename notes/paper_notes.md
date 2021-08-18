@@ -1602,6 +1602,94 @@ The Willi et al. 2006 paper looks useful. What's up with the Kirkpatrick and Pei
 (read last two paras)
 also think about this in the context of our model. The fitness landscape is monotonic... but NDD changes it I guess? There isn't a case where the less fit individuals are favored - it's just a matter of them not being disfavored I suppose?
 
+### Willi, Y., Van Buskirk, J., and Hoffman, A.A. 2006. Limits to the adaptive potential of small populations. ARES.
+
+- "How good is the evidence that small populations have reduced evolvability?"
+	- (Houle 1992 is good source for evolvability, it seems)
+- Frankham 1996: small populations have low neutral genetic variation and low heterozygosity
+	- assumes that heterozygosity at markers are proportional to heterzygosity underlying phenotypically expressed traits (and therefore traits experiencing selection)
+	- but, genetic variation depends on more than population size (e.g., number of loci, dominance/epistasis, mutation rates, selection intensity, mode of selection)
+	- other factors influence adaptation: enviromental stress, genetic stress
+
+##### Theory of genetic variation and population size
+###### Single locus
+- allelic diversity may be a better measure of genetic variation than henterozygosity
+- with only drift and mutation, heterozygosity increaes monotonically with population size
+	- both because of the relationship to effective population size and the fact that more individuals means more mutations
+- single-locus models with selection and additive gene effects (single-locus but additive effects?): heterozygosity declines because the favored alleles will reach fixation
+	- selection is more efficient in large populations than small ones (because of the lack of drift?)
+	- so, elimination of deleterious mutations increases with N
+	- "A locus under selection begins to behave like a neutral locus when s <= 1/(2N_e) (Wright 1931)"
+		- i.e. with weak selection strength (or small population size) loci are more subject to drift?
+		- "Therefore as population size declines, stronger selection is required to prevent loss of rare beneficial mutations due to drift, and to ensure elimination of deleterious mutations. Consequently, genetic load becomes a problem"
+- with enough dispersal, isolated populations behave as if panmictic
+	- for isolated populations with low dispersal, loss of heterzygosity depends on number of demes/populations (probability of fixation happening at all demes?)
+##### Polygenic models
+- Assuming neutrality and additive effects, equilibrium V_A of a quantitative trait increases linearly with N_e (see Chakraborty and Nei 1982, Lynch and Hill 1986)
+	- because variation is eroded in small populations
+	- but not all small populations have low variation; drift at low N_e can produce a lot of different outcomes
+- Under selection, equilibrium V_A depends not just on population size but type/intensity of selection, rate and effect of mutations, and number of loci involved (Houle 1989, Keightley and Hill 1987)
+	- with directional selection V_A can increase unbounded but stabilizing selection has a limit on the possible V_A for large populations (because directional selection favors alleles in one direction... but this would reduce variation wouldn't it?)
+- Maximum heritability under stabilizing selection depends on population size and number of loci
+	- selection eliminates genetic variation (but effect is small when many loci are involved - Robertson?)
+	- selection also favors genotypes with beneficial alleles at many loci -> linkage equilibrium (which reduces variation by reducing the independence of loci)
+	- selection also decreases the number of individuals that reproduce and increases relatedness above them and produces variance in reproductive success, reducing N_e
+- Dispersal: movement increases V_A because immigrants counteract losses from drift more rapidly than mutation does
+- For longer-term directional selection, drift decreases chances of fixation of rare beneficial alleles and counteracts selection
+	- the selection differential also itself decreases under longer-term selection (?)
+	- Hill 1982 and Nomura 1997 show that there's more response to selection in populations that are small - variation of response is 2FV_A for inbreeding coefficient F
+		- staying smaller for longer increases F and thus increases variation in response
+	- think I should also look at Verrier et al. 1991?
+- Bottlenecks: reduce V_A due to drift and also influence individual genes (does this depend on frequency of dominant alleles...)
+
+##### Empirical studies
+- Swindell and Bouzat 2005: Drosophila heritability of bristle number declines with increasing time at small size, consistent with models of drift+mutation or drift+mutation+stabilizing selection
+- Cross-study comparison looking at F (can be derived from generalized study design) and and V_A
+	- F gives the expected decline in heterozygosity at neutral loci
+	- V_A declines linearly with F as with a neutral model with additive effects
+	- Fig. 2... should digest what's going on with fitness traits although I suppose that the number of studies with fitness is very small; but what does it mean if y axis is greater than 1??
+- In natural populations, often N_e does not predict quantitative genetic variation
+	- Willi et al. 2007 did find smaller populations had lower heritability when averaging over eight traits in 13 natural plant populations
+	- Waldmann 2001 and Widen and Andersson 1993 did not find relationships between heritability and population size although they were underpowered
+	- a combined meta-analysis of five studies here found no combined evidence of an effect of heritability on population size
+	- Reed and Frankham 2001: meta-analysis shows no evidence that quantitative variation and population size (15 studies?)
+		- heritability and neutral variation also appear unrelated
+	- Could be that small populations only declined only recently and still have variance-increasing effects of dominance or epistatic variance
+		- if V_A drops under drift-mutation balance at 1/(2N_e) per generation, substantial time may be needed to see effects of drift
+	- traits may be experiencing weak stabilizing selection such that V_A is only sensitive to population sizes at small size (at larger size the variance would asymptote)
+	- Also could be that the smallest populations where the effect would be strongest could already have gone extinct
+	- Or, gene flow may decouple V_A from population size
+- Abundant experimental tests showing populations held at small size for a long time have reduced short- and long-term adaptive response
+	- refs herein
+	- likely explanation here is drift counteracting selection
+		- Weber & Diggins (1990) looked at nine long-term experiments and found reduced selection capacity was stronger than expected due to a drift/selection model
+		- could be few loci or linkage disequilibrium (Bulmer effect)
+- Bottlenecks: original work by Bryant (1986 and 1993 papers) found no evidence of V_A reductions in bottlenecked populations
+	- subsequent studies have both found increases in V_A but also decreases consistent with additive expectations
+	- life history traits tend to show the increases in additive variance with inbreeding - possibly due to inbreeding depression and strong selection (purging?)
+	- hypothesis: bottlenecks increase V_A by changing nonadditive variance to additive variance (traits associated with fitness, experiencing inbreeding depression, have high dominance variance)
+	- then, can bottlenecks increase adaptive potential?
+		- bottlenecks typically reduce fitness (inbreeding depression) and surfaces deleterious recessive alleles - increased adaptive ability probably can't overcome this
+		- increases in V_A for some traits may be accompanied by decreases in V_A for others
+
+##### Other things reducing population adaptability
+
+- Small populations could be marginalized to less favorable environments, exposing them to less favorable conditions and lowering fitness
+	- what is needed to adapt in these environments may be different than in more suitable habitat, e.g., adaptation to environmental variation (plasticity?), adaptation to stronger stress
+- Lower individual fitness due to inbreeding depression, genetic load, nongenetic Allee effects
+	- Crnokrak and Roff 1999 review inbreeding depression in natural populations
+	- Lynch and Lande 1993 look at critical rates of change of a trait conferring maximal fitness
+	- Fischer and Mathies 1998 is a good empirical look with plant populations of various sizes - large populations can adapt to rapid environmental change but smaller populations can not
+	- Armbruster and Reed 2005 found inbreeding depression on average 69% more severe in stressful environments
+
+Hmm... okay good. Theory shows that most of the time but with some exceptions (not relevant to our model) small populations will lose genetic variation and heritability will fall. Selection seems to also reduce V_A (especially stabilizing selection, which isn't in our model).
+
+Empirical results are mixed. May be due to the fact that multiple traits are involved and/or more complicated genetic architectures as well as the presence of dominance or epistasis. The additive/non-additive variances were slightly confusing to me - I guess this is dominance variance? Means that our results depend on the trait (surprise!)
+
+The other points about marginal habitat and different types of selection are very interesting but not as relevant to us. The point about inbreeding depression is good - populations aren't just threatened by lack of adaptability, but by the reduced fitness! In fact, they reinforce. Which we see in our model. 
+
+Some empirical stuff in here would be good to look at. Willi's other paper look cool. Reviews: Reed and Frankham, Armbruster and Reed. Fischer and Mathies looks super interesting but perhaps not for this project. Theory by Lande as well as Lynch and Lande would be good to read. Need to read S. Wright. 
+
 
 
 
