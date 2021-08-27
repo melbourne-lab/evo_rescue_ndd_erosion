@@ -1,3 +1,5 @@
+# Estimating extinction probabilities, conditioned on state vars, using Bayes's rule
+
 library(ggplot2)
 library(dplyr)
 library(tidyr)
@@ -40,7 +42,7 @@ ggplot(test2 %>% filter(gen %in% 1:10)) +
 
 p.ext.v %>% 
   ungroup() %>%
-  filter(gen %in% (1 + (0:2)*3), 
+  filter(gen %in% c(1, 5), 
          n.ex > 10 & n.sv > 10) %>%
   mutate(n.pop0 = factor(ifelse(n.pop0 > 50, 'large', 'small')),
          low.var = factor(ifelse(low.var, 'low diversity', 'high diversity'))) %>%
@@ -67,7 +69,7 @@ p.ext.v %>%
   facet_wrap(~ paste(n.pop0, low.var, sep = ', '), nrow = 2) +
   labs(x = 'Additive genetic variance', y = 'Prob. extinct') +
   theme_bw() +
-  theme(legend.position = 'bottom') +
+  theme(legend.position = 'bottom') #+
   ggsave('~/Dropbox/rescue_ndd_paper_2020/figures/p_extinct_sig_genvar.pdf',
          width = 6, height = 6)
 
@@ -137,7 +139,7 @@ p.ext.w %>%
   facet_wrap(~ paste(n.pop0, low.var, sep = ', '), nrow = 2) +
   labs(x = 'Intrinsic fitness (W)', y = 'Prob. extinct') +
   theme_bw() +
-  theme(legend.position = 'bottom') +
+  theme(legend.position = 'bottom') #+
   ggsave('~/Dropbox/rescue_ndd_paper_2020/figures/p_extinct_w_fitn.pdf',
          width = 6, height = 6)
 
@@ -389,3 +391,117 @@ p.ext.n %>%
   labs(x = 'Loci at fixation (negatve)', y = 'Prob. extinct') +
   theme_bw() +
   theme(legend.position = 'bottom')
+
+### Another attempt incorporating population size
+
+# Population size is a latent variable in the above.
+# But, we can estimate the joint probabilities of extinction, conditioned on population size
+# using Bayes's Rule in a similar way to the above.
+
+# A problem is the population size. As with above, I'll bin the population size variable
+# (the binning here may change the output)
+# In particular, bin on a log scale or on the natural scale? I try this here with the log scale
+# (log 2) but the code would work with a natural scaling too.
+
+# Aux wrapper function (tested and proven) for binning
+# x is the vector of numbers to bin, nums are the bin boundaries
+numbin = function(x, nums) {
+  expand.grid(input = x, ns = rev(nums)) %>%
+    mutate(i = rep(1:length(x), times = length(nums))) %>%
+    filter(input >= ns) %>%
+    distinct(i, input, .keep_all = TRUE) %>%
+    arrange(i) %>%
+    select(ns) %>%
+    unlist()
+}
+
+# The numeric scales used
+# numscale = c(1, 2, 3, 5, 10, 20, 30, 50, 100, 200, 300, 500)
+# numscale = c(1, 2, 5, 10, 20, 50, 100, 200, 500)
+numscale = c(1, 5, 10, 20, 40, 80, 160) # nice log 2 scale
+
+# Generate the distributions
+p.ext.w = all.data %>%
+  mutate(wr = round(wbar * 10) / 10,
+         nr = numbin(n, numscale)) %>%
+  group_by(n.pop0, low.var, alpha, gen, extinct) %>%
+  mutate(n.ex = n()) %>%
+  group_by(n.pop0, low.var, alpha, gen, extinct, wr, nr) %>%
+  summarise(n.w.e = n(),
+            n.e = n.ex[1],
+            p.w.e = n.w.e / n.e) %>%
+  merge(y = pext) %>%  
+  group_by(n.pop0, low.var, alpha, gen, wr, nr) %>%
+  filter(any(extinct) & any(!extinct)) %>%
+  summarise(p1 = (p.w.e[extinct] * p.ext[1]),
+            p2 = (p.w.e[!extinct] * (1 - p.ext[1])),
+            p.e.w = p1 / (p1 + p2),
+            n.ex = n.w.e[extinct],
+            n.sv = n.w.e[!extinct])
+
+# This looks like the best plot thus far
+p.ext.w %>% 
+  ungroup() %>%
+  filter(gen %in% c(2, 6), nr > 2, nr < 100, # note - excludes populations above size 160
+         n.ex > 10 & n.sv > 10) %>%
+  mutate(n.pop0 = factor(ifelse(n.pop0 > 50, 'large', 'small')),
+         low.var = factor(ifelse(low.var, 'low diversity', 'high diversity'))) %>%
+  ggplot(aes(x = wr, y = p.e.w)) +
+  geom_line(
+    aes(
+      group = interaction(gen, alpha, nr),
+      linetype = factor(alpha),
+      colour = factor(nr)
+    ),
+    size = 1
+  ) +
+  geom_point(
+    aes(
+      colour = factor(nr),
+      shape = factor(alpha)
+    ),
+    size = 3
+  ) +
+  scale_shape_manual(values = c(16, 17), #, 15),
+                     'Generation') +
+  scale_color_brewer(palette = 'Spectral',
+                     'Alpha') +
+  facet_wrap(gen ~ paste(n.pop0, low.var, sep = ', ') , nrow = 2) +
+  labs(x = 'Intrinsic fitness (W)', y = 'Prob. extinct') +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+# may want to try the above plot using fill instead of colour,
+# and shapes with a black packground (to make things pop)
+
+# A less likeable plot, faceting on size and featuring several generations
+p.ext.w %>% 
+  ungroup() %>%
+  filter(gen %in% c(2, 6),
+         n.ex > 10 & n.sv > 10) %>%
+  mutate(n.pop0 = factor(ifelse(n.pop0 > 50, 'large', 'small')),
+         low.var = factor(ifelse(low.var, 'low diversity', 'high diversity'))) %>%
+  ggplot(aes(x = wr, y = p.e.w)) +
+  geom_line(
+    aes(
+      group = interaction(gen, alpha, nr),
+      linetype = factor(alpha),
+      colour = factor(nr)
+    ),
+    size = 0.75
+  ) +
+  geom_point(
+    aes(
+      colour = factor(nr),
+    ),
+    size = 2
+  ) +
+  scale_shape_manual(values = c(16, 17, 15),
+                     'Generation') +
+  scale_color_brewer(palette = 'YlOrRd',
+                     'Alpha') +
+  # facet_wrap(paste(n.pop0, low.var, sep = ', ') ~ nr) +
+  facet_grid(rows = vars(n.pop0, low.var), cols = vars(nr)) +
+  labs(x = 'Intrinsic fitness (W)', y = 'Prob. extinct') +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
