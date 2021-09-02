@@ -257,11 +257,11 @@ ext.data %>%
 size.plot.row = all.data %>%
   filter(trial < 26) %>%
   mutate(romnum = factor(ifelse(n.pop0 %in% 100,
-                                ifelse(low.var, '(i)', '(ii)'),
-                                ifelse(low.var, '(iii)', '(iv)'))),
+                                ifelse(!low.var, '(i)', '(ii)'),
+                                ifelse(!low.var, '(iii)', '(iv)'))),
          n.pop0 = factor(ifelse(n.pop0 %in% 100, "Large", "Small")),
          alpha = factor(ifelse(alpha > 0, "Density dependent", "Density independent")),
-         low.var = factor(ifelse(low.var, "Low diversity", "High diversity"))) %>%
+         low.var = factor(ifelse(!low.var, "High diversity", "Low diversity"))) %>%
   ggplot(aes(x = gen)) +
   geom_line(
     aes(
@@ -291,7 +291,8 @@ size.plot.row = all.data %>%
   theme(legend.position = 'none',
         panel.grid.major = element_line(colour = 'gray88'),
         panel.background = element_rect(fill = 'white'),
-        strip.background = element_rect(colour = 'black'))
+        strip.background = element_rect(colour = 'black'),
+        strip.text = element_text(size = 11))
 
 inst.plot.row = all.extinctions.long %>%
   group_by(n.pop0, low.var, alpha) %>%
@@ -322,7 +323,8 @@ inst.plot.row = all.extinctions.long %>%
         strip.text = element_blank(),
         strip.background = element_blank(),
         panel.grid.major = element_line(colour = 'gray88'),
-        panel.background = element_rect(fill = 'white'))
+        panel.background = element_rect(fill = 'white'),
+        plot.margin = margin(b = 0, r = 5, l = 20, unit = 'pt'))
 
 # Cumulative extinction plot (b)
 cuml.plot.row = all.extinctions.long %>%
@@ -339,30 +341,32 @@ cuml.plot.row = all.extinctions.long %>%
     alpha = 0.5
   ) +
   scale_fill_manual(values = c('purple', 'black')) +
-  labs(x = 'Generation', y = 'Probability of extinction') +
+  labs(x = 'Generation', y = '') +
   facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
   theme(legend.position = 'none',        
         strip.text = element_blank(),
         strip.background = element_blank(),
         panel.grid.major = element_line(colour = 'gray88'),
-        panel.background = element_rect(fill = 'white'))
+        panel.background = element_rect(fill = 'white'),
+        plot.margin = margin(b = 0, r = 5, l = 20, unit = 'pt'))
 
-geno.full.row = geno.ext.fulls %>%
-  ggplot() +
-  geom_line(
-    aes(
-      x = gbar, y = p, group = factor(alpha),
-      colour = factor(alpha)
-    )
-  ) +
-  labs(x = 'Initial genotype', y = '') +
-  scale_color_manual(values = c('purple', 'black')) +
-  facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
-  theme(legend.position = 'none',
-        strip.text = element_blank(),
-        strip.background = element_blank(),
-        panel.grid.major = element_line(colour = 'gray88'),
-        panel.background = element_rect(fill = 'white'))
+# geno.full.row = geno.ext.fulls %>%
+#   ggplot() +
+#   geom_line(
+#     aes(
+#       x = gbar, y = p, group = factor(alpha),
+#       colour = factor(alpha)
+#     )
+#   ) +
+#   labs(x = 'Initial genotype', y = '') +
+#   scale_color_manual(values = c('purple', 'black')) +
+#   facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
+#   theme(legend.position = 'none',
+#         strip.text = element_blank(),
+#         strip.background = element_blank(),
+#         panel.grid.major = element_line(colour = 'gray88'),
+#         panel.background = element_rect(fill = 'white'),
+#         plot.margin = margin(b = 0, r = 5, l = 5, unit = 'pt'))
 
 data.plots.row = plot_grid(size.plot.row, cuml.plot.row, 
                            inst.plot.row, geno.full.row, 
@@ -475,10 +479,12 @@ geno.full.row = ggplot(epreds, aes(x = gbar, y = estimate)) +
   scale_color_manual(values = c('black', 'purple')) +
   facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
   theme(legend.position = 'none',
+        axis.text.x = element_text(angle = 45),
         strip.text = element_blank(),
         strip.background = element_blank(),
         panel.grid.major = element_line(colour = 'gray88'),
-        panel.background = element_rect(fill = 'white'))
+        panel.background = element_rect(fill = 'white'),
+        plot.margin = margin(b = 0, r = 5, l = 20, unit = 'pt'))
 
 data.plots.row = plot_grid(size.plot.row, inst.plot.row, 
                            cuml.plot.row, geno.full.row, 
@@ -486,3 +492,7 @@ data.plots.row = plot_grid(size.plot.row, inst.plot.row,
                            nrow = 4)
 
 data.plots.row
+
+plot_grid(data.plots.row, extinct.legend, ncol = 1, rel_heights = c(1, .1)) %>%
+  save_plot(filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_2_long.pdf',
+            base_width = 8, base_height = 8)
