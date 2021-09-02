@@ -141,6 +141,7 @@ k.vr = all.tau %>%
 ### Single variable plots
 
 tau.loglam = all.tau %>%
+  filter(ext) %>%
   ungroup() %>%
   mutate(n.pop0  = factor(n.pop0 > 20, labels = c('Small', 'Large')),
          low.var = factor(low.var, labels = c('High diversity', 'Low diversity'))) %>%
@@ -177,6 +178,7 @@ tau.loglam = all.tau %>%
         strip.background = element_rect(colour = 'black'))
 
 tau.varred = all.tau %>%
+  filter(ext) %>%
   ungroup() %>%
   mutate(n.pop0  = factor(n.pop0 > 20, labels = c('Small', 'Large')),
          low.var = factor(low.var, labels = c('High diversity', 'Low diversity'))) %>%
@@ -215,6 +217,7 @@ tau.varred = all.tau %>%
 
 tau.malada = all.tau %>%
   ungroup() %>%
+  filter(ext) %>%
   mutate(n.pop0  = factor(n.pop0 > 20, labels = c('Small', 'Large')),
          low.var = factor(low.var, labels = c('High diversity', 'Low diversity'))) %>%
   ggplot(aes(x = tau, y = 1 - kt)) +
@@ -258,7 +261,7 @@ cowplot::plot_grid(
   label_y = c(1, 1.12, 1.12),
   nrow = 3
 ) %>%
-  cowplot::save_plot(filename = 'simulations/analysis_results/figure_drafts/test_figs/fig3.pdf',
+  cowplot::save_plot(filename = 'simulations/analysis_results/figure_drafts/test_figs/fig4.pdf',
                      base_width = 8, base_height = 6)
 
 ### Looking at rates by generation instead of tau
