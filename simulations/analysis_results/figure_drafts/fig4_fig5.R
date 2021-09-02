@@ -61,10 +61,10 @@ all.fix = all.data %>%
 
 ext.fix = all.data %>%
   group_by(n.pop0, low.var, alpha, gen, extinct) %>%
-  summarise(p.pos = mean(p.fix.pos),
-            v.pos = var(p.fix.pos),
-            p.neg = mean(p.fix.neg),
-            v.neg = var(p.fix.neg),
+  summarise(p.pos = mean(25*p.fix.pos),
+            v.pos = var(25*p.fix.pos),
+            p.neg = mean(25*p.fix.neg),
+            v.neg = var(25*p.fix.neg),
             n = n()) %>%
   ungroup() %>%
   mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
@@ -247,8 +247,8 @@ variance.plot = ext.v %>%
   labs(x = '', y = 'Genetic variance') +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   theme(panel.background = element_rect(fill = 'white'),
-        panel.grid.major = element_line(colour = 'gray88'),
-        panel.grid.minor = element_blank(),
+        #panel.grid.major = element_line(colour = 'gray88'),
+        #panel.grid.minor = element_blank(),
         panel.border = element_rect(fill = NA),
         strip.background = element_rect(colour = 'black'),
         legend.position = 'none')
@@ -273,19 +273,21 @@ fixation.pos.plot = ext.fix %>%
     ),
     alpha = 0.2
   ) +
-  ylim(c(0, 0.5)) +
+  ylim(c(0, 13)) +
   scale_colour_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   guides(linetype = guide_legend('', nrow = 1),
          colour = guide_legend('', nrow = 1),
          fill = guide_legend('', nrow = 1)) +
-  labs(x = 'Generation', y = 'Loci at positive fixation') +
+  labs(x = '', y = 'Loci at positive fixation') +
   theme(panel.background = element_blank(),
         panel.border = element_rect(fill = NA),
         legend.position = 'none',
-        strip.background = element_rect(colour = 'black'),
-        strip.text = element_text(size = 12))
+        strip.text = element_blank(),
+        strip.background = element_blank())
+        # strip.background = element_rect(colour = 'black'),
+        # strip.text = element_text(size = 12))
 
 fixation.neg.plot = ext.fix %>%
   ggplot(aes(x = gen)) +
@@ -307,7 +309,7 @@ fixation.neg.plot = ext.fix %>%
     ),
     alpha = 0.2
   ) +
-  ylim(c(0, 0.5)) +
+  ylim(c(0, 13)) +
   scale_colour_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
@@ -318,8 +320,10 @@ fixation.neg.plot = ext.fix %>%
   theme(panel.background = element_blank(),
         panel.border = element_rect(fill = NA),
         legend.position = 'none',
-        strip.background = element_rect(colour = 'black'),
-        strip.text = element_text(size = 12))
+        strip.text = element_blank(),
+        strip.background = element_blank())
+        # strip.background = element_rect(colour = 'black'),
+        # strip.text = element_text(size = 12))
 
 
 varn.legend = get_legend(
@@ -330,10 +334,13 @@ varn.legend = get_legend(
 )
 
 save_plot(plot_grid(variance.plot, fixation.pos.plot, fixation.neg.plot, 
+                    labels = c('(A)', '(B)', '(C)'),
+                    label_x = c(-0.015, -0.015, -0.015),
+                    label_y = c(1, 1.14, 1.14),
                     varn.legend, rel_heights = c(1, 1, 1, 0.1), ncol = 1), 
           #varn.legend,
           #rel_heights = c(1, 0.1),
-          filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_4.pdf',
+          filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_3.pdf',
           base_width = 8, base_height = 6)
 
 # Summary stats of above:
