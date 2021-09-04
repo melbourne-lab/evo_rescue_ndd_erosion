@@ -496,3 +496,22 @@ data.plots.row
 plot_grid(data.plots.row, extinct.legend, ncol = 1, rel_heights = c(1, .1)) %>%
   save_plot(filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_2_long.pdf',
             base_width = 8, base_height = 8)
+
+gbar.slopes = with(
+  -1*posts,
+  cbind(
+    large.hivar.did = gbar,
+    small.hivar.did = gbar + `n.pop0small:gbar`,
+    large.lovar.did = gbar + `low.varlow.div:gbar`,
+    large.hivar.ndd = gbar + `alphandd:gbar`,
+    small.lovar.did = gbar + `n.pop0small:gbar` + `low.varlow.div:gbar` + `n.pop0small:low.varlow.div:gbar`,
+    small.hivar.ndd = gbar + `n.pop0small:gbar` + `alphandd:gbar` + `n.pop0small:alphandd:gbar`,
+    large.lovar.ndd = gbar + `low.varlow.div:gbar` + `alphandd:gbar` + `low.varlow.div:alphandd:gbar`,
+    small.lovar.ndd = gbar + `n.pop0small:gbar` + `low.varlow.div:gbar` + `alphandd:gbar` +
+                      `n.pop0small:low.varlow.div:gbar` + `n.pop0small:alphandd:gbar` + `low.varlow.div:alphandd:gbar` + 
+                      `n.pop0small:low.varlow.div:alphandd:gbar`
+  )
+)
+
+apply(gbar.slopes, 2, mean) %>% round(2)
+apply(gbar.slopes, 2, function(x) quantile(x, c(0.025, 0.975))) %>% round(2)
