@@ -1690,6 +1690,29 @@ The other points about marginal habitat and different types of selection are ver
 
 Some empirical stuff in here would be good to look at. Willi's other paper look cool. Reviews: Reed and Frankham, Armbruster and Reed. Fischer and Mathies looks super interesting but perhaps not for this project. Theory by Lande as well as Lynch and Lande would be good to read. Need to read S. Wright. 
 
+### Bell, G., and Gonzalez, A. 2009. Evolutionary rescue can prevent extinction following environmental change. Ecology Letters.
+
+- Rescue in response to a monogenic (?) threat - yeast exposed to salt
+	- populations will be likely although not certain to adapt if Nf > 1 where f is mutations capable of rescuing populations from stress
+- Yeast: haploid, asexually reproducing, susceptible to osmotic and ionic stress reducing growth (individual or population?) in presence of salt
+	- 10g/L inhibits growth, 150 g/L is lethal to wild types, experiment run at 125 g/L
+	- Expmt 1: can rescue occur in a large population (initial size 6 x 10^5)
+	- Expmt 2: can rescue occur in any size?
+		- 10 levels of pouplation size, ranging form 10^7 to ~10, with two different growth media
+	- Expmt 3: what is the genetic basis of adaptation?
+		- look at 14 ORFs sensitive to cation regulation and halosensitivity
+		- repeat study with one ORF deleted at a time?
+		- (if a strain with ann ORF deleted survives, gene is unlikely to be effective)
+- Expmt 1: geometric decline over first 24 hours to ~10% of original size, but returns to original size geometrically (G&H's U shape confirmed)
+	- estimating the frequency of resistant cells in the original population: extrapolating the ascending u-shaped recovery curve backwards to the original size (note: must be asexual reproduction for this to work) and also just spread samples of OG population on a salt plate
+		- initial frequency fo 2-2.5%
+- Using data here to get the initial population size needed to get 50% probability of rescue and also the beneficial mutation rate
+- Most of the deletion strains had growth similar to wild type, but one had highly reduced growth and another had eessentially zero growth
+- "50% probability of adaptation may require many 100s of individuals even only in the presence of demographic stochasticity"
+	- this means more individuals are likely needed in variable environments, or in populations with reduced standing variation
+- Also: empirical evidence that size matters (see Fig. 3)
+
+Uses to us: size is important (empirical demonstration), rescue can happen of course, simple study system, contrast the comment about 100s of individuals being needed for rescue to occur
 
 
 
