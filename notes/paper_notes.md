@@ -1714,5 +1714,46 @@ Some empirical stuff in here would be good to look at. Willi's other paper look 
 
 Uses to us: size is important (empirical demonstration), rescue can happen of course, simple study system, contrast the comment about 100s of individuals being needed for rescue to occur
 
+### Vinton, A.C., and Vasseur, D.A. 2020. Evolutionary tracking is determined by differential selection on demographic rates and density dependence. Ecology and Evolution.
+
+- For fast birth, fast death populations, response to selection will be faster (than a slow birth, slow death population with the same intrinsic growth rate) due to more population turnover
+- Likewise, stochastic processes can cause deviation from expected outcomes (in - evolution?) esp. for small populations (so this should be modeled explicitly)
+- So with adaptation, in addition to knowing $r$, we need to understand both the birth/death parameters and also how r depends on density dependence and environmental change
+- Here: how does evolutionary tracking (and thereby rescue?) depend on environmental change and its effects on demographic rates
+##### Model
+- Continuous time, individual-based logistic growth model
+	- environment alters birth or death in a density-independent or density-dependent way (four cases)
+	- N' = g(N) * N
+		- g(N) is difference between per cap birth rate B and death rate D
+		- N'/N = b0 - bI - Nbd - (d0 + dI + NdD)
+		- b0, d0 are background birth/death, bI/dI are density independent modifications to them, bD and dD are density-dependent modifications
+	- optimum trait value varies sinusoidally, and abs of environmental deviation from it is incorporated into demographic rates
+		- equilibrium population size (w/o environmental change) is same in all cases
+	- using these, one can solve for parameters that will give equilibrium population size as a function of (environmental change?)
+- Stochasticity added through the Gillespie algorithm
+	- heritability variation in individual traits incorporated (somehow)
+	- random selection on birth and death, also random mutations during reproduction
+##### Results
+- Persistence was greater in populations with birth rates environmentally influenced and when environment affected density dependence
+	- n.b. according to Figure 1 the density dependence means at small population size all genotypes have the same birth/death (think about this...)
+	- similarly for death rates persistence is more likely when environment influences density dependence
+	- (supposedly has something to do with behavior when the population is small... I suppose a lot of births when small is more helpful than fewer deaths? - interesting question)
+	- but also this relationship exists in the no-evolution cases (why does extinction not happen here?)
+	- note: Nisbet & Gurney 2003 and Palamara et al. 2016 show that stochasticity is determined by the sum of birth and death rates; somehow the death models have higher stochasticity at equilibrium points (is this due to parameterization only?)
+	- ohhhh I see Fig. 1 is important - the vertical line is the other (non-density dependent vital rate) and CC is where they intersect ofc...  
+- In all four scenarios, with a greater frequency of environmental variation,   persistence time increases
+	- "although the environmental density effect increases variation at high population sizes, it is favorable when populations are small as they are better able to rebound" - counterintuitive... or actually does this match some of the amelioration terms? there's some stuff in here e.g. Ferguson and Ponciano 2015 that look at environmental terms that influence density and show a "multiplicative effect"
+	- ecological tracking: ability to track a changing environment diminishes with increasing frequency? stronger tracking at low frequencies means greater variation in population density which means more time spent below mean?
+- U-shaped relationship between frequency of env. change and mean persistence times
+	- not monotonic; declining at first when going from small to medium rates of change but then increasing persistence going from medium to high (true in all cases)
+	- trade-off between ecological and evolutionary tracking; with stronger evolutionary (phenotypic?) tracking, there is less ecological tracking because there's less variation in vital rates (wait... why? is it because the tracking means that populations are less adapted, and therefore large, so there's less demographic stochasticity?)
+	- ecological tracking is bad (??) (also what is it?)
+
+Okay... I still don't totally get what's going on but I understand it more now than before. Important things: (1) density dependent *environmental effects* aid persistence rather than hurting and (2) the demographic stochasticity is helpful... somehow
+
+The stochasticity - at some point they discussed it being helpful for populations at low density. Was the idea here that smaller populations can be aided by the environmental fluctuations similarly to the Peniston et al. paper? Not sure. Actually I guess it's not super important!
+
+The use here is also writing about this in the context of the "shape" of density dependence. A density dependent demographic effect that influences all individuals equally vs. one favoring more fit individuals over less fit ones. I do think a lot of the result here is just that at low densities the NDD-effect populations have the same (high) growth rate whereas in the independent case the populations all have lower fitness regardless... ah I wonder if this means that a population that's small can rebound even if it's mostly composed of fit individuals? Actually couldn't this impede selection by stopping purging? Ahhh!!... but also cool!
+
 
 
