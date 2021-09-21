@@ -422,17 +422,28 @@ numscale = c(1, 5, 10, 20, 40, 80, 160) # nice log 2 scale
 
 # Generate the distributions
 p.ext.w = all.data %>%
-  mutate(wr = round(wbar * 10) / 10,
+  mutate(wr = 0.1 + round(wbar * 5) / 5,
          nr = numbin(n, numscale)) %>%
   group_by(n.pop0, low.var, alpha, gen, extinct) %>%
-  mutate(n.ex = n()) %>%
+  #   n.ex is the number of trials (per generation, extinction status)
+  mutate(n.ex = n()) %>% 
   group_by(n.pop0, low.var, alpha, gen, extinct, wr, nr) %>%
+  #   n.w.e is the number of trials in the w,n bin
+  #   n.e is the number of total trials (across w,n bins)
+  #   p.w.e is the probability of being in that w,n bin
+  #     (conditioned on extinction), i.e., P(w,n|e))
   summarise(n.w.e = n(),
             n.e = n.ex[1],
             p.w.e = n.w.e / n.e) %>%
+  # For getting P(e)
   merge(y = pext) %>%  
   group_by(n.pop0, low.var, alpha, gen, wr, nr) %>%
-  filter(any(extinct) & any(!extinct)) %>%
+  #filter(any(extinct) & any(!extinct)) %>%
+  #   p1 is P(w,n|e) * P(e)
+  #   p2 is P(w,n|ne) * P(ne)
+  #   p.e.w is p1 / p2 i.e. P(e|w,n)
+  #   n.ex and n.sv are the number of trials extinct/not extinct
+  #     in the given gen
   summarise(p1 = (p.w.e[extinct] * p.ext[1]),
             p2 = (p.w.e[!extinct] * (1 - p.ext[1])),
             p.e.w = p1 / (p1 + p2),
@@ -442,10 +453,15 @@ p.ext.w = all.data %>%
 # This looks like the best plot thus far
 p.ext.w %>% 
   ungroup() %>%
-  filter(gen %in% c(2, 6), nr > 2, nr < 100, # note - excludes populations above size 160
-         n.ex > 10 & n.sv > 10) %>%
+  filter(gen %in% 5, # nr < 100, # note - excludes populations above size 160
+         n.ex + n.sv >= 15) %>%
   mutate(n.pop0 = factor(ifelse(n.pop0 > 50, 'large', 'small')),
-         low.var = factor(ifelse(low.var, 'low diversity', 'high diversity'))) %>%
+         low.var = factor(ifelse(low.var, 'low diversity', 'high diversity')),
+         nr = factor(ifelse(nr > 20, '40-79',
+                     ifelse(nr > 10, '20-39',
+                     ifelse(nr > 5,  '10-19',
+                     ifelse(nr > 1,  '05-09',
+                                     '01-04')))))) %>%
   ggplot(aes(x = wr, y = p.e.w)) +
   geom_line(
     aes(
@@ -453,23 +469,35 @@ p.ext.w %>%
       linetype = factor(alpha),
       colour = factor(nr)
     ),
-    size = 1
+    size = 1.5
   ) +
   geom_point(
     aes(
-      colour = factor(nr),
+      fill = factor(nr),
       shape = factor(alpha)
     ),
-    size = 3
+    size = 4
   ) +
-  scale_shape_manual(values = c(16, 17), #, 15),
-                     'Generation') +
+  scale_linetype('Density dependence') +
+  scale_shape_manual(values = c(21, 24), #, 15),
+                     'Density dependence') +
   scale_color_brewer(palette = 'Spectral',
-                     'Alpha') +
-  facet_wrap(gen ~ paste(n.pop0, low.var, sep = ', ') , nrow = 2) +
+                     'Size') +
+  scale_fill_brewer(palette = 'Spectral',
+                    'Size') +
+  facet_wrap( ~ paste(n.pop0, low.var, sep = ', ') , nrow = 1) +
   labs(x = 'Intrinsic fitness (W)', y = 'Prob. extinct') +
   theme_bw() +
-  theme(legend.position = 'bottom') 
+  # guides(
+  #   guide_legend(override.aes = list(size = 0.1)) 
+  # ) +
+  theme(
+    legend.position = 'bottom',
+    legend.key.size = unit(2, 'lines'),
+    panel.background = element_rect(fill = 'gray77')
+  ) 
+
+ggsave('~/Dropbox/rescue_ndd_paper_2020/figures/p_extinct_w.pdf', width = 10, height = 4)
 
 # may want to try the above plot using fill instead of colour,
 # and shapes with a black packground (to make things pop)
@@ -477,8 +505,8 @@ p.ext.w %>%
 # A less likeable plot, faceting on size and featuring several generations
 p.ext.w %>% 
   ungroup() %>%
-  filter(gen %in% c(2, 6),
-         n.ex > 10 & n.sv > 10) %>%
+  filter(gen %in% c(2, 4, 6),
+         n.ex + n.sv > 20) %>%
   mutate(n.pop0 = factor(ifelse(n.pop0 > 50, 'large', 'small')),
          low.var = factor(ifelse(low.var, 'low diversity', 'high diversity'))) %>%
   ggplot(aes(x = wr, y = p.e.w)) +
@@ -486,22 +514,57 @@ p.ext.w %>%
     aes(
       group = interaction(gen, alpha, nr),
       linetype = factor(alpha),
-      colour = factor(nr)
+      colour = factor(gen)
     ),
     size = 0.75
   ) +
   geom_point(
     aes(
-      colour = factor(nr),
+      colour = factor(gen),
     ),
     size = 2
   ) +
   scale_shape_manual(values = c(16, 17, 15),
                      'Generation') +
-  scale_color_brewer(palette = 'YlOrRd',
+  scale_color_brewer(palette = 'Set3',
                      'Alpha') +
   # facet_wrap(paste(n.pop0, low.var, sep = ', ') ~ nr) +
   facet_grid(rows = vars(n.pop0, low.var), cols = vars(nr)) +
   labs(x = 'Intrinsic fitness (W)', y = 'Prob. extinct') +
   theme_bw() +
   theme(legend.position = 'bottom') 
+
+logit = function(p) log(p / (1-p))
+ingit = function(x) exp(x) / (1 + exp(x))
+
+p.ext.w.lratio = p.ext.w %>%
+  filter(n.sv + n.ex > 15) %>%
+  mutate(alpha = factor(ifelse(alpha > 0, 'ndd', 'di'))) %>%
+  select(-c(p1, p2, n.ex, n.sv)) %>%
+  ungroup() %>%
+  spread(key = alpha, value = p.e.w) %>%
+  filter(!is.na(di) & !is.na(ndd)) %>%
+  mutate(lratio = logit(ndd) - logit(di))
+
+p.ext.w.lratio %>%
+  filter(gen %in% 2) %>%
+  mutate(nr = factor(nr)) %>%
+  ggplot(aes(x = wr, y = lratio)) +
+  # geom_segment(
+  #   aes(
+  #     xend = wr, 
+  #     yend = 0,
+  #     group = nr,
+  #     colour = nr
+  #     ),
+  #   position = position_dodge(width = 0.1)
+  #   ) +
+  geom_point(
+    aes(
+      colour = nr
+    ),
+    position = position_dodge(width = 0.1)
+  ) +
+  facet_wrap(. ~ paste(n.pop0, low.var, sep = ', ') , nrow = 2)
+  
+# nah
