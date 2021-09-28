@@ -1,0 +1,62 @@
+# Meeting Notes
+
+##### September 28, 2021
+
+##### Scott, Brett, Ruth, Laure, Lily
+
+### Introduction and framing
+
+- B: framing plus intro is "great"
+- R: has some framing feedback for "tightening"
+- LO: introduction is currently "well explained" - try not to disrupt flow with subsequent changes
+
+- Introducing the concept of rescue and a conceptual figure based on Lily's draft - a good idea
+	- R: two population time serieses: one extant, one extinct, with the vortex cloud opaque
+	- R: relatedly add one additional sentence to the vortex paragraph highlighting novelty of focusing on extinction (which is the "flipside" of rescue) 
+	- S: most papers have some sort of cartoony U-shape figure laying out expectations and ours currently doesn't have one but this could be a good way to do it
+	- LD: this is a good opportunity for conceptual synthesis
+
+- R: on experimental design in introduction, it would be good to highlight that stochastic variation gives extra bonus analysis of maladaptation
+
+- R: paragraphs introducing rescue: would be good to separate the G&H paragraphs into one highlighting their model and features positively, and a second model showing assumptions and potential improvements
+	- we're building on and relaxing assumptions, not that things are wrong
+
+- B: adpative capacity - is this idea formally defined anywhere?
+	- Will readers have an expectation of a certain type of analysis if we use this term?
+	- **Scott** should do a google scholar for "adaptive capacity"
+	- some places to look: Willi et al. 2006 (**Ruth** will read this) and Houle 1992 (**Scott** will read)
+	- If this idea isn't formally developed then we should do some of that so we have an idea of what we're talking about 
+
+### Methods
+
+- R, LD: it would be good to have a table for variables, including their initial or optimal values
+	- basically make this stuff easy to read and interpret 
+
+- R: genotypic units - what are these? How do you get the 13.75 number? A little distracting without a good explanation.
+	- It would be good to formalize the idea of a genotypic unit in a useable form
+	- Relatedly what are units of theta?
+
+- R: "selection for positive alleles" - is this directional selection?
+	- audience may be thinking of something particular with selection for/selection against... be cautious with wording here
+	- S: point here is to say positive alleles are favored but there may be a clearer way to define
+
+- Rescue/time to rescue
+	- LO: could just go into supplements noting that results are qualitatively similar
+	- B: rescue as a response should still be discussed
+		- perhaps have it as a small figure or table but don't just describe with text
+		- even if results are that rescue mirrors extinction that's still worth reporting
+			- (S: if they are the same, explain why - this has to do with when extinctions are occurring, can be tied into NDD)
+	- R: is return to initial size a meaningful response for NDD populations? or for all populations?
+		- (S: note this is provided in G&H)
+	- Maybe point out in text that it's difficult to operationalize rescue - populations are like draws of a stochastic process but rescue is mostly defined as if it was deterministic or the mean of an ensemble...
+
+##### Figures
+
+- Figure 2: definitely needs y axis labels even if they're a pain
+	- **Laure** can do this via Inkscape
+
+- Bayes figure:
+	- LD: confusing
+	- B: could be good for supplements as a "check" on potential biases introduced by extinction
+	- S: could be something like "do address shortcomings of E(x|extinct) we used Bayes's theorem to estimate P(extinct|x) while controlling for population size) as demonstrated in supplements"
+
