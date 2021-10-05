@@ -1755,5 +1755,33 @@ The stochasticity - at some point they discussed it being helpful for population
 
 The use here is also writing about this in the context of the "shape" of density dependence. A density dependent demographic effect that influences all individuals equally vs. one favoring more fit individuals over less fit ones. I do think a lot of the result here is just that at low densities the NDD-effect populations have the same (high) growth rate whereas in the independent case the populations all have lower fitness regardless... ah I wonder if this means that a population that's small can rebound even if it's mostly composed of fit individuals? Actually couldn't this impede selection by stopping purging? Ahhh!!... but also cool!
 
+### Houle, D. 1992. Comparing evolvability and variability of quantitative traits. Genetics.
+
+- "we would like to be able to predict the ability of a population to respond to natural or artificial selection; this I will term 'evolvability'"
+- Partitioning trait variation into additive variance and remaining variance
+	- heritability h^2 is the ratio of V_A to total phenotypic variance
+	- response to selection is R = S h^2 i.e. response is selection differential times heritability (S is difference in population mean before and after selection)
+	- life history traits tend to have lower heritabilities (likely because there is such little genetic variation in them)
+- "A good measure of evolvability is the expected response to selection."
+	- h2 is not a sufficient descriptor (h2 dimensionless, R is not, so info about R is missing)
+		- because we are "most often interested in" proportional change so standardizing the response is appropriate and useful - use the population mean (why)
+		- also S (strength of selection) is not just a function of the fitness landscape/function but also the selected population (and thus V_P the pheno variance)
+	- when X (trait) is fitness, then Fisher's fundamental theorem says (with algebra and substitution) that the response of fitness is V_A / \bar{W}
+	- Also: under weak Gaussian selection, there's a formula for the response to selection (Bulmer 1980 has this)
+		- with algebra and subs., V_A / \bar{X} is a factor in the proportional response and it is the only factor that is knowable (??)
+	- "In both of these important cases, directional and weak stabilizing selection, a variance to mean ratio is the most appropriate measure of evolvability of a trait"
+- Some stuff looking at data (not clear... what on earth are these regressions supposed to be telling us)
+- "it is not possible to define a single measure appropriate for all circumstances
+	- e.g. if w2 is on the order of phenotypic variance or less,  then the analytic comparison fails because V_p won't drop out of some expression
+	- is this true for us? we have w2 approx 3.57 and V_p approx between 0.5 and 1, but does it really matter if V_p doesn't drop out of our expression? The argument seems hand-waivy.
+
+Hmm, not what I was expecting. The bulk of this paper is looking at variation (in phenotypes, heritability, and V_a) across traits. Only a small part is about this concept of "evolvability". The thrust of the part on "evolvability" appears to be that V_A is a better measure of "evolvability" (response to selection I guess) than heritability although this wasn't in question for us (I guess a historical dispute). 
+
+Some stuff about Gaussian optimizing selection which is/was good to think about. But also there was some stuff about the strength of selection and the phenotypic variance. We may violate this but it wasn't explained what harm this does (if any!). 
+
+The standardization - does this matter to us? Seems like the standardization matters for comparison across traits - does it matter across populations? Or across time, when the optimum is changing? I really don't have a good sense because (see below)...
+
+Is the concept even really thoroughly explained out here? Seems to just be "response to selection" but maybe broader I guess? No aspect of temporality here. Is that what our "adaptive capacity" entails?
+
 
 
