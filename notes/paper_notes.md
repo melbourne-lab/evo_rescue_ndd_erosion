@@ -1783,5 +1783,35 @@ The standardization - does this matter to us? Seems like the standardization mat
 
 Is the concept even really thoroughly explained out here? Seems to just be "response to selection" but maybe broader I guess? No aspect of temporality here. Is that what our "adaptive capacity" entails?
 
+### Lande, R. 1988. Genetics and demography in biological conservation. Science. 
 
+- Much of the contemporary theory of extinction is broad and ignores specifics of the species's ecology and population structure: here are some considerations needed
+	- A background argument: demographic vs. genetic consequences in determining minimum viable density
+##### Population genetics
+- Inbreeding depression reducing fitness (viability and fecundity) when populations shrink to a smal size
+	- Drosophila analyses show that half of inbreeding depression is due to recessive lethal and semi-lethal mutations at 5000 loci
+		- whereas in a large outbred population an individual is heterozygous for a small number of lethals
+	- remainder of inbreeding depression is due to a large number of "slightly detrimental mildly recessive" mutations (Lande and Schemske 1985?)
+- Genetic variation: drift reduces genetic variation leading to homozygosity and loss of "evolutionary adaptability" to environmental changes
+	- low effective population size: due in most part to fluctuations in population size, increased variance in family size (relative to mean), and unequal sex ratios
+		- without mutation, immigration, or selection for heterozygosity, the expected rate of heterozygosity (1/(2*N_e))
+	- although the rate of expected erosion of genetic variation is small, several generations of small population size can "severely deplete genetic variability"
+		- nonadditive gene expression, dominance and epistasis, can cause transient increases in genetic variation as can drift
+	- Franklin says N_e around 500 is good for preserving genetic variation although
+		- although for other kinds of traits or loci larger N_e may be needed (e.g. in the case of very low mutation rates)
+- We preserve genetic variation because we know that genetic variation is a (the?) limiting factor in adapting to a changing environment (cites textbooks... come on man)
+	- there is little direct evidence that heterozygosity is directly beneficial for fitness beyond avoiding inbreeding depression and allowing adaptation (i.e. heterozygote advantage at single loci is rare)
+	- Slatkin and Lande 1976 discuss optimal amount of genetic variation for populations chasing a moving target
+##### Demography
+- Allee effects
+- Demographic stochasticity: sampling variances in vital rates of individuals
+	- less influential in large populations than environmental stochasticity but in small populations demographic stochasticity is more important
+	- density dependence + age structure is really hard to do analytically
+- Edge effects: critical patch size models, including under a range of realistic circumstances such as Allee effects
+- Local extinction/colonization
 
+Useful overview of some genetics. One thing that is reinforced to me here is that our populations are already below the MVP. This explains in part why we are seeing drift occurring even in the N_0 = 100 populations.
+
+Also I never thought about uneven sex ratios contributing to adaptive capacity (also thoughts on this below) by lowering effective population size. I had only been thinking about this as a demographic effect. Is it worth mentioning N_e in this study? What are our factors that lower N_e? Surely sex ratios and fluctuating population size. Is there variation in family size in excess of the mean (presumably not? because of the Poisson draws?). Otherwise generations are non-overlapping. 
+
+Also: another mention here of adaptive "capability" (or something) that isn't fleshed out. Do we need to do this? I'm increasingly thinking no. It should be evident so long as we reinforce that rate of adaptation is proportional to the genetic variation!
