@@ -25,6 +25,13 @@ all.tau = all.data %>%
             n  = n()) %>%
   filter(tau > 0)
 
+# Indices: tau = 0 is the first generation the population is extinct
+# this *includes* a census with a population size of 1 
+# (i.e. N = 1 corresponds to tau = 0).
+# 
+# A consequence of this: N = 1 does *not* get included in these estimated means
+# (because we are filtering out tau = 0.)
+
 all.data %>%
   group_by(gen, n.pop0, low.var, alpha) %>%
   summarise(wbar = mean(wbar)) %>%
@@ -169,7 +176,7 @@ tau.loglam = all.tau %>%
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap(~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
-  labs(x = '', y = 'Log lambda') +
+  labs(x = '', y = expression(atop("Population growth", "rate, ln" ~ lambda[tau]))) +
   theme(legend.position = 'none',
         panel.grid.major = element_line(colour = 'gray88'),
         panel.background = element_rect(fill = 'white'),
@@ -202,7 +209,7 @@ tau.varred = all.tau %>%
     ),
     alpha = 0.1
   ) +
-  labs(x = '', y = 'Prop. of variance lost') +
+  labs(x = '', y =  expression(atop("Loss of genetic", "variance, " ~ nu[tau]))) +
   scale_x_reverse(breaks = (0:4)*3, labels = NULL) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
@@ -244,7 +251,8 @@ tau.malada = all.tau %>%
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap(~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
-  labs(x = 'Time to extinction (tau)', y = 'Rate of adaptation') +
+  labs(x = expression('Time to extinction, ' ~ tau), 
+       y = expression(atop('Rate of adaptation,', ~ 1-k[tau]))) +
   theme(legend.position = 'none',
         strip.text = element_blank(),
         strip.background = element_blank(),
@@ -261,7 +269,7 @@ cowplot::plot_grid(
   label_y = c(1, 1.12, 1.12),
   nrow = 3
 ) %>%
-  cowplot::save_plot(filename = 'simulations/analysis_results/figure_drafts/test_figs/fig4.pdf',
+  cowplot::save_plot(filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_vortex.pdf',
                      base_width = 8, base_height = 6)
 
 ### Looking at rates by generation instead of tau
