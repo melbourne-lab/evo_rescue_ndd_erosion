@@ -1815,3 +1815,65 @@ Useful overview of some genetics. One thing that is reinforced to me here is tha
 Also I never thought about uneven sex ratios contributing to adaptive capacity (also thoughts on this below) by lowering effective population size. I had only been thinking about this as a demographic effect. Is it worth mentioning N_e in this study? What are our factors that lower N_e? Surely sex ratios and fluctuating population size. Is there variation in family size in excess of the mean (presumably not? because of the Poisson draws?). Otherwise generations are non-overlapping. 
 
 Also: another mention here of adaptive "capability" (or something) that isn't fleshed out. Do we need to do this? I'm increasingly thinking no. It should be evident so long as we reinforce that rate of adaptation is proportional to the genetic variation!
+
+### Agashe, D., Falk, J.J., Bolnick, D.I. 2011. Effects of founding genetic variation on adaptation to a novel resource. Evolution. 
+
+- "Recent theoretical work" suggests that AGV and fitness is more complex than simply formulated in Fisher's fundamental theorem
+	- e.g., Lande and Shannon 1996: environmental fluctuations add genetic load
+	- e.g., genetic covariances influences what happens when selection acts on multiple traits
+	- e.g., demographic constraints like demographic stochasticity for small populations
+		- "hard selection": fitness differences due to genotypic survival rather than competition for a limiting resource
+- Predicted effects of standing genetic variation on rate and probability of rescue under hard selection (e.g., by G&H) not tested empirically
+	- do larger populations, or those with higher genetic variation, have higher probability of success?
+	- authors here note that selection can decrease population size *and genetic variation for fitness*
+- Dynamics of genetic variation during rescue 
+	- during decline selection may cause a hard selective sweep for a single initially rate genotype (serious erosion of genetic variation)
+	- or, during decline a soft sweep where genetic variation is lost due to hitchhiking (would retain more variation than a hard sweep)
+	- or, a subset of previously existing genotypes can persist by chance via drift
+	- the degree of genetic variation determines what happens during the trough and recovery phases
+- Here: follow up from a previous study on *T. cast* (Agashe 2009)
+	- subset of populations reared on an "ancestral" food source W and moved to a novel suboptimal source C
+##### Methods
+- Populations from four *T. cast* strains used to create four strains with varying genetic variation (least, low, medium, high) w/ differing degrees of mixing
+	- all adults, larvae, pupae censused for first 36 weeks of trial
+- Population performance in novel corn habitat
+	- Rate of initial decline (all declined in first 10 weeks)
+		- estimation of time to reach half of original size
+	- Probability of extinction
+		- effects of alleles (which?) on strains by looking to see if (1) presence/absence of certain strains influence extinction or (2) if density of a strain w/in founding mix influences extinction
+	- Rate of recovery
+		- slope of recovery (population growth rate) during final phase
+- Fitness assays
+	- Fecundity at week two and (for survivors) 1-2 years after start of experiment
+	- Egg survival, larval development
+	- Cannibalism rates two years after start of population, compared to in the single-strain wheat populations
+##### Results
+- Genetic variation did not affect time to decline to half of original size and also unrelated to proportion of extinct populations in treatment group
+- Genetic variation did decrease the probability of extinction
+	- 1:4 founding straints -> 89%, 23%, 12.5%, 0% probability of extinction
+	- three focal strains did influence the probability of extinction although their relative proportion did not
+- Rate of population recovery (for surviving populations) was correlated with founding genetic variation (r = 0.99, p = 0.01)
+	- some LH stuff associated with stuff e.g. fecundity, egg survival
+- No effects of genetic variation on cannbalism
+##### Discussion
+- Previous work (Agashe and Bolnick 2010) - under strong competition for ancestral resource, founding genetic variation increases the rate of niche expansion in novel heterogeneous environment
+- Despite low starting size and high initial maladaptation, mixed multi-strain populations can be rescued (rescue more likely than single-strain)
+- Adult emergence was rare during initial decline phase
+	- so initial decline was nonselective starvation-related mortality and not changes to fecundity or egg survival
+	- following the decline, though, genetic variation reduced extinction odds and meant faster recovery
+- Genetic variation's effects could be fixation of beneficial alleles and/or novel combinations
+	- alleles from two particular strains were necessary but not sufficient for adaptation
+	- if fixation was the sole explanation, then the rate of recovery would actually be lower in high-diversity populations, which did not occur
+	- likewise having more individuals from these strains did not appear to increase growth
+	- these support the hypothesis that recombination *between strains* leads to emergence of novel genotypes (although it is possible that this was due to sampling effects or persisting linkage disequilibrium blocks)
+- The cannibalism stuff: in *T. cast* there is genetic variation in cannibalism rates, meaning potential for adaptation in novel environments
+- Increasing founding genetic variation increased relative fecundity but not survival or development
+	- Fernandez et al. showed greater heritability for fecundity (0.5 +/ 0.2) compared to that of early stage viability (0.03)
+
+Some cool stuff in here. Really liked the genetic processes described during the three phases of rescue. I'm not totally sure how, independently of what's happening in the first phase, the genetics of the second phase prevent extinction (I guess the standing variation here dictates how strong the effects of drift and inbreeding are?). The idea that the standing variation influences the growth rate in the ascending phase: this I guess would just be because more (remaining?) genetic variation here means a greater increase in fitness which means greater growth rates?
+
+It's interesting that time to half of population size was not influenced by standing variation - our model I think does have this effect? Maybe that decline is happening too quickly for adaptation to be occurring?  These effects of founding variation took a while to take hold - less chance of extinctino (independent of t_{1/2}?) and faster recovery (I can't really see this on Figure 1 though?).
+
+Recombination: likely but not proven mechanism for genetic variation benefitting population fate. Our model does not feature this (we just have segregation of alleles). How much of the time is recombination is useful? Guess that's a rather basic evolution question... but it does make me wonder what the benefit of genetic variation is for us? What are benefits of genetic variation? Is it just heterozygosity that allows us to flip negative alleles to positive? Hmm... think about this. Maybe data mine.
+
+
