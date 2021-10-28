@@ -1915,3 +1915,33 @@ There's a "bias corrected" extinction risk here - I'm not exactly sure what risk
 
 I think what's going on here is that: the probability of population extinction is basically a question about all lineages going extinct. If you compare a population where all lineages are identical with one where some are good and some are bad, the one where some are good are less likely to go extinct *because extinction means every lineage goes extinct*. Sexual reproduction (and recombination, etc.) would presumably affect this because lineage-fates are all intertwined except for in cases of extreme assortative mating.
 
+C.f. Brett's 2008 paper that says that demographic heterogeneity increases extinction risk and even sometimes gets confused for environmental variation. Hmm... that seems to ruin my theory that this is due to asexual reproduction in this model.
+
+Also Aaron W. had a great observation that what Fox is describing here is heritability - or rather that heritability is a specific form. Fox says that the correlation does not necessarily have to be genetic. But heritability seems like a useful concept to keep in mind here.
+
+### Kendall, B.E., and Fox, G.A. 2003. Unstructured individual variation and demographic stochasticity.
+
+- "Structure" in a demographic trait's variation - variation dependent on 
+traits of other individuals or the individual's identity
+	- e.g., correlations among individuals at a given time such as timing of hatching influencing survival (Engen et al. 1998 - demographic covariance)
+	- e.g., individuals covarying across time e.g. some individuals always being healthier at all points in their lives (Conner and White 1998 - individual heterogeneity)
+	- Kendall and Fox 2002: unstructured variation in survival probabilities i.e. individual trait value drawn at random independently of all other individuals, does not influence demographic variance, but that structured variation in mortality risk can decrease population level variance
+		- although note that it is yet to be proven or confirmed that this result about unstructured variance extends to fecundity
+		- Robert et al. 2003 confirmed result about unstructured survival risk but found that unstructured fecundity variation increased extinction
+- Types of variance
+	- Variance in trait, where the trait underlies demographic performance
+	- Variance in individual fate (final outcome), of which there is both demographic stochasticity and also unpredictability in the trait itself
+	- Variance in population fate, i.e., the population size (n.b. for unstructured variation in this is just N times the individual fate variance)
+	- Demographic variance: variance in fate associated with demographic process/stochasticity (e.g., m(1-m) for binomial survival)
+	- Demographic variance for mean trait: variance in fate given the mean trait in the entire population
+- Some math giving the whole population trait... prior 2002 paper was missing a +1 term, which affects the fecundity result sketched out above
+	- thus there's a crucial effect of V''_D(E[m]), i.e., the second derivative of the demographic variance associated with the mean trait, with respect to m
+		- V''_D > 0 means any variation will increase magnitude of stochasticity
+		- V''_D < -2 means any variation will decrease the magnitude of stochasticity
+		- V''_D between 0 and 2 means structured and unstructured variation will have opposite effects on variation
+		- (no matter what unstructured variation will be more detrimental than structured variation)
+		- for Binomially distributed survival, V''_D = -2, but for Poisson-distrubuted fecundity it is zero
+
+Hmm... okay it's good to think about these in more depth. Variation in fate is process variation, but variance in trait is known. Separating these out is good. It's also good to think about structure in variance - maybe an inter-individual covariance matrix is a good way to think about this? IDK. But there's also a temporal element...
+
+
