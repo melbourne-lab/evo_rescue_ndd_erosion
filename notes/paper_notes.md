@@ -1876,4 +1876,42 @@ It's interesting that time to half of population size was not influenced by stan
 
 Recombination: likely but not proven mechanism for genetic variation benefitting population fate. Our model does not feature this (we just have segregation of alleles). How much of the time is recombination is useful? Guess that's a rather basic evolution question... but it does make me wonder what the benefit of genetic variation is for us? What are benefits of genetic variation? Is it just heterozygosity that allows us to flip negative alleles to positive? Hmm... think about this. Maybe data mine.
 
+### Fox, G.A. 2005. Extinction risk of heterogeneous populations. Ecology.
+
+- Fox and Kendall 2002, Kendall and Fox 2002, 2003: ignoring demographic variation means misestimation (over- or under-) of demographic stochasticity
+	- here: if parents and offspring have correlated risk, then emographic heterogeneity reduces extinction risk?
+- Branching processes: mean reproductive rate M, variance V
+	- asymptotic individual extinction probability q is the probability that an individual leaves zero descendents
+		- cumulative extinction probability q(t): probability that an individual will have zero descendents by time t
+		- q(t) can be found by iterating a probability generating function from q(0) = 0 to t (not sure what this means - see Caswell 2001?)
+	- for M <= 1, asymptotic extinction probability is q = 1, for M > 1 then q(t) converges to q
+- If heterogeneity is purely due to chance
+	- i.e. if phenotypic correlation from parents to offspring is 0
+	- all individuals would have the ssame probability of extinction because of the extinction risk of their progeny
+	- thus, if heterogeneity is purely due to chance there will be no variation in ultimate extinction risk for individuals
+	- there must be correlation in extinction risk between parents and offspring
+- Say then that offspring have parents exact demographic characteristics (correlation of 1)
+	- assume no environmental variation or density dependence
+- Case 1: M > 1
+	- say that in a homogeneous population, all individuals have mean qbar, ultimate probability of population extinction is Q* = (qbar)^n for population of size n
+	- but with hetergeneity, individual i has q_i which is not necessarily equal to other individuals, and Q is the product prod_i^n q_i
+	- Jensen's inequality says that Q* > Q unless q_i are identical
+	- for probability of extinction by time t, Q(t) = prod_i^n q_i(t)
+	- similar arguments relying on Jensen's inequality demonstrating that Q(t) is maximized when q_i(t) are identical
+- Case 2: M <= 1 and population is guaranteed to go extinct - which will go extinct sooner?
+	- showing with expected time to extinction that heterogeneous population has slower time to extinction
+	- has to do with the second derivative of q(t) wrt time
+- Expression for a "bias-corrected" approximate extinction risk (eq 12)
+	- decreases with variability of q or with increasing n
+	- increasing variability as a management strategy?
+
+Interesting result but I think I have it figured out...
+
+The result is that (in an asexual population), a heterogeneity that is (positively?) correlated across generations will decrease the risk of extinction risk. Relative to what? It's stated here but I'm not totally sure - either a population with no heterogeneity or a population with totally uncorrelated heterogeneity. This is true whether the population is destined for deterministic extinction (mean replacement rate less than 1) or if the mean replacement rate is greater than 1; in the case where mean is less than 1, correlated heterogeneity forestalls extinction.
+
+The reason I think is just Jensen's inequality: if the extinction rates of lineages are equivalent (which I think is true even if there is uncorrelated heterogeneity), then the probability of population extinction is the mean extinction rate to the nth power. With heterogeneity there will be variation in the extinction rates, and their product will be lower than the product of their means (due to Jensen's inequality). 
+
+There's a "bias corrected" extinction risk here - I'm not exactly sure what risk means here - and sensitivity and elasticity analysis thereupon. Decreasing the mean population risk and increasing the population size of course will decrease extinction risk. It's also true that increasing the variance also increases extinction risk - presumably because it widens the Jensen gap.
+
+I think what's going on here is that: the probability of population extinction is basically a question about all lineages going extinct. If you compare a population where all lineages are identical with one where some are good and some are bad, the one where some are good are less likely to go extinct *because extinction means every lineage goes extinct*. Sexual reproduction (and recombination, etc.) would presumably affect this because lineage-fates are all intertwined except for in cases of extreme assortative mating.
 
