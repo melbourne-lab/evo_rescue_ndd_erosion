@@ -277,6 +277,7 @@ fixation.pos.plot = ext.fix %>%
   scale_y_continuous(limits = c(0, 13), breaks = (0:4)*3) +
   scale_colour_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
+  scale_linetype_manual(values = c(1, 2)) +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   guides(linetype = guide_legend('', nrow = 1),
          colour = guide_legend('', nrow = 1),
@@ -315,6 +316,7 @@ fixation.neg.plot = ext.fix %>%
   scale_y_continuous(limits = c(0, 13), breaks = (0:4)*3) +
   scale_colour_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
+  scale_linetype_manual(values = c(1, 2)) +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   guides(linetype = guide_legend('', nrow = 1),
          colour = guide_legend('', nrow = 1),
@@ -333,7 +335,8 @@ fixation.neg.plot = ext.fix %>%
 
 varn.legend = get_legend(
   variance.plot + 
-    guides(fill = guide_legend(''), colour = guide_legend(''), linetype = guide_legend('')) +
+    guides(fill = guide_legend(''), colour = guide_legend(''),
+           linetype = guide_legend('', values = c(1, 3))) +
     theme(legend.position = 'bottom',
           legend.box.margin = margin(1, 0, 0, 0))
 )
