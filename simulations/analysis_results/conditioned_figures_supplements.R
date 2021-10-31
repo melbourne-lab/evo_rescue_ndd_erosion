@@ -67,3 +67,238 @@ ext.n %>%
         legend.position = 'none') #,
         # strip.text = element_blank(),
         # strip.background = element_blank())
+
+### Conditioning mean genotype on extinction
+
+ext.gz = all.data %>%
+  rename(g = gbar,
+         z = zbar) %>%
+  select(trial, gen, g, z, n.pop0, alpha, low.var, extinct) %>%
+  gather(key = gz, value = val, c(g, z)) %>%
+  # Aggregate (mean and variance in each generation)
+  group_by(gen, n.pop0, low.var, alpha, extinct, gz) %>%
+  summarise(varbar = mean(val),
+            varvar = var(val),
+            n.trials = n()) %>%
+  ungroup() %>%
+  mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
+         alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
+         low.var = factor(low.var, labels = c("High diversity", "Low diversity")))
+
+ext.gz %>%
+  ggplot(aes(x = gen, y = varbar)) +
+  geom_ribbon(
+    aes(
+      ymin = varbar - 2 * sqrt(varvar / n.trials),
+      ymax = varbar + 2 * sqrt(varvar / n.trials),
+      fill = factor(alpha),
+      group = interaction(extinct, alpha)
+    ),
+    alpha = 0.2
+  ) +
+  geom_line(
+    aes(
+      colour = factor(alpha),
+      group = interaction(extinct, alpha),
+      linetype = extinct
+    )
+  ) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  scale_color_manual(values = c('black', 'purple')) +
+  facet_wrap(gz ~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
+  theme(panel.background = element_blank(),
+        panel.border = element_blank(),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.grid.minor = element_blank(),
+        legend.position = 'none')
+
+# A cowplot would probably work better than this
+
+ext.g.plot = ext.gz %>%
+  filter(gz %in% 'g') %>%
+  ggplot(aes(x = gen, y = varbar)) +
+  geom_ribbon(
+    aes(
+      ymin = varbar - 2 * sqrt(varvar / n.trials),
+      ymax = varbar + 2 * sqrt(varvar / n.trials),
+      fill = factor(alpha),
+      group = interaction(extinct, alpha)
+    ),
+    alpha = 0.2
+  ) +
+  geom_line(
+    aes(
+      colour = factor(alpha),
+      group = interaction(extinct, alpha),
+      linetype = extinct
+    ),
+    size = 1.5
+  ) +
+  labs(x = '', y = expression('Mean population genotype, ' ~ bar(g[t]))) +
+  scale_linetype_manual(values = c(1, 2)) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  scale_color_manual(values = c('black', 'purple')) +
+  facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
+  theme(panel.background = element_blank(),
+        panel.border = element_blank(),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.grid.minor = element_blank(),
+        legend.position = 'none',
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+# ext.g.plot
+
+ext.z.plot = ext.gz %>%
+  filter(gz %in% 'z') %>%
+  mutate(extinct = factor(extinct, labels = c('Surviving', 'Extinct'))) %>%
+  ggplot(aes(x = gen, y = varbar)) +
+  geom_ribbon(
+    aes(
+      ymin = varbar - 2 * sqrt(varvar / n.trials),
+      ymax = varbar + 2 * sqrt(varvar / n.trials),
+      fill = factor(alpha),
+      group = interaction(extinct, alpha)
+    ),
+    alpha = 0.2
+  ) +
+  geom_line(
+    aes(
+      colour = factor(alpha),
+      group = interaction(extinct, alpha),
+      linetype = extinct
+    ),
+    size = 1.5
+  ) +
+  labs(x = 'Generation', y = expression('Mean population phenotype, ' ~ bar(z[t]))) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  scale_color_manual(values = c('black', 'purple')) +
+  scale_linetype_manual(values = c(1, 2)) +
+  facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
+  theme(panel.background = element_blank(),
+        panel.border = element_blank(),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.grid.minor = element_blank(),
+        legend.position = 'none',
+        strip.text = element_blank(),
+        strip.background = element_blank())
+
+# ext.z.plot
+
+ext.gz.legend = get_legend(
+  ext.z.plot + 
+    guides(fill = guide_legend(''), colour = guide_legend(''),
+           linetype = guide_legend(' ', values = c(1, 3))) +
+    theme(legend.position = 'bottom',
+          legend.box.margin = margin(1, 0, 0, 0))
+)
+# note: see and run "varn.legend" in fig4_fig5.R
+# as this plot won't let us change the order or style of legends
+# (truly a mystery)
+
+ext.gz.plots = plot_grid(ext.g.plot, ext.z.plot, 
+                        labels = c('(A)', '(B)'),
+                        label_y = c(1, 1.075),
+                        nrow = 2)
+save_plot(
+  plot_grid(ext.gz.plots, varn.legend, 
+            ncol = 1, rel_heights = c(1, .1)),
+  filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_supp_ext_gz.pdf',
+  base_width = 8, base_height = 6
+)
+
+### Conditioning mean intrinsic fitness W on extinction
+
+ext.wr = all.data %>%
+  rename(w = wbar) %>%
+  mutate(r = w * exp(-n * alpha)) %>%
+  select(trial, gen, n.pop0, low.var, alpha, extinct, w, r) %>%
+  gather(key = wr, value = val, c(w, r)) %>%
+  # Aggregate (mean and variance in each generation)
+  group_by(gen, n.pop0, low.var, alpha, extinct, wr) %>%
+  summarise(varbar = mean(val),
+            varvar = var(val),
+            n.trials = n()) %>%
+  ungroup() %>%
+  mutate(n0 = factor(n.pop0, labels = c("Small", "Large")),
+         alpha = factor(alpha, labels = c("Density independent", "Density dependent")),
+         low.var = factor(low.var, labels = c("High diversity", "Low diversity")))
+
+ext.w.plot = ext.wr %>%
+  filter(wr %in% 'w') %>%
+  ggplot(aes(x = gen, y = varbar)) +
+  geom_ribbon(
+    aes(
+      ymin = varbar - 2 * sqrt(varvar / n.trials),
+      ymax = varbar + 2 * sqrt(varvar / n.trials),
+      fill = factor(alpha),
+      group = interaction(extinct, alpha)
+    ),
+    alpha = 0.2
+  ) +
+  geom_line(
+    aes(
+      colour = factor(alpha),
+      group = interaction(extinct, alpha),
+      linetype = extinct
+    ),
+    size = 1.5
+  ) +
+  labs(x = '', y = expression(atop('Mean population intrinsic', 'fitness, ' ~ bar(W[t])))) +
+  scale_linetype_manual(values = c(1, 2)) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  scale_color_manual(values = c('black', 'purple')) +
+  facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
+  theme(panel.background = element_blank(),
+        panel.border = element_blank(),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.grid.minor = element_blank(),
+        legend.position = 'none',
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ext.r.plot = ext.wr %>%
+  filter(wr %in% 'r') %>%
+  mutate(extinct = factor(extinct, labels = c('Surviving', 'Extinct'))) %>%
+  ggplot(aes(x = gen, y = varbar)) +
+  geom_ribbon(
+    aes(
+      ymin = varbar - 2 * sqrt(varvar / n.trials),
+      ymax = varbar + 2 * sqrt(varvar / n.trials),
+      fill = factor(alpha),
+      group = interaction(extinct, alpha)
+    ),
+    alpha = 0.2
+  ) +
+  geom_line(
+    aes(
+      colour = factor(alpha),
+      group = interaction(extinct, alpha),
+      linetype = extinct
+    ),
+    size = 1.5
+  ) +
+  labs(x = 'Generation', y = expression(atop('Mean population extrinsic', 'fitness, '~ bar(R[t])))) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  scale_color_manual(values = c('black', 'purple')) +
+  scale_linetype_manual(values = c(1, 2)) +
+  facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
+  theme(panel.background = element_blank(),
+        panel.border = element_blank(),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.grid.minor = element_blank(),
+        legend.position = 'none',
+        strip.text = element_blank(),
+        strip.background = element_blank())
+
+ext.wr.plots = plot_grid(ext.w.plot, ext.r.plot, 
+                         labels = c('(A)', '(B)'),
+                         label_y = c(1, 1.05),
+                         nrow = 2)
+save_plot(
+  plot_grid(ext.wr.plots, varn.legend, 
+            ncol = 1, rel_heights = c(1, .1)),
+  filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_supp_ext_wr.pdf',
+  base_width = 8, base_height = 6
+)
+
