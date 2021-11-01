@@ -244,6 +244,7 @@ ext.w.plot = ext.wr %>%
     ),
     size = 1.5
   ) +
+  scale_y_continuous(breaks = c(0.8, 1.0, 1.2, 1.4)) +
   labs(x = '', y = expression(atop('Mean population intrinsic', 'fitness, ' ~ bar(W[t])))) +
   scale_linetype_manual(values = c(1, 2)) +
   scale_fill_manual(values = c('black', 'purple')) +
