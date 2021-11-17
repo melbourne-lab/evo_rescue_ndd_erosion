@@ -1944,4 +1944,45 @@ traits of other individuals or the individual's identity
 
 Hmm... okay it's good to think about these in more depth. Variation in fate is process variation, but variance in trait is known. Separating these out is good. It's also good to think about structure in variance - maybe an inter-individual covariance matrix is a good way to think about this? IDK. But there's also a temporal element...
 
+### Lyberger, K.P., Osmond, M.M., and Schreiber, S.J. 2021. Is evolution in response to extreme events good for population persistence? The American Naturalist, 198(1).
+
+- Rapid adaptation to pulse disturbances
+	- Grant et al. 2017 has a review
+	- Note that pulse disturbances are a middle ground betwen press disturbances and continuously fluctuating environments
+	- Genetic variation is necessary for increasing probability of rescue (phenotypic change) after environmental shift
+	- For "predictable" environments genetic variation reduces lag load (allowing tracking)
+	- For "unpredictable" e vironments genetic variance typically increases lag load
+	- Higher long-term growth rates do not necessarily mean lower extinction risk - citing some recent papers - what to make of stochasticity and extinction risk followingn pulse disturbances
+- Simulation model:
+	- Discrete, nonoverlapping generations
+	- Viability selection - stabilizing selection influencing probability of survival
+	- Selection followed by random mating producing Poisson distributed number of offspring
+	- Carrying capacity of K, with K randomly chosen (among offspring) if above CC
+- Approximations 
+	- Recurrence relations for genotype and additive variance
+		- n.b. variance appears to increase over time?? look in to this
+		- genetic variance increases towards and equilibrium... unclear if the steady state is larger or smaller than initial
+- Extinction estimated with branching process
+- Heritability does not influence population size during event, but more phenotypic variance does
+	- more phenotypic variance means small population size after a low-severity event, but larger population size after high-severity event
+		- increases variance load (more maladapted individuals) but also means more extreme individuals who can survive
+	- phenotypic variance "reduces mean fitness within a generation and the variance in fitness across generations" - bet-hedging increasing *geometric mean* after disturbance
+- Heritability doesn't influence survival but does effect recovery
+	- heritability means lower growth rate in subsequent generations... because they adapted during the event
+- Extinction risk: too much variance means smaller population size and higher extinction risk for low/moderate severity events
+- Duration of event influences the damage of heritablity: heritability increases extinction risk for short events, but long-term extinction risk decreases with heritability for longer events
+	- (for longer events than one-offs, heritability is good because it allows adaptation to those events)
+	- estimating a cumulative lag load, for short events heritability increases lag load but decreases it for longer events (because populations adapt to the event)
+- Conclusion: (similar to Lande I guess?) trait variation can hurt (variance load) or help (more extreme individuals) regardless of heritability
+	- Reduced mean and variance in fitness is a bet-hedging strategy, increasing the short-term geometric mean of fitness in cases of sufficiently severe events
+- Conclusion: herirtable variation can increase extinction risk by inducing maladaptation to short shifts
+	- if there is no heritability, then the only fitness penalty is occurring during the event
+	- intermediate tracking can be good... trade-off?? variance in survival is reduced from year to year meaning lower extinction probability
+- Explicitly they say - no erosion of genetic variance, simple density dependence model
+
+Thinking about this in terms of empirical testing... what to test. Well, with the Trib setup, we can do one-for-one swaps to separate the effects of evolution to the short term change to the longer-term ones. How to modify heritability? I guess through bottlenecking. Where could the model fail? Possibly due to the erosion of genetic variation - this would influence the ability to rebound no? 
+
+The heritability thing - if heritability is reduced using a population bottleneck, then there is the possibility that the bottleneck itself produces exceptionally adapted individuals as well. Just a thought...
+
+Here I guess the disturbance type is just to swap the food source right? Is there a more realistic way to model the disturbance? Ooh is there a way to do a de-escalation from the disturbance? Ooh thinking about the matrix regeneration occurring at Wog Wog.
 
