@@ -1986,3 +1986,40 @@ The heritability thing - if heritability is reduced using a population bottlenec
 
 Here I guess the disturbance type is just to swap the food source right? Is there a more realistic way to model the disturbance? Ooh is there a way to do a de-escalation from the disturbance? Ooh thinking about the matrix regeneration occurring at Wog Wog.
 
+### Forester, B.R., Beever, E.A., Darst, C., Szymanski, J., and Funk. W.C. 2021. Linking evolutionary potential to extinction risk: applications and future directions. Frontiers in Ecology and the Environment.
+
+- **Evolutionary potential** (EP) - capacity to evolve genetically based changes that increase fitnes under changing conditions
+	- different from adaptive capacity? ability to accomodate, cope with, or respond to dynamic conditions... which I suppose can include plasticity, behavior modification, etc.
+- EP needs to be incorporated into vulnerability assessments for evaluating and mitigating risk
+	- but it's hard/impossible for many species meaning there will be uncertainty in any assessment
+- Species vulnerability to disturbance is considered wrt (1) exposure and (2) sensitivity
+	- exposure is typically magnitude of disturbance
+	- adaptive capacity in response to disturbance is usually considered with three attributes: (a) dispersal/colonization, (b) plasticity, (c) evolutionary potential
+	- similarly to niche theory, a species has "fundamental" capacity reduced to a "realized" capacity by environmental exigencies e.g. biotic interactions
+	- adaptive capacity x exposure x sensitivity determines vulnerability
+- Estimating EP: need to know which stressors, which traits, and what the (genetic) variation at those traits is
+	- genomics, high quality reference genomes, etc. help to estimate EP though
+- The extinction vortex: demographic stochasticity, etc.
+	- genetic effects occurring at small population size: smaller effective size means inbreeding and reduced EP (maladaptive phenotypes, reduced fitness) lowering vital rates
+	- claim: current approaches evaluating extinction risk rarely think about reduced EP reducing fitness
+	- e.g., species with smaller ranges with more isolated/dispersed populations are more likely to be subject to the EV
+		- gene flow can reduce EP but it could also inrease it
+	- species with less EP across their geographic range will have less EP because of the lack of range in selective conditions
+- Maintaining evolutionary potential
+	- maintain populations across species range (across conditions), maintaining phenotypic and environmental diversity
+	- at population level, keep populations large to avoid stochasticity, drift, inbreeding
+	- preserve selection (?) and gene flow, which can also be done by conserving niche diversity
+- Walters and Berger (2019) on EP + demography: EP (additive variation? + gene flow) increases time to extinction regardless of environment and carrying capacity
+- Some studies on white nose syndrome in bats - selection (and mass mortalities perhaps) producing evolutionary responses, and identifying genes (and I guess their variation?) influencing survival
+- Quantifying EP: impossible to do precisely, so need proxies
+	- Heritability of fitness-related traits is one, although this requires huge sample sizes and typically depends on the population, environment, trait, etc.
+	- Genotype-environment associations - marker-based approach
+	- ecological variation can maintain EP by maintaining standing variation (across populations... assisted migration?)
+	- Fournier-Level et al. 2016 (A. Schmidt on here too?) and some empirical stuff on *Arabadopsis thaliana* that looks promising
+- Using EP proxies: USFWS study on monarch butterflies (protecting two different ecotypes), and a coral study that integrates genomic data on thermal tolerance into climate change parameters
+	- DEEMs: dynamic ecological-evolutionary modeling
+
+Cool stuff. Helpful for a career in conservation!
+
+One thing that leapt out to me was the stuff about gene flow among different populations. In addition to potentially being very tough (environmental distances likely to be small at distances relevant for gene flow?) there's also this question of gene flow increasing or decreasing EP. I'm sure there is some theory for when this is/is not true? Lily's project is doing some empirical stuff about this. I'm sure this research is out there - where is it? 
+
