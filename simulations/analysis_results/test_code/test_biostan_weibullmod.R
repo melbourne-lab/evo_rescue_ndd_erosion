@@ -305,15 +305,31 @@ post.preds %>%
 # Let's actually compare our model with actual data.
 
 # Empirical survival curves probably look like this?
-p.surv = all.data %>%
-  group_by(n.pop0, low.var, alpha, gen) %>%
-  summarise(n.surv = sum(n > 1)) %>%
+# (note: can't do this with raw data due to size censoring)
+#p.surv = 
+p.surv = ext.times %>% 
+  filter(extinct) %>% 
+  group_by(n.pop0, low.var, alpha, ext.gen) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  rbind(
+    expand.grid(
+      n.pop0 = c(20, 100),
+      low.var = c(TRUE, FALSE),
+      alpha = c(0, 0.0035),
+      ext.gen = 1:50
+    ) %>%
+    mutate(n = 0)
+  ) %>%
+  group_by(n.pop0, low.var, alpha, ext.gen) %>%
+  summarise(n = sum(n)) %>%
   group_by(n.pop0, low.var, alpha) %>%
-  mutate(p.surv = n.surv / max(n.surv)) %>%
-  ungroup()
-
+  mutate(n.ext = cumsum(n)) %>% 
+  ungroup() %>%
+  mutate(p.surv = 1 - n.ext/1000)
+  
 p.surv %>%
-  ggplot(aes(x = gen, y = p.surv)) +
+  ggplot(aes(x = ext.gen, y = p.surv)) +
   geom_line(
     aes(
       colour = factor(alpha)
@@ -322,6 +338,7 @@ p.surv %>%
   scale_colour_manual(values = c('black', 'purple')) +
   facet_wrap(low.var ~ n.pop0)
 
-# This looks nothing like a Weibull survival curve! 
-# Ugh...
-# Maybe I can do quadratic time???
+# Oh... duh I have plots like this already
+# Anyway this doesn't really look like the model estimates
+# the hazard rate really needs to fall a lot more quickly
+# (different alpha value)
