@@ -143,3 +143,59 @@ ggplot(stan1.pars %>% filter(par %in% c('mu', 'alpha', 'beta1', 'beta2', 'beta3'
 bayesplot::mcmc_areas(as.data.frame(stan1.fit)[1:2800,], 
                       pars = c('mu', 'alpha', 'beta_bg[1]', 'beta_bg[2]', 'beta_bg[3]'))
 
+### Try a three-way model??
+
+mod.mat2 = ext.times %>%
+  ungroup() %>%
+  mutate(b_alpha = as.numeric(alpha > 0),
+         b_lovar = as.numeric(low.var),
+         b_large = as.numeric(n.pop0 > 50),
+         b_alpha_lovar = b_alpha * b_lovar,
+         b_lovar_large = b_lovar * b_large,
+         b_alpha_large = b_alpha * b_large,
+         b_alpha_lovar_large = b_alpha * b_lovar * b_large) %>%
+  select(contains('b_'))
+
+stan.inputs2 = list(
+  Nobs = sum(ext.times$extinct),
+  Ncen = sum(!ext.times$extinct),
+  M_bg = 7,
+  yobs = ext.times$ext.gen[ext.times$extinct],
+  ycen = ext.times$ext.gen[!ext.times$extinct],
+  Xobs_bg = as.matrix(mod.mat2[ext.times$extinct,]),
+  Xcen_bg = as.matrix(mod.mat2[!ext.times$extinct,])
+)
+
+stan2.fit = stan(file = 'simulations/weibull_survival_model.stan',
+                 data = stan.inputs2,
+                 seed = 10,
+                 cores = 4)
+
+stan2.fit
+# whoa... all of these converged??
+# is censoring dependent on parameters?
+
+stan2.pars = as.data.frame(stan2.fit) %>%
+  rename(beta1 = `beta_bg[1]`,
+         beta2 = `beta_bg[2]`,
+         beta3 = `beta_bg[3]`,
+         beta4 = `beta_bg[4]`,
+         beta5 = `beta_bg[5]`,
+         beta6 = `beta_bg[6]`,
+         beta7 = `beta_bg[7]`) %>%
+  mutate(i = rep(1:4000)) %>%
+  gather(key = par, value = estim, -i) %>%
+  mutate(chain = (i-1) %/% 1000 + 1,
+         iter  = (i-1) %% 1000 + 1)
+
+ggplot(stan2.pars %>% filter(par %in% c('mu', 'alpha', 'beta1', 'beta2', 'beta3',
+                                        'beta4', 'beta5', 'beta6', 'beta7'))) +
+  geom_line(aes(x = iter, y = estim, group = chain),
+            size = 0.5) +
+  facet_wrap(par ~ chain, scales = 'free_y', ncol = 4)
+
+bayesplot::mcmc_areas(as.data.frame(stan2.fit), 
+                      pars = c('mu', 'alpha', 'beta_bg[1]', 'beta_bg[2]', 'beta_bg[3]',
+                               'beta_bg[4]', 'beta_bg[5]', 'beta_bg[6]', 'beta_bg[7]'))
+# certainties... maybe this is fine
+
