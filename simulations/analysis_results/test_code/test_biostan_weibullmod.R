@@ -199,3 +199,129 @@ bayesplot::mcmc_areas(as.data.frame(stan2.fit),
                                'beta_bg[4]', 'beta_bg[5]', 'beta_bg[6]', 'beta_bg[7]'))
 # certainties... maybe this is fine
 
+### Looking at other code snippets from tutorial
+# (https://rstudio-pubs-static.s3.amazonaws.com/435225_07b4ab5afa824342a4680c9fb2de6098.html)
+
+bayesplot::mcmc_acf(as.data.frame(stan2.fit), 
+                    pars = c('mu', 'alpha', 'beta_bg[1]', 'beta_bg[2]', 'beta_bg[3]',
+                             'beta_bg[4]', 'beta_bg[5]', 'beta_bg[6]', 'beta_bg[7]'))
+# This actually looks good.
+
+# Oh the remaining stuff is hard coded into the stan file
+# Really don't want to run this with n in the thousands and produce thousands of columns
+
+# I suppose we can generate survival curves just from these posterior draws
+# (n.b. they don't include prediction error, i.e., are just estimates of the mean)
+
+stan2.wide = as.data.frame(stan2.fit) %>%
+  rename(beta1 = `beta_bg[1]`,
+         beta2 = `beta_bg[2]`,
+         beta3 = `beta_bg[3]`,
+         beta4 = `beta_bg[4]`,
+         beta5 = `beta_bg[5]`,
+         beta6 = `beta_bg[6]`,
+         beta7 = `beta_bg[7]`) %>%
+  select(alpha, mu, contains('beta')) %>%
+  select(-contains('bg'))
+
+post.draws = merge(
+  x = stan2.wide %>% mutate(i = 1:nrow(.)) %>% filter(i < 201),
+  y = data.frame(expand.grid(i = 1:200, t = 1:50))
+) %>%
+  arrange(i, t) %>%
+  mutate(sig000 = exp(-mu / alpha),
+         sig100 = exp(-(mu + beta1) / alpha),
+         sig010 = exp(-(mu + beta2) / alpha),
+         sig110 = exp(-(mu + beta1 + beta2 + beta4) / alpha),
+         sig001 = exp(-(mu + beta3) / alpha),
+         sig101 = exp(-(mu + beta1 + beta3 + beta6) / alpha),
+         sig011 = exp(-(mu + beta2 + beta3 + beta5) / alpha),
+         sig111 = exp(-(mu + beta1 + beta2 + beta3 + 
+                        beta4 + beta5 + beta6 + beta7) / alpha),
+         st_a0v0s0 = exp(-t / sig000)^alpha,
+         st_a1v0s0 = exp(-t / sig100)^alpha,
+         st_a0v1s0 = exp(-t / sig010)^alpha,
+         st_a1v1s0 = exp(-t / sig110)^alpha,
+         st_a0v0s1 = exp(-t / sig001)^alpha,
+         st_a1v0s1 = exp(-t / sig101)^alpha,
+         st_a0v1s1 = exp(-t / sig011)^alpha,
+         st_a1v1s1 = exp(-t / sig111)^alpha) %>%
+  select(i, t, contains('st_')) %>%
+  gather(key = st, value = estim, -c(i, t)) %>%
+  mutate(ndd = grepl('a1', st),
+         lov = grepl('v1', st),
+         lrg = grepl('s1', st))
+
+post.draws %>%
+  ggplot(aes(x = t, y = estim)) +
+  geom_line(
+    aes(
+        group = interaction(i, st), 
+        colour = ndd
+      ),
+    size = 0.1
+    ) +
+  scale_colour_manual(values = c('black', 'purple')) +
+  facet_wrap(lov ~ lrg)
+
+# Cool, intuitive, etc.
+
+# Although, what we are actually interested in is the mean time until extinction.
+
+post.preds = stan2.wide %>% 
+  mutate(i = 1:nrow(.)) %>% 
+  mutate(siga0v0s0 = exp(-mu / alpha),
+         siga1v0s0 = exp(-(mu + beta1) / alpha),
+         siga0v1s0 = exp(-(mu + beta2) / alpha),
+         siga1v1s0 = exp(-(mu + beta1 + beta2 + beta4) / alpha),
+         siga0v0s1 = exp(-(mu + beta3) / alpha),
+         siga1v0s1 = exp(-(mu + beta1 + beta3 + beta6) / alpha),
+         siga0v1s1 = exp(-(mu + beta2 + beta3 + beta5) / alpha),
+         siga1v1s1 = exp(-(mu + beta1 + beta2 + beta3 + 
+                          beta4 + beta5 + beta6 + beta7) / alpha)) %>%
+  select(-contains('beta')) %>%
+  select(-mu) %>%
+  gather(key = sig, value = sig.estim, -c(i, alpha)) %>%
+  mutate(ndd = grepl('a1', sig),
+         lov = grepl('v1', sig),
+         lrg = grepl('s1', sig)) %>%
+  ungroup() %>%
+  mutate(pred = rweibull(n = nrow(.), shape = alpha, scale = sig.estim))
+
+post.preds %>%
+  ggplot(aes(x = pred)) +
+  geom_density(
+    aes(
+      colour = ndd
+    )
+  ) +
+  scale_x_log10(limits = c(1, 50)) +
+  facet_wrap(lov ~ lrg)
+# Not a fan of this! Wrong denominator when censoring.  
+
+# Are mean times to extinction relevant here? Growth rates increasing...
+# Can we extrapolate beyond 50?
+
+# Let's actually compare our model with actual data.
+
+# Empirical survival curves probably look like this?
+p.surv = all.data %>%
+  group_by(n.pop0, low.var, alpha, gen) %>%
+  summarise(n.surv = sum(n > 1)) %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  mutate(p.surv = n.surv / max(n.surv)) %>%
+  ungroup()
+
+p.surv %>%
+  ggplot(aes(x = gen, y = p.surv)) +
+  geom_line(
+    aes(
+      colour = factor(alpha)
+    ),
+  ) +
+  scale_colour_manual(values = c('black', 'purple')) +
+  facet_wrap(low.var ~ n.pop0)
+
+# This looks nothing like a Weibull survival curve! 
+# Ugh...
+# Maybe I can do quadratic time???
