@@ -2023,3 +2023,34 @@ Cool stuff. Helpful for a career in conservation!
 
 One thing that leapt out to me was the stuff about gene flow among different populations. In addition to potentially being very tough (environmental distances likely to be small at distances relevant for gene flow?) there's also this question of gene flow increasing or decreasing EP. I'm sure there is some theory for when this is/is not true? Lily's project is doing some empirical stuff about this. I'm sure this research is out there - where is it? 
 
+### Maurtin, G., Aguilee, R., Ramsayer, J., Kaltz, O., and Ronce, O. 2013. The probability of evolutionary rescue: towards a quantitative comparison between theory and evolution experiments. Phil Trans R Soc B.
+
+- Intro draws distinction between infinitesimal genetic model (G&H) and the single locus case (O&U)
+	- O&U explicitly describes stochasticity in establishment of beneficial variants (unlike G&H which uses a threshold)
+	- note that adaptation and drug resistance are typically "genetically narrow" i.e. closer to O&U model dynamics
+- Describing the "probability" of rescue... - difficult, especially with only one realization
+	- some studies cited here that attempt to do this including some flour beetle studies
+	- connecting theory to models requires empirically measurable parameters
+	- (also, "certain peculiarities of microbial populations")
+		- (includes overlapping generations often seen in microbes...)
+		- (also includes frequent bottlenecks, which in the presence of several variants may produce fixation of different alleles)
+##### Methods
+- Two empirical systems and datasets: Bell & Gonzalez's yeast, Ramsayer et al.'s  *Pseudomonas fluorescens* and antibiotic stress (clonal vs. admixture lines)
+- Analytical solutions: Feller diffusion process modeling continuous growth/decay
+	- mean reproductive output r, variance in reproductive output sigma
+	- mutations according to a Poisson process
+	- simulations tested against simulated birth-death processes
+##### Analysis
+- Number of mutations destined to rescue the population (?) is Poisson distributed when the per capita chance of mutation is small
+	- P_R* = 1 - exp(-N0 th*_R), i.e., probability of rescue is 1 minutes probability of zero rescued mutations occurring - what is th*_R then?
+	- th*_R is a rate of rescue mutation per inoculated individual
+	- analysis of subcases here to find what th*_R is
+- Models and subsequent analysis (on G&B data?) suggests that lineages (of founding individuals) have independent/roughly independent mutation rates and demographic patterns
+
+Hmm... yeah good okay. Not as relevant to us as I had originally thought or hoped. This is about haploid, single-locus clonally reproducing lines. The result here is just the generality of Poisson distribution's use in getting  rescue probability (something like rescoe probability is one minus probability of extinction, and the work is in getting rates in different contexts).
+
+There are some good notes in here especially at the end about incorporating more realistic features into models. This includes density dependence and sex. There's also a claim in here about generalization to overlapping generation times that I didn't read closely enough to see how this is supported.
+
+So interesting premise but not super relevant to our study so I did not read closely.
+
+
