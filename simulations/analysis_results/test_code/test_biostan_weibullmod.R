@@ -175,6 +175,15 @@ stan2.fit
 # whoa... all of these converged??
 # is censoring dependent on parameters?
 
+# But I am getting these messages:
+# Chain 3: Rejecting initial value:
+#  Chain 3:   Log probability evaluates to log(0), i.e. negative infinity.
+# Chain 3:   Stan can't start sampling from this initial value.
+#
+# Chain 3: Rejecting initial value:
+# Chain 3:   Error evaluating the log probability at the initial value.
+# Chain 3: Exception: weibull_lpdf: Scale parameter[1] is 0, but must be > 0!  (in 'model1223262f7058_weibull_survival_model' at line 69)
+
 stan2.pars = as.data.frame(stan2.fit) %>%
   rename(beta1 = `beta_bg[1]`,
          beta2 = `beta_bg[2]`,
