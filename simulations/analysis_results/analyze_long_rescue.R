@@ -55,7 +55,7 @@ p.rescue = merge(
     distinct(trial, n.pop0, low.var, alpha, .keep_all = TRUE) %>%
     select(trial, n.pop0, low.var, alpha, gbar),
   # Merge this with the rescue summary from above
-  y = rescue.summ,
+  y = rescue.summary,
   by = c('trial', 'n.pop0', 'low.var', 'alpha'),
   all.x = TRUE, all.y = TRUE
 ) %>%
@@ -141,8 +141,8 @@ ndd.rescue = with(
   )
 )
 
-apply(ndd.rescue, 2, mean)
-apply(ndd.rescue, 2, function(x) c(quantile(x, 0.025), quantile(x, 0.975)))
+apply(ndd.rescue, 2, mean) %>% round(2)
+apply(ndd.rescue, 2, function(x) c(quantile(x, 0.025), quantile(x, 0.975))) %>% round(2)
 
 ## Effect sizes for size (being small)
 size.rescue = with(
@@ -155,8 +155,8 @@ size.rescue = with(
   )
 )
 
-apply(size.rescue, 2, mean)
-apply(size.rescue, 2, function(x) c(quantile(x, 0.025), quantile(x, 0.975)))
+apply(size.rescue, 2, mean) %>% round(2)
+apply(size.rescue, 2, function(x) c(quantile(x, 0.025), quantile(x, 0.975))) %>% round(2)
 
 ## Effect sizes for low diversity 
 lodiv.rescue = with(
@@ -169,8 +169,8 @@ lodiv.rescue = with(
   )
 )
 
-apply(lodiv.rescue, 2, mean)
-apply(lodiv.rescue, 2, function(x) c(quantile(x, 0.025), quantile(x, 0.975)))
+apply(lodiv.rescue, 2, mean) %>% round(2)
+apply(lodiv.rescue, 2, function(x) c(quantile(x, 0.025), quantile(x, 0.975))) %>% round(2)
 
 ## Effect size of increasing maladaptation
 gbar.slopes = with(
@@ -189,8 +189,8 @@ gbar.slopes = with(
   )
 )
 
-apply(gbar.slopes, 2, mean)
-apply(gbar.slopes, 2, function(x) c(quantile(x, 0.025), quantile(x, 0.975)))
+apply(gbar.slopes, 2, mean) %>% round(2)
+apply(gbar.slopes, 2, function(x) c(quantile(x, 0.025), quantile(x, 0.975))) %>% round(2)
 
 ### Wescue (fitness rescue) models
 
@@ -200,6 +200,7 @@ p.wescue = p.wescue %>%
          gdiv = factor(ifelse(low.var, 'Low', 'High')),
          ddep = factor(ifelse(alpha == 0, 'Ind', 'Neg')))
 
+# Run model
 wescue.mod.full =  stan_glm(
   rescued ~ size * gdiv * ddep * gbar,
   data = p.wescue, 
@@ -213,4 +214,163 @@ summary(wescue.mod.full)
 
 bayesplot::pp_check(wescue.mod.full)
 
-# (next: effect sizes)
+wescue.post.df = as.data.frame(wescue.mod.full)
+
+# Effects of density dependence
+ndd.wescue = with(
+  wescue.post.df,
+  cbind(
+    hidiv.large = ddepNeg,
+    hidiv.small = ddepNeg + `sizeSmall:ddepNeg`,
+    lodiv.large = ddepNeg + `gdivLow:ddepNeg`,
+    lodiv.small = ddepNeg + `sizeSmall:ddepNeg` + `gdivLow:ddepNeg` + `sizeSmall:gdivLow:ddepNeg`
+  )
+)
+
+apply(ndd.wescue, 2, mean) %>% round(2)
+apply(ndd.wescue, 2, function(x) c(quantile(x, 0.025), quantile(x, 0.975))) %>% round(2)
+
+# Effects of size
+size.wescue = with(
+  wescue.post.df,
+  cbind(
+    hidiv.did = sizeSmall,
+    hidiv.ndd = sizeSmall + `sizeSmall:ddepNeg`,
+    lodiv.did = sizeSmall + `sizeSmall:gdivLow`,
+    lodiv.ndd = sizeSmall + `sizeSmall:ddepNeg` + `sizeSmall:gdivLow` + `sizeSmall:gdivLow:ddepNeg`
+  )
+)
+
+apply(size.wescue, 2, mean) %>% round(2)
+apply(size.wescue, 2, function(x) c(quantile(x, 0.025), quantile(x, 0.975))) %>% round(2)
+
+# Effects of low diversity
+lodiv.wescue = with(
+  wescue.post.df,
+  cbind(
+    large.did = gdivLow,
+    large.ndd = gdivLow + `gdivLow:ddepNeg`,
+    small.did = gdivLow + `sizeSmall:gdivLow`,
+    small.ndd = gdivLow + `gdivLow:ddepNeg` + `sizeSmall:gdivLow` + `sizeSmall:gdivLow:ddepNeg`
+  )
+)
+
+apply(lodiv.wescue, 2, mean) %>% round(2)
+apply(lodiv.wescue, 2, function(x) c(quantile(x, 0.025), quantile(x, 0.975))) %>% round(2)
+
+# Effects of genotype (increased adaptation)
+gbar.slopes.w = with(
+  -1*wescue.post.df,
+  cbind(
+    large.hidiv.did = gbar,
+    large.hidiv.ndd = gbar + `ddepNeg:gbar`,
+    large.lodiv.did = gbar + `gdivLow:gbar`,
+    large.lodiv.ndd = gbar + `ddepNeg:gbar` + `gdivLow:gbar` + `gdivLow:ddepNeg:gbar`,
+    small.hidiv.did = gbar + `sizeSmall:gbar`,
+    small.hidiv.ndd = gbar + `sizeSmall:gbar` + `ddepNeg:gbar` + `sizeSmall:ddepNeg:gbar`,
+    small.lodiv.did = gbar + `sizeSmall:gbar` + `gdivLow:gbar` + `sizeSmall:gdivLow:gbar`,
+    small.lodiv.ndd = gbar + `sizeSmall:gbar` + `gdivLow:gbar` + `ddepNeg:gbar` + 
+      `sizeSmall:gdivLow:gbar` + `sizeSmall:ddepNeg:gbar` + `gdivLow:ddepNeg:gbar` +
+      `sizeSmall:gdivLow:ddepNeg:gbar`
+  )
+)
+
+apply(gbar.slopes.w, 2, mean) %>% round(2)
+apply(gbar.slopes.w, 2, function(x) c(quantile(x, 0.025), quantile(x, 0.975))) %>% round(2)
+
+### Plots
+
+# Posterior draws from rescue model
+geno.res.fulls = expand.grid(gbar = (-5:5)/10,
+                             ddep = c("Ind", "Neg"),
+                             size = c("Large", "Small"),
+                             gdiv = c("Low", "High"))
+
+res.epreds = posterior_epred(rescue.mod.full, 
+                             newdata = geno.res.fulls,
+                             seed = 8400, draws = 200) %>%
+  as.data.frame() %>%
+  t() %>%
+  cbind(geno.res.fulls, .) %>%
+  gather(key = draw, value = estimate, -c(gbar, ddep, size, gdiv))
+
+# Generate plot of Pr(rescue) ~ genotype and other factors
+# for rescue based on population size
+res.geno.plot = res.epreds %>%
+  mutate(size = paste("Initially", tolower(size)),
+         gdiv = paste(gdiv, "diversity")) %>%
+  ggplot(aes(x = gbar, y = estimate)) +
+  geom_line(
+    aes(
+      group = interaction(ddep, draw),
+      colour = factor(ddep)
+    ),
+    size = 0.1
+  ) +
+  labs(x = '', y = 'Probability of rescue\n(exceeding initial size)') +
+  scale_color_manual(values = c('black', 'purple')) +
+  facet_wrap( ~ paste(size, gdiv, sep = ', '), ncol = 4) +
+  theme(legend.position = 'none',
+        axis.text.x = element_text(angle = 45),
+        # strip.text = element_blank(),
+        strip.background = element_blank(),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'),
+        plot.margin = margin(b = 0, r = 5, l = 20, unit = 'pt'))
+
+res.geno.plot
+
+# Generate posterior draws from rescue model (based on fitness)
+geno.wes.fulls = expand.grid(gbar = (-5:5)/10,
+                             ddep = c("Ind", "Neg"),
+                             size = c("Large", "Small"),
+                             gdiv = c("Low", "High"))
+
+wes.epreds = posterior_epred(wescue.mod.full, 
+                             newdata = geno.wes.fulls,
+                             seed = 8400, draws = 200) %>%
+  as.data.frame() %>%
+  t() %>%
+  cbind(geno.wes.fulls, .) %>%
+  gather(key = draw, value = estimate, -c(gbar, ddep, size, gdiv))
+
+
+wes.geno.plot = ggplot(wes.epreds, aes(x = gbar, y = estimate)) +
+  geom_line(
+    aes(
+      group = interaction(ddep, draw),
+      colour = factor(ddep)
+    ),
+    size = 0.1
+  ) +
+  labs(x = 'Initial genotype', y = 'Probability of rescue\n(mean fitness exceeding 1)') +
+  scale_color_manual(values = c('black', 'purple')) +
+  facet_wrap( ~ paste(size, gdiv, sep = ', '), ncol = 4) +
+  theme(legend.position = 'none',
+        axis.text.x = element_text(angle = 45),
+        strip.text = element_blank(),
+        strip.background = element_blank(),
+        panel.grid.major = element_line(colour = 'gray88'),
+        panel.background = element_rect(fill = 'white'),
+        plot.margin = margin(b = 0, r = 5, l = 20, unit = 'pt'))
+
+wes.geno.plot
+
+geno.plot.grid = cowplot::plot_grid(res.geno.plot, 
+                                    wes.geno.plot,
+                                    labels = c("A)", "B)"),
+                                    nrow = 2)
+
+geno.plot.grid
+
+### Next: instant rescue
+
+rescue.summary %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(inst.rescue = sum(rescue.time < 3),
+            long.rescue = sum(rescue.time > 2))
+
+wescue.summary %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(inst.rescue = sum(rescue.time < 3),
+            long.rescue = sum(rescue.time > 2))
