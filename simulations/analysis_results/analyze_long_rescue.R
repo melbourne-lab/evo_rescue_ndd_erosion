@@ -299,7 +299,7 @@ res.epreds = posterior_epred(rescue.mod.full,
 res.geno.plot = res.epreds %>%
   mutate(size = paste("Initially", tolower(size)),
          gdiv = paste(gdiv, "diversity")) %>%
-  ggplot(aes(x = gbar, y = estimate)) +
+  ggplot(aes(x = 2.75 - gbar, y = estimate)) +
   geom_line(
     aes(
       group = interaction(ddep, draw),
@@ -311,8 +311,10 @@ res.geno.plot = res.epreds %>%
   scale_color_manual(values = c('black', 'purple')) +
   facet_wrap( ~ paste(size, gdiv, sep = ', '), ncol = 4) +
   theme(legend.position = 'none',
-        axis.text.x = element_text(angle = 45),
-        # strip.text = element_blank(),
+        axis.text.x = element_text(angle = 45, size = 8),
+        axis.text.y = element_text(size = 8),
+        axis.title  = element_text(size = 8),
+        strip.text  = element_text(size = 8),
         strip.background = element_blank(),
         panel.grid.major = element_line(colour = 'gray88'),
         panel.background = element_rect(fill = 'white'),
@@ -335,7 +337,7 @@ wes.epreds = posterior_epred(wescue.mod.full,
   gather(key = draw, value = estimate, -c(gbar, ddep, size, gdiv))
 
 
-wes.geno.plot = ggplot(wes.epreds, aes(x = gbar, y = estimate)) +
+wes.geno.plot = ggplot(wes.epreds, aes(x = 2.75 - gbar, y = estimate)) +
   geom_line(
     aes(
       group = interaction(ddep, draw),
@@ -343,12 +345,14 @@ wes.geno.plot = ggplot(wes.epreds, aes(x = gbar, y = estimate)) +
     ),
     size = 0.1
   ) +
-  labs(x = 'Initial genotype', y = 'Probability of rescue\n(mean fitness exceeding 1)') +
+  labs(x = 'Initial maladaptation', y = 'Probability of rescue\n(mean fitness exceeding 1)') +
   scale_color_manual(values = c('black', 'purple')) +
   facet_wrap( ~ paste(size, gdiv, sep = ', '), ncol = 4) +
   theme(legend.position = 'none',
-        axis.text.x = element_text(angle = 45),
-        strip.text = element_blank(),
+        axis.text.x = element_text(size = 8, angle = 45),
+        axis.text.y = element_text(size = 8),
+        axis.title  = element_text(size = 8),
+        strip.text  = element_blank(),
         strip.background = element_blank(),
         panel.grid.major = element_line(colour = 'gray88'),
         panel.background = element_rect(fill = 'white'),
@@ -356,21 +360,24 @@ wes.geno.plot = ggplot(wes.epreds, aes(x = gbar, y = estimate)) +
 
 wes.geno.plot
 
-geno.plot.grid = cowplot::plot_grid(res.geno.plot, 
-                                    wes.geno.plot,
-                                    labels = c("A)", "B)"),
-                                    nrow = 2)
+geno.plot.grid = plot_grid(res.geno.plot, 
+                           wes.geno.plot,
+                           labels = c("A)", "B)"),
+                           nrow = 2)
 
-geno.plot.grid
+save_plot(geno.plot.grid, base_width = 8, base_height = 5,
+          filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_supp_p_rescue.pdf')
 
 ### Next: instant rescue
 
 rescue.summary %>%
   group_by(n.pop0, low.var, alpha) %>%
   summarise(inst.rescue = sum(rescue.time < 3),
-            long.rescue = sum(rescue.time > 2))
+            total.rescue = n(),
+            propn.rescue = mean(rescue.time < 3))
 
 wescue.summary %>%
   group_by(n.pop0, low.var, alpha) %>%
   summarise(inst.rescue = sum(rescue.time < 3),
-            long.rescue = sum(rescue.time > 2))
+            total.rescue = n(),
+            propn.rescue = mean(rescue.time < 3))
