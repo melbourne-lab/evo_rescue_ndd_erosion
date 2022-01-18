@@ -467,7 +467,7 @@ epreds = posterior_epred(ext.mod.full, newdata = geno.ext.fulls,
 epreds = epreds %>%
   gather(key = draw, value = estimate, -c(gbar, alpha, n.pop0, low.var))
 
-geno.full.row = ggplot(epreds, aes(x = gbar, y = estimate)) +
+geno.full.row = ggplot(epreds, aes(x = 2.75 - gbar, y = estimate)) +
   geom_line(
     aes(
       group = interaction(alpha, draw),
@@ -475,7 +475,7 @@ geno.full.row = ggplot(epreds, aes(x = gbar, y = estimate)) +
     ),
     size = 0.1
   ) +
-  labs(x = 'Initial genotype', y = '') +
+  labs(x = 'Initial maladaptation', y = '') +
   scale_color_manual(values = c('black', 'purple')) +
   facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
   theme(legend.position = 'none',
@@ -494,7 +494,7 @@ data.plots.row = plot_grid(size.plot.row, inst.plot.row,
 data.plots.row
 
 plot_grid(data.plots.row, extinct.legend, ncol = 1, rel_heights = c(1, .1)) %>%
-  save_plot(filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_2_long.pdf',
+  save_plot(filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_2.pdf',
             base_width = 8, base_height = 8)
 
 gbar.slopes = with(
