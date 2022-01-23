@@ -381,3 +381,135 @@ wescue.summary %>%
   summarise(inst.rescue = sum(rescue.time < 3),
             total.rescue = n(),
             propn.rescue = mean(rescue.time < 3))
+
+
+### Visualizations of time until rescue
+
+# Get bootstrap CIs for mean times to rescue
+
+# boot.n = 1000
+# 
+# wescue.bootstrap.ci = data.frame(
+#   n.pop0 = rep(NA, 8*boot.n),
+#   low.var = rep(NA, 8*boot.n),
+#   alpha = rep(NA, 8*boot.n),
+#   mean.t = rep(NA, 8*boot.n),
+#   trial = rep(NA, 8*boot.n)
+# )
+# 
+# set.seed(394906)
+# 
+# for (boot.trial in 1:1000) {
+#   
+#   i1 = 1 + 8*(boot.trial-1)
+#   i2 = 8*(boot.trial)
+#   
+#   wescue.bootstrap.ci[i1:i2,] = wescue.summary %>% 
+#     group_by(n.pop0, low.var, alpha) %>% 
+#     mutate(rt = sample(rescue.time, size = n(), replace = TRUE)) %>%
+#     summarise(mean.t = mean(rt)) %>%
+#     ungroup() %>%
+#     mutate(trial = boot.trial)
+#   
+# }
+# 
+# # rm(i1, i2)
+# 
+# wescue.bootstrap.ci = wescue.bootstrap.ci %>%
+#   group_by(n.pop0, low.var, alpha) %>%
+#   summarise(t.c975 = quantile(mean.t, 0.975),
+#             t.c025 = quantile(mean.t, 0.025)) %>%
+#   merge(y = 
+#           wescue.summary %>%
+#           group_by(n.pop0, low.var, alpha) %>%
+#           summarise(mean.t = mean(rescue.time)) %>%
+#           ungroup()
+#         ) %>%
+#   mutate(size = paste("Initially", ifelse(n.pop0 > 50, 'large', 'small')),
+#          gdiv = paste(ifelse(low.var, 'Low', 'high'), "diversity"))
+
+wescue.time.means = wescue.summary %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(mean.t = mean(rescue.time)) %>%
+  ungroup() %>%
+  mutate(size = paste("Initially", ifelse(n.pop0 > 50, 'large', 'small')),
+         gdiv = paste(ifelse(low.var, 'Low', 'high'), "diversity"))
+
+wescue.time.hist = wescue.summary %>% 
+  ungroup() %>%
+  mutate(rescue.time = rescue.time - min(rescue.time) + 1) %>%
+  mutate(size = paste("Initially", ifelse(n.pop0 > 50, 'large', 'small')),
+         gdiv = paste(ifelse(low.var, 'Low', 'high'), "diversity")) %>%
+  ggplot(aes(x = rescue.time)) +
+  geom_histogram(
+    aes(
+      fill = factor(alpha)
+    ),
+    position = 'identity',
+    binwidth = 1, 
+    alpha = 0.5) +
+  geom_point(
+    data = wescue.time.means,
+    aes(
+      x = mean.t, 
+      y = 240,
+      colour = factor(alpha) 
+    ),
+    size = 4, shape = 18
+  ) +
+  scale_color_manual(values = c('black', 'purple')) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  facet_wrap(~ paste(size, gdiv, sep = ', '), nrow = 1) +
+  labs(x = '', y = 'Frequency') +
+  theme(
+    legend.position = 'none',
+    panel.background = element_blank()
+  )
+
+rescue.time.means = rescue.summary %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(mean.t = mean(rescue.time)) %>%
+  ungroup() %>%
+  mutate(size = paste("Initially", ifelse(n.pop0 > 50, 'large', 'small')),
+         gdiv = paste(ifelse(low.var, 'Low', 'high'), "diversity"))
+
+rescue.time.hist = rescue.summary %>% 
+  ungroup() %>%
+  mutate(rescue.time = rescue.time - min(rescue.time) + 1) %>%
+  mutate(size = paste("Initially", ifelse(n.pop0 > 50, 'large', 'small')),
+         gdiv = paste(ifelse(low.var, 'Low', 'high'), "diversity")) %>%
+  ggplot(aes(x = rescue.time)) +
+  geom_histogram(
+    aes(
+      fill = factor(alpha)
+      ),
+    position = 'identity',
+    binwidth = 2, 
+    alpha = 0.5) +
+  geom_point(
+    data = rescue.time.means,
+    aes(
+      x = mean.t, 
+      y = 220,
+      colour = factor(alpha) 
+    ),
+    size = 4, shape = 18
+  ) +
+  scale_color_manual(values = c('black', 'purple')) +
+  scale_fill_manual(values = c('black', 'purple')) +
+  labs(x = 'Time', y = 'Frequency') +
+  facet_wrap(~ paste(size, gdiv, sep = ', '), nrow = 1) +
+  theme(
+    strip.text = element_blank(),
+    strip.background = element_blank(),
+    legend.position = 'none',
+    panel.background = element_blank()
+  )
+
+time.hists = plot_grid(
+  wescue.time.hist, rescue.time.hist,
+  labels = c("A)", "B)"),
+  nrow = 2
+)
+
+time.hists
