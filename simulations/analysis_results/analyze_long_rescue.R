@@ -297,8 +297,8 @@ res.epreds = posterior_epred(rescue.mod.full,
 # Generate plot of Pr(rescue) ~ genotype and other factors
 # for rescue based on population size
 res.geno.plot = res.epreds %>%
-  mutate(size = paste("Initially", tolower(size)),
-         gdiv = paste(gdiv, "diversity")) %>%
+  # mutate(size = paste("Initially", tolower(size)),
+  #        gdiv = paste(gdiv, "diversity")) %>%
   ggplot(aes(x = 2.75 - gbar, y = estimate)) +
   geom_line(
     aes(
@@ -307,14 +307,15 @@ res.geno.plot = res.epreds %>%
     ),
     size = 0.1
   ) +
-  labs(x = '', y = 'Probability of rescue\n(exceeding initial size)') +
+  labs(x = 'Initial maladaptation', 
+       y = 'Probability of rescue\n(exceeding initial size)') +
   scale_color_manual(values = c('black', 'purple')) +
   facet_wrap( ~ paste(size, gdiv, sep = ', '), ncol = 4) +
   theme(legend.position = 'none',
         axis.text.x = element_text(angle = 45, size = 8),
         axis.text.y = element_text(size = 8),
         axis.title  = element_text(size = 8),
-        strip.text  = element_text(size = 8),
+        strip.text  = element_blank(),
         strip.background = element_blank(),
         panel.grid.major = element_line(colour = 'gray88'),
         panel.background = element_rect(fill = 'white'),
@@ -337,7 +338,10 @@ wes.epreds = posterior_epred(wescue.mod.full,
   gather(key = draw, value = estimate, -c(gbar, ddep, size, gdiv))
 
 
-wes.geno.plot = ggplot(wes.epreds, aes(x = 2.75 - gbar, y = estimate)) +
+wes.geno.plot = wes.epreds %>%
+  mutate(size = paste("Initially", tolower(size)),
+         gdiv = paste(gdiv, "diversity")) %>%
+  ggplot(aes(x = 2.75 - gbar, y = estimate)) +
   geom_line(
     aes(
       group = interaction(ddep, draw),
@@ -345,14 +349,14 @@ wes.geno.plot = ggplot(wes.epreds, aes(x = 2.75 - gbar, y = estimate)) +
     ),
     size = 0.1
   ) +
-  labs(x = 'Initial maladaptation', y = 'Probability of rescue\n(mean fitness exceeding 1)') +
+  labs(x = '', y = 'Probability of rescue\n(mean fitness exceeding 1)') +
   scale_color_manual(values = c('black', 'purple')) +
   facet_wrap( ~ paste(size, gdiv, sep = ', '), ncol = 4) +
   theme(legend.position = 'none',
         axis.text.x = element_text(size = 8, angle = 45),
         axis.text.y = element_text(size = 8),
         axis.title  = element_text(size = 8),
-        strip.text  = element_blank(),
+        strip.text  = element_text(size = 8),
         strip.background = element_blank(),
         panel.grid.major = element_line(colour = 'gray88'),
         panel.background = element_rect(fill = 'white'),
@@ -360,28 +364,13 @@ wes.geno.plot = ggplot(wes.epreds, aes(x = 2.75 - gbar, y = estimate)) +
 
 wes.geno.plot
 
-geno.plot.grid = plot_grid(res.geno.plot, 
-                           wes.geno.plot,
+geno.plot.grid = plot_grid(wes.geno.plot, 
+                           res.geno.plot,
                            labels = c("A)", "B)"),
                            nrow = 2)
 
 save_plot(geno.plot.grid, base_width = 8, base_height = 5,
           filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_supp_p_rescue.pdf')
-
-### Next: instant rescue
-
-rescue.summary %>%
-  group_by(n.pop0, low.var, alpha) %>%
-  summarise(inst.rescue = sum(rescue.time < 3),
-            total.rescue = n(),
-            propn.rescue = mean(rescue.time < 3))
-
-wescue.summary %>%
-  group_by(n.pop0, low.var, alpha) %>%
-  summarise(inst.rescue = sum(rescue.time < 3),
-            total.rescue = n(),
-            propn.rescue = mean(rescue.time < 3))
-
 
 ### Visualizations of time until rescue
 
@@ -513,3 +502,49 @@ time.hists = plot_grid(
 )
 
 time.hists
+
+### Information for putting in table
+
+p.wescue %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(p.rescue = mean(rescued))
+
+wescue.summary %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(inst.rescue = sum(rescue.time < 3),
+            total.rescue = n(),
+            propn.rescue = mean(rescue.time < 3))
+
+p.rescue %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(p.rescue = mean(rescued))
+
+rescue.summary %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(inst.rescue = sum(rescue.time < 3),
+            total.rescue = n(),
+            propn.rescue = mean(rescue.time < 3))
+
+
+### Get extinctions
+
+# all.data %>%
+#   group_by(n.pop0, low.var, alpha, trial) %>%
+#   filter(any(n > 1000)) %>%
+#   ungroup() %>%
+#   ggplot(aes(x = gen, y = n, group = trial)) +
+#   geom_line() +
+#   scale_y_log10() +
+#   facet_wrap(n.pop0 + low.var ~ alpha, nrow = 2)
+
+n.extinct = all.data %>%
+  group_by(n.pop0, low.var, alpha, trial) %>%
+  summarise(extinct = !any(n > 1000) & max(gen) < 50)
+
+merge(wescue.summary, n.extinct) %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(p.extinct = mean(extinct))
+
+merge(rescue.summary, n.extinct) %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(p.extinct = mean(extinct))
