@@ -2103,3 +2103,34 @@ On (1) an interesting point I thought about was the note in sampling effects and
 
 On (2) - first, there's a point made that the clonal competition could be induced by tank size. Note that clonal erosion is also happening in control tanks. But do we need to conclude that there is clonal competition occurring here? Maybe the tank conditions maybe are just ill-suited for certain strains relative to their home habitats. Hmm... okay, maybe don't need to conclude that. But it is true that there is greater genetic erosion under stress. That's probably worth pointing out, even if it is a clonal system.
 
+### Bell, G. 2013. Evolutionary rescue and the limits of adaptation. RTSB.
+
+- Review of Haldane's "cost of natural selection", i.e., beneficial alleles from mutation reach quasi-fixation in part through the death/sterility of poorly adapted individuals (deaths/lack of replacement strain population persistence)
+	- cost is independent of the intensity of selection and rate of environmental deterioration (??)
+	- the cost is proportional to the initial frequency of the allele
+	- number of loci under intense selection must be small due to additive nature of loci
+	- estimate: fixation of a single favorable allele is 10-30x the population size, which slows down selection (because of the missing individuals that aren't replaced?)
+	- Nunney reference... Haldane was aware that "density-regulated populations may be able to sustain very high rates of juvenile mortality without damage" (??)
+- Genetic variation contributing to variation in relative fitness as a determinant of adaptive capacity (so long as the most fit genotypes can still sustain positive growth)
+	- e.g., in toxic mine tailings studies, most species can't colonize and persist in the novel environments, in part due to low genetic variance for tolerance in source populations
+		- (interestingly this is written about as a species-level trait instead of a population-level one...)
+	- Bradshaw calls this evolutionary inertia due to lack of appropriate genetic variation "genostasis"
+		- he noted that a new source of genetic variation can overcome genostasis
+- Absolute variation is important as well: at least one viable genotype is a necessary but not sufficient condition for rescue
+	- What is the distribution of absolute fitness in natural pouplations? The right tail is the only (?) important part
+		- typically the right tail has exponential-or-worse decay in most plausible distributions (e.g., normal, exponential)
+	- Gillespie notes that alleles necessary in a novel environment are more likely to be rare (Orr looked at this too)
+		- so, extremes are important, which is why population size is important (larger populations are more likely to contain extremes)
+- Rate of environmental and population decay is important
+	- Mutations: there will be a greater supply of mutations (and individual mutants for selection to act upon) if populations are declining slowly
+	- also, populations will be more likely to track a slowly-changing environment rather than a suddenly-changing one
+- Population size and its importance: it's one of many factors that influence rescue odds (others include heritability, genetic correlations, phenotypic variation) but it's the most easily observable
+	- many of the factors involved, e.g., fixation rates of a beneficial allele, do not necessarily depend on population size
+		- thus for a lot of genetic processes the influences of population size are typically neutral, e.g., drift
+- Conclusion: many limits to rescue, shouldn't assume that most populations are likely to persist under environmental change
+
+Very cool! Glad I read this. Good reference for theoretical (or at least verbal) arguments for the importance of genetic variation. But reading this after writing something briefly about the importance of population size and genetic diversity (more likely to have individuals) was good timing. Great reference for reinforcing this argument.
+
+It's good logic! But I think this assumption conditions on the initial genotype being fixed at the old optimum. In reality, there is sampling variation around the genotypic optimum (due to drift *before the environmental shift*), and incorporating this possible variation does increase the odds of populations being more initially adapted to novel conditions. Note that this argument relies on sex. Oh man what a cool point to make. Ask Ruth et al. about this.
+
+
