@@ -2053,4 +2053,53 @@ There are some good notes in here especially at the end about incorporating more
 
 So interesting premise but not super relevant to our study so I did not read closely.
 
+### Loria, A., Cristescu, M.E., and Gonzalez, A. 2022. Genotype diversity promotes the persistence of *Daphnia* populations exposed to severe copper stress. Journal of Evolutionary Biology. 
+
+- Copper in aquatic systems has toxic effects, and without suitable alternative habitats to disperse to or phenotypic plasticity evolutionary rescue may be required
+	- during this time of rapid genetic adaptation, genetic erosion may occur
+	- heavy metals, genetic diversity (flipside erosion? not mentioned) and population dynamics - not really studied empirically (see refs)
+	- here: look at *Daphnia*, which is widely distributed, clonally reproducing, and has short generation times lending itself well to long-term experiments
+		- (refs looking at genetic erosion following metal contamination)
+##### Methods
+- Daphnia of two species sampled from six habitats; 36 genotypes (six from each habitat) randomly chosen from a collection of clones
+- 24 populations in a two-way factorial design:
+	- Monoclonal vs. Multiclonal (MNC vs MTC)
+		- MTC 72 individuals per tank (36 genotypes x 2 individuals)
+		- MNC 72 individuals per individual per tank (12 replicates, so six per habitat per Cu treatment group)
+	- Cu control vs. Cu treatment
+	- Populations reach carrying capacity in clean tank then spiked
+	- Diversity ensured after Cu addition by adding one non-gravid female of each genotype added to each population (MNCs: 36 individuals of same clonal line)
+	- On sampling four sampling days incl. end of study, individuals ssampled and genotyped
+- Probability of persistence for each clonal line calculated by counting allele markers (microsats)
+	- Time to extinction for each population analyzed with a KM survival analysis
+		- comparing curves between MTC and MNC populations wiht a log-rank test
+	- GLMMs assess time to extinction as a function of diversity, population and habitat ID
+	- Population growth rate analysis of log lamda: means, standard deviations (daily?)
+##### Results
+- Cyclical dynamics present initially in both populations (transient), with differences appearing 40-60 days after Cu addition
+- Both MTC and MNC populations feature total extinction by end of experiment
+	- time to extinction greater (slower extinction) in MTC treatments - about 30 days longer to go extinct
+- Evidence of "U"-shaped patterns of growth? Not exactly sure what's going on here... temporary spikes in log-lambda which show temporary recovery?
+	- population peaks relative to control group...?
+	- more of these in MTC treatment
+- Allelic richness: dropped in both control and Cu treatments
+	- MTC controls lost 77% of all alleles by end of experiment
+	- variation between pond and lake genotypes here: more decline in pond genotypes? (over time lake genotypes become numerically dominant)
+##### Discussion
+- Genetic diversity means longer persistence under stress (although no rescue)
+	- sampling effect: more advantageous clones likely to be present in more diverse populations
+- Rescue: there were abrupt increases in population growth rates that could be "failed ER attempts" (eh)
+	- the longest-persistent MTC population showed the strongest transient dynamics (although these happened 20-40 days prior to extinction)
+	- But why did rescue fail? Some thoughts. Didn't read carefully.
+	- there was NDD here! tank size means there was a carying capacity, increasing drift and decreasing clonal diversity
+	- pre-exposure may have been helpful for Daphnia... why? seems like the lack of exposure is the point... how is pre-exposure different than just looking at effects of exposure
+- Reduction in genotypic diversity - possibly due to competition between clonal lines?
+	- Laskowski et al. 2015 cited on point that demographic stochasticity and contamination influence the patterns of (mildly) heightened genetic erosion under stress
+	- does clonal competition explain why there was genetic erosion in the control treatments?
+
+Hmm... interesting stuff, more here than one would initially think. Some thoughts: (1) more evidence that genetic diversity prolongs time to extinction under stress and possibly (eh not a huge fan of this evidence) increases chance of rescue, although these results are clonal; (2) genetic erosion occurs in this system, with (very mildly?) increased rates of erosion under stress.
+
+On (1) an interesting point I thought about was the note in sampling effects and genetic diversity. This actually is the opposite of my point on sampling effects in smaller populations. Here is one of the effects of sex: without sex, larger populations are more likely to have favored clones. With sex, larger populations with panmictic mating are more less likely to have disproportionate draws of favored individuals.
+
+On (2) - first, there's a point made that the clonal competition could be induced by tank size. Note that clonal erosion is also happening in control tanks. But do we need to conclude that there is clonal competition occurring here? Maybe the tank conditions maybe are just ill-suited for certain strains relative to their home habitats. Hmm... okay, maybe don't need to conclude that. But it is true that there is greater genetic erosion under stress. That's probably worth pointing out, even if it is a clonal system.
 
