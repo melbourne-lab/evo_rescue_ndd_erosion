@@ -2133,4 +2133,30 @@ Very cool! Glad I read this. Good reference for theoretical (or at least verbal)
 
 It's good logic! But I think this assumption conditions on the initial genotype being fixed at the old optimum. In reality, there is sampling variation around the genotypic optimum (due to drift *before the environmental shift*), and incorporating this possible variation does increase the odds of populations being more initially adapted to novel conditions. Note that this argument relies on sex. Oh man what a cool point to make. Ask Ruth et al. about this.
 
+### Frankham, R., Bradshaw, C.A., and Brook, B.W. 2014. Genetics in conservation management: revised recommendations for the 50/500 rules, Red List criteria, and population viability analyses
+
+(n.b. - Lily recommended reading Jamieson and Allendorf 2012, which the authors of this piece and others published a rebuttal against - this is a longer-form counter to their paper)
+
+- IUCN's three levels for conservation of biodiversity: genetic diversity, species diversity
+	- here, review of genetic stochasticity
+- Inbreeding and genetic diversity losses are unavoidable in small, closed, sexually reproducing populations
+	- Wright 1969 shows that these increase in rachet-like fashion over time
+	- Frankham et al. 2010 demonstrate that this leads to reduced capaity to evolve
+	- Crnokrak and Roff 1999 show deleterious effects of inbreeding on fitness in wild outbreeding populations
+	- population size, genetic diversity, and mean fitness are positive correlated (Frankham 2012)
+- N_e of 50 to avoid inbreeding depression over five generations?
+	- inbreeding is typically greater in stressful, wild environments than the breeding environments these recommendations were based on
+	- in the wild, N_e of 50 typically means a decline in fitness of ~25% in five generations, with consequences for extinction (e.g., Newman and Pilson 1997)
+	- theory predicts that N_e ~ 150 is needed to retain 90% of current fitness after inbreeding of 5%
+- N_e of 500 for evolutionary potential in perpetuity?
+	- from Franklin 1980, arguing that this is where a good balance of drift-mutation balance (addition and removal typically of deleterious mutations, with equilibrium of these present at low frequencies)
+	- for naturally outbreeding species, N_e > 1000 is probably needed although less than this does not "doom" a population to extinction in short to medium term
+- Substantial evidence shows that genetic factors influence extinction risk
+	- inbreeding depression substantially reduces time to extinction in PVAs of wild, natural populations
+	- some empirical studies show this too
+	- some stochastic studies showing adaptive capacity and fish evolution
+
+Yep - N_e < 50 means extreme risk and fitness loss within five generations but N_e > 1000 means should have long-term potential. N.b. that N_e / N is typically around 0.1-0.2.
+
+
 
