@@ -2158,5 +2158,69 @@ It's good logic! But I think this assumption conditions on the initial genotype 
 
 Yep - N_e < 50 means extreme risk and fitness loss within five generations but N_e > 1000 means should have long-term potential. N.b. that N_e / N is typically around 0.1-0.2.
 
+### Bozzuto, C., Biebach, I., Muff, S., Ives, A.R., and Keller, L.F. 2019. Inbreeding reduces long-term growth of alpine ibex populations. Nature E&E.
+
+- Reduced fitness of individuals due to inbreeding - does it influence population growth?
+	- some theory about how inbreeding's effects on population dynamics is determined by ecology and LH of species
+	- e.g., under density dependence, inbreeding depression among individuals doesn't necessarily hinder population growth because competition is relaxed
+- Here: population growth in reintroduced Alpine ibex populations, 23-96 years
+- Ibex populations: bred and released into Alpine habitat from last remaining population in 1906
+	- annual abundance time series counts, number of harvested animals
+	- four reintroduction-associated bottlenecks (88 in source population, then founding populations in two waves)
+		- (only half of founders contributed genes to the next generation meaning the bottleneck was even more pronounced)
+- quantifying inbreeding using 37 microsatellites to get F_ST estimates (IBD within population compared to among populations), and a population-specific F_ST 
+	- no evidence of non-random mating within populations, so F_ST is all inbreeding since last common ancestral population
+- population growth rates in 26 populations: continuous rate of increase r_0, density dependence, and reintroduced+harvested individuals
+	- inbreeding effects: regressed log(r_0) against inbreeding coefficients
+		- (bayesian heteroscedastic measurement-error models)
+	- also mean environmental variables known to influence ibex populations for each population: mean daily summer and winter temperatures, mean daily summer and winter precipitation, winter snow cover
+- negative effect: inbreeding decreases population growth rates
+	- demographic model accounts for 79% of variance in r_0
+	- F_ST ranges 0.21-0.03, where 0.21 is associated with 71% reduction in growth rate compared to 17% reduction for 0.03
+	- inbreeding effects interacted with climate: absent with low summer precipitation, but stronger with wetter summers (influences body growth?)
+- small population size - could increase inbreeding? (vortex-like)
+	- expected inbreeding in randomly-mating population sizes is determined by the harmonic mean population size
+	- including harmonic mean of population size in models did not influence anything, i.e., no evidence that harmonic mean of pop size (determinant of drift) influenced inbreeding levels
+		- variation in founder group size, admixture, and carrying capacity likely drove differences
+- Why would inbreeding reduce population growth rates?
+	- this study had no way to quantify or test for purging... maybe it did occur (similarly to in some studies of invasive species) 
+	- drift load perhaps - bottlenecks may have led weakly deleterious alleles to reach fixation
+	- inbreeding here probably due to weakly deleterious alleles, drift load, and mild at best purging
+		- genetic rescue could occur with translocated ibices (rescue)
+- there is evidence of density dependence here (see fig. 1)
+	- seems like inbreeding effects overcame density-dependent compensation
+	- if NDD were stronger, then perhaps inbreeding would not have such strong effects because of the benefit of relaxed competition more approximating soft selection
+
+Ah okay super interesting... empirical evidence of inbreeding and drift influencing population dynamics! Negative direction - stronger inbreeding means lower growth rates. Figure 2 is not incredibly convincing (how much variance in population growth rates would be explained by this?).
+
+What is happening? Well, the things that could counteract inbreeding effects, according to the authors, are (1) purging and (2) compensating forces e.g. density dependence being weakened. Seems like those are not happening here although there is no explicit way to quantify these (they claim NDD is weak - how do they know?) Instead it seems to be drift from the sampling population and time spent at small size. This actually seems really relevant to us - the minimum size a population reaches may determine its growth rate! (I can test this!!)
+
+This is super relevant to us! I also think this is something that it would be great to validate with the beetle system if possible - population genetic work would be useful here although I guess that's beyond what I can do.
+	
+
+### Kardos, M., et al. 2021. The crucial role of genome-wide genetic variation in conservation. PNAS.
+
+- Conflict: to improve population viablity, should we conserve genome-wide genetic variation, or instead functional genetic variation directly influencing fitness?
+	- we often plan for large connected populations to maintain genetic variation, heritability, and avoid inbreeding depression
+	- does genetic variation actually improve fates? Isle Royale wolves collapsed after immigration, and we know of several populations able to persist at small size for long periods of time
+- Genetic variation and inbreeding depression - usually assumed to be driven by homozygous and identical by descent deleterious partially recessive alleles
+	- novel maladaptive mutations make inbreeding depression a possibility
+	- heterozygosity loss per generation is expected to be predictive of the rate of increase in the inbreeding coefficient
+	- deleterious alleles lost due to selection, drift, purging, possibly reducing inbreeding depression
+		- empirical data suggests that purging only removes a small amount of inbreeding depression though
+	- in general, higher degree of drift load and lower nucleotide diversity for small populations at mutation-selection balance
+	- equilibrium levels of nucleotide diversity and drift load won't occur in populations changing size (and/or featuring immigration)
+	- bottlenecks: genomic diversity declines following a bottleneck, due to drift and purging, but it does mean that deleterious alleles can increase in frequency
+		- after a bottleneck drift load, inbreeding load, and nucleotide diversity can change at different rates following bottlenecks (e.g. rapid increase in drift load and slow decrease in nucleotide diversity)
+- Genome-wide genetic variation and adaptive potential: additive genetic variance is required for selection on a trait
+	- V_a is affected by mutation, selection, migration, genetic drift, meaning that larger populations typically have higher V_a than smaller populations and thus that V_a and nucleotide diversity should be correlated with each other
+		- but this doesn't happen as often as we expect
+	- effects of bottlenecks on V_a can be complex due to epistatic or dominance variance due to drift that may increase V_a (but eventually V_a would fall again due to inbreeding)
+	- empirical studies show waker responses to selection in smaller populations and/or populations that have experienced a bottleneck
+	- but also, multiple studies show a weak relationship betwen V_a and genome-wide genetic variation across population
+- Mutation effects: bimodal distribution of mutation effects on fitness, with most mutations having a small effect <25% of s and a small minority being lethal/semi-lethal
+	- dominance also influences the effects of mutation
+	
+(not finished)
 
 
