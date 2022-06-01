@@ -1,6 +1,7 @@
 # State variables, conditioned on survival/generation of extinction
 # (Supplemental figures - "fishscale plots")
 # SN - 15 Nov 2021
+# (re-run 2 May 2022 lol)
 
 # Load packages
 library(ggplot2)
@@ -29,7 +30,7 @@ all.data %>%
 
 gen.cond = all.data %>%
   group_by(n.pop0, low.var, alpha, ext.gen, extinct, gen) %>%
-  rename(g = gbar, w = wbar) %>%
+  rename(g = gbar, z = zbar, w = wbar) %>%
   summarise(
     # Population size
     nbar = mean(n),
@@ -37,6 +38,9 @@ gen.cond = all.data %>%
     # Genotype
     gbar = mean(g),
     gvar = var(g),
+    # Phenotype
+    zbar = mean(z),
+    zvar = var(z),
     # Intrinsic fitness
     wbar = mean(w),
     wvar = var(w),
@@ -82,7 +86,7 @@ gen.cond %>%
   scale_fill_manual(values = c('black', 'red'), '') +
   scale_color_manual(values = c('black', 'red'), '') +
   scale_y_log10() +
-  labs(x = "Generation", y = "Population size") +
+  labs(x = "Generation", y = "Mean population size") +
   facet_wrap(dd ~ paste(n0, lv, sep = ', '), ncol = 4) +
   theme(
     legend.position = 'bottom',
@@ -93,7 +97,10 @@ gen.cond %>%
     strip.background = element_rect(colour = 'black')
     )
 
-### Genotype
+ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_supp_ext_gen_n.png',
+       width = 8, height = 5)
+
+### Genotype (g)
 
 gen.cond %>%
   mutate(
@@ -121,7 +128,7 @@ gen.cond %>%
   ) +
   scale_fill_manual(values = c('black', 'red'), '') +
   scale_color_manual(values = c('black', 'red'), '') +
-  labs(x = "Generation", y = "Genotypee") +
+  labs(x = "Generation", y = "Mean population genotype") +
   facet_wrap(dd ~ paste(n0, lv, sep = ', '), ncol = 4) +
   theme(
     legend.position = 'bottom',
@@ -131,6 +138,51 @@ gen.cond %>%
     panel.background = element_blank(),
     strip.background = element_rect(colour = 'black')
   )
+
+ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_supp_ext_gen_g.png',
+       width = 8, height = 5)
+
+### Phenotype (z)
+
+gen.cond %>%
+  mutate(
+    n0 = factor(n.pop0, labels = c('Small', 'Large')),
+    lv = factor(low.var, labels = c('High diversity', 'Low diversity')),
+    dd = factor(alpha, labels = c('Density independent', 'Density dependent')),
+    extinct = factor(extinct, labels = c("Surviving", "Extinct"))
+  ) %>%
+  ggplot(aes(x = gen)) +
+  # geom_ribbon(
+  #   aes(
+  #     ymin = gbar - 2 * sqrt(gvar / nobs),
+  #     ymax = gbar + 2 * sqrt(gvar / nobs),
+  #     group = interaction(ext.gen, extinct),
+  #     fill = extinct
+  #   ),
+  #   alpha = 0.1
+  # ) +
+  geom_line(
+    aes(
+      y = zbar,
+      group = interaction(ext.gen, extinct),
+      colour = extinct
+    )
+  ) +
+  scale_fill_manual(values = c('black', 'red'), '') +
+  scale_color_manual(values = c('black', 'red'), '') +
+  labs(x = "Generation", y = "Mean population phenotype") +
+  facet_wrap(dd ~ paste(n0, lv, sep = ', '), ncol = 4) +
+  theme(
+    legend.position = 'bottom',
+    panel.grid.major = element_line(colour = 'gray88'),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank(),
+    strip.background = element_rect(colour = 'black')
+  )
+
+ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_supp_ext_gen_z.png',
+       width = 8, height = 5)
 
 ### Intrinsic fitness (W)
 
@@ -160,7 +212,7 @@ gen.cond %>%
   ) +
   scale_fill_manual(values = c('black', 'red'), '') +
   scale_color_manual(values = c('black', 'red'), '') +
-  labs(x = "Generation", y = "Intrinsic fitness") +
+  labs(x = "Generation", y = "Mean intrinsic fitness") +
   facet_wrap(dd ~ paste(n0, lv, sep = ', '), ncol = 4) +
   theme(
     legend.position = 'bottom',
@@ -171,7 +223,10 @@ gen.cond %>%
     strip.background = element_rect(colour = 'black')
   )
 
-### Genetic variation
+ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_supp_ext_gen_w.png',
+       width = 8, height = 5)
+
+### Additive genetic variance
 
 gen.cond %>%
   mutate(
@@ -199,7 +254,7 @@ gen.cond %>%
   ) +
   scale_fill_manual(values = c('black', 'red'), '') +
   scale_color_manual(values = c('black', 'red'), '') +
-  labs(x = "Generation", y = "Genetic variation") +
+  labs(x = "Generation", y = "Mean additive genetic variance") +
   facet_wrap(dd ~ paste(n0, lv, sep = ', '), ncol = 4) +
   theme(
     legend.position = 'bottom',
@@ -209,6 +264,9 @@ gen.cond %>%
     panel.background = element_blank(),
     strip.background = element_rect(colour = 'black')
   )
+
+ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_supp_ext_gen_v.png',
+       width = 8, height = 5)
 
 ### Fixation of alleles (positive)
 
@@ -229,7 +287,7 @@ gen.cond %>%
   ) +
   scale_fill_manual(values = c('black', 'red'), '') +
   scale_color_manual(values = c('black', 'red'), '') +
-  labs(x = "Generation", y = "Loci at fixation (positive allele)") +
+  labs(x = "Generation", y = "Proportion of loci at fixation (positive allele)") +
   facet_wrap(dd ~ paste(n0, lv, sep = ', '), ncol = 4) +
   theme(
     legend.position = 'bottom',
@@ -239,6 +297,9 @@ gen.cond %>%
     panel.background = element_blank(),
     strip.background = element_rect(colour = 'black')
   )
+
+ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_supp_ext_gen_fixp.png',
+       width = 8, height = 5)
 
 ### Fixation of alleles (negative)
 
@@ -259,7 +320,7 @@ gen.cond %>%
   ) +
   scale_fill_manual(values = c('black', 'red'), '') +
   scale_color_manual(values = c('black', 'red'), '') +
-  labs(x = "Generation", y = "Loci at fixation (negative allele)") +
+  labs(x = "Generation", y = "Proportion of loci at fixation (negative allele)") +
   facet_wrap(dd ~ paste(n0, lv, sep = ', '), ncol = 4) +
   theme(
     legend.position = 'bottom',
@@ -269,3 +330,6 @@ gen.cond %>%
     panel.background = element_blank(),
     strip.background = element_rect(colour = 'black')
   )
+
+ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_supp_ext_gen_fixn.png',
+       width = 8, height = 5)
