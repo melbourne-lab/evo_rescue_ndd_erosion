@@ -176,7 +176,7 @@ tau.loglam = all.tau %>%
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap(~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
-  labs(x = '', y = expression(atop("Population growth", "rate, ln" ~ lambda[tau]))) +
+  labs(x = '', y = expression(atop("Population growth", " rate, " ~ group(langle, r, rangle)[tau]))) +
   theme(legend.position = 'none',
         panel.grid.major = element_line(colour = 'gray88'),
         panel.background = element_rect(fill = 'white'),
@@ -209,7 +209,7 @@ tau.varred = all.tau %>%
     ),
     alpha = 0.1
   ) +
-  labs(x = '', y =  expression(atop("Loss of genetic", "variance, " ~ nu[tau]))) +
+  labs(x = '', y =  expression(atop("Loss of genetic", "variance, " ~ group(langle, nu, rangle)[tau]))) +
   scale_x_reverse(breaks = (0:4)*3, labels = NULL) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
@@ -252,7 +252,7 @@ tau.malada = all.tau %>%
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap(~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
   labs(x = expression('Time to extinction, ' ~ tau), 
-       y = expression(atop('Rate of adaptation,', ~ 1-k[tau]))) +
+       y = expression(atop('Rate of adaptation,', ~ 1-group(langle, k, rangle)[tau]))) +
   theme(legend.position = 'none',
         strip.text = element_blank(),
         strip.background = element_blank(),
