@@ -244,7 +244,8 @@ variance.plot = ext.v %>%
   scale_colour_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   scale_linetype_manual(values = c(2, 1)) +
-  labs(x = '', y = 'Genetic variance') +
+  labs(x = '', 
+       y = expression(paste('Genetic variance, ', group(langle, sigma[a]^2, rangle)[t]))) +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   theme(panel.background = element_rect(fill = 'white'),
         # panel.grid = element_line('gray88'),
