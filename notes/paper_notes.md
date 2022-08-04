@@ -2196,7 +2196,7 @@ Ah okay super interesting... empirical evidence of inbreeding and drift influenc
 What is happening? Well, the things that could counteract inbreeding effects, according to the authors, are (1) purging and (2) compensating forces e.g. density dependence being weakened. Seems like those are not happening here although there is no explicit way to quantify these (they claim NDD is weak - how do they know?) Instead it seems to be drift from the sampling population and time spent at small size. This actually seems really relevant to us - the minimum size a population reaches may determine its growth rate! (I can test this!!)
 
 This is super relevant to us! I also think this is something that it would be great to validate with the beetle system if possible - population genetic work would be useful here although I guess that's beyond what I can do.
-	
+
 
 ### Kardos, M., et al. 2021. The crucial role of genome-wide genetic variation in conservation. PNAS.
 
@@ -2223,4 +2223,65 @@ This is super relevant to us! I also think this is something that it would be gr
 	
 (not finished)
 
+### Bisschop, K., Alzate, A., Bonte, D., and Etienne, R.S. 2022. The demographic consequences of adaptation: evidence from experimental evolution. Am. Nat. 
+
+- Adaptation requires changes in LH, e.g., # ofspring, mortality (varying w. age), devo rate (Stearns 1976), possibly producing feedbacks influencing demographic properties
+	- high population growth -> faster recovery after population collapse (good), but also maybe chaotic dynamics (?) and overcompensation (>)
+	- higher carrying capacity -> more recombination, mutations -> more evolutionary "potential", less inbreeding
+- Intraspecific competition may favor individuals with higher resource efficiency (metabolism, handling time, etc.)
+	- this could be compounded by immigration (relatedly, connectivity) which may increase competition where there is net immigration
+- Changes in carrying capacity: could go down if individuals invest surplus energy from increased efficiency in competitive ability, or up if invested in offspring
+	- little empirical testing of the idea that adaptation can influence carrying capacity
+	- Abrams 2019 ha a model suggesting that populations should decrease in size after adaptation because increased resource uptake means decrease in resource availability
+		- could also be trade-ofs in individual growth and resource defense, or resource uptake and conversion efficiency
+- Here: refitting data from Alzate et al. 2017, 2019 to see how adaptation to a novel environment affect population growth rates and/or carrying capacity
+##### Methods
+- Spider mites - high-fecundity herbivore
+	- Previous studies looking at local adaptation from beans onto tomato plants (challenging due to phytohormones and trichomes)
+	- 2019 study "island biogeography study": immigration rate and resource availability (# plants per island) on adaptation
+	- 2017 study "immigration load experiment": immigration rates and competition, although for considered study competition data is ignored
+		- no differences in resource availability, higher rates of immigration than biogeog study
+	- adult female mites from lines reared on bean plants, 20 generations, put onto tomato plants
+		- plants refreshed every two weeks; "older" plants were larger (two weeks extra growth) with higher CC, possibly inducing population fluctuations (although censuses were performed before plant "refreshment")
+	- measure of adaptation: female fecundity after 20 generations
+		- # eggs / female divided by max. # eggs / female (across treatments)
+- Does adaptation change K (carrying capacity) or lambda (growth rate)
+	- based on Ricker model, assuming that plant refreshment meant resource rates were constant
+	- (Ricker can be re-parameterized to have CC?? wow...)
+		- b = r/K is NDD term (analogous to our alpha)
+	- modified Ricker to include immigration
+	- only counted females (longer-lived, consume morst resources) although  males and juvs do influence NDD term
+	- dependencies of lambda and K on time (adaptation) controlled by a, b, s terms (positive effect with/without intercept, neutral, negative)
+- Six models allowing changes in combos of lambda, K
+##### Results
+- Initial growth phase, overshoot, oscillatory plateau
+	- in both studies, positive correlation between (mean?) adaptation factor f and positive growth rate
+	- contrasting results (between studies) for adaptation factor and carrying capacity
+		- geography experiment: positive relationship (more adaptation corresponds to higher CC)
+		- immigration load exp: negative relationship (more adaptation corresponds to lower CC)
+		- second best model assumes no relationship with CC
+	- influence of adaptation seems to kick in earlier in immigration load than biogeog
+##### Discussion
+- Adaptation to the novel environment increased population growth
+	- "Populations of better-adapted individuals at the end of the experiment thus grewfaster over the course of the experiment" - feel like there's something possibly profound in this...
+	- there was evidence that carrying capacity was influenced by adaptation but it was context dependent (depending on resource availability(?) and immigration)
+- Why the result that growth rate increased was not necessarily trivial:
+	- higher fitness may result in more resource use, which could be allocated to reproduction when alone but to competition when not alone
+	- (but in present study they did in fact observe higher population growth rates... this suggests that the main driver was increased reproductive allocation?)
+	- but with overshooting (overcompensation) higher growth rates do not necessarily guarantee long-term success (wait... but unless there is extinction, higher growth rates *do* mean higher rates of return to the CC if there is a crash)
+- Carrying capacity results as a dichotomy in resource use:
+	- increasing resource use would mean lower population size
+	- increasing resource use efficiency would mean higher population size
+	- different results could be due to the fact that there were larger islands in the biogeography experiment
+		- with similar levels of resource availability, higher adaptation meant lower CC
+			- so more resources are being allocated for competitive strength
+		- but with large or small resource availability, patterns suggest evolution of resource efficiency
+
+Interesting questions in here although discussion is muddled and I don't trust their conclusions (re: their own data) on carrying capacity.
+
+First - really good to be aware of the possibility that carrying capacity (strength of NDD) can be modified by adaptation. I like the dichotomy between resource use (decrease CC) and resource use efficiency (increase CC). Perhaps resource use increases are okay in certain environment types - e.g., more likely to see selection for efficiency in low-resource environments. 
+
+It was also to think a little bit more mechanistically about what the benefits of adaptation are. Higher fecundity may only be advantageous at lower densities. Are increases in resource acquisition allocated to reproduction or competition? This is helpful for the LH project I suppose - survival vs. reproduction (and/or ontogeny projects?)
+
+I don't trust the arguments about context dependence on the CC results. Some of this seems post hoc-ey.
 
