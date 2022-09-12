@@ -2285,3 +2285,76 @@ It was also to think a little bit more mechanistically about what the benefits o
 
 I don't trust the arguments about context dependence on the CC results. Some of this seems post hoc-ey.
 
+### Bonnet, T., et al. 2022. Genetic variance in fitness indicates rapid contemporary adaptive evolution in wild animals. Science.
+
+- Selection acts on many traits simultaneously, and specific traits may not represent the "overall rate of adaptation" in a population
+	- it's necessary to consider a "comprehensive assessment" of genetic change in all traits influencing individual fitness
+- Fisher's fundamental theorem: per-generation proportional change in mean absolute fitness via natural selection is given by additive genetic variance in relative fitness
+	- V_A(w) is heritable genetic differences in ability to reproduce
+	- changes in mean fitness may deviate from additive variance through mutations, gene flow, environmental change, etc.
+- Estimating V_A(w) - need individual fitness and pairwise genetic relatedness with a lot of individuals
+	- distribution of individual fitness also requires stats for non-standard distributions of realized fitnesses
+	- two reviews have estimates of V_A(w) from 16 populations (incl. 13 different plant and non-human animal species)
+- Here: additive genetic variance in 19 free-living vertebrates using Bayesian quantitative genetic methods
+	- six birds, nine mammal species in diverse biomes, life histories, social systems
+	- 11-63 years per population, 561 total fully-monitored cohorts and 249K individuals of both sexes
+	- fitness: "lifetime breeding success" - number of individuals produced over lifetime irrespective of offspring survival (zygote-to-zygote definition of individual fitness, see Hadfield 2012 in Evolution of Parental Care)
+	- fitness estimated using a zero-inflated Poisson models (hmm...)
+- Additive genetic variance with posterior modes between 0.003 and 0.497
+	- 95% CIs excluded values below 0.001 in 10/19 populations and values below 0.01 in 8/19
+	- median of posterior modes across populations was 0.100 (meta-analytic mean 0.185)
+	- among-population meta-analytic standard deviation of 0.11
+- h2(w) - heritability of fitness (V_A(w) divided by phenotypic variance in relative fitness) might be a poor measure of overall rate of adaptive evolution because of the possibly-large magnitude of stochasticity and unaccounted environmental variation that would wash out heritability estimates
+	- this study found h2(W) to be small - 3%!
+	- (this is similar to previous estimates)
+	- posterior modes between 0.019 (%?) and 17%
+- V_A(w) sets an upper bound for possible per-generation response to selection of any trait (see: Hansen et al., 2011)
+	- e.g., an 0.05-0.39 standard deviation upper bound for a 30% heritable trait in this study
+		 - phenotypic change observed in natural populations seems barely above 0.1 standard deviations, if any at all
+	- Detecting or quantifying actual genetic evolution of traits - tests are rare and often underpowered
+- Back-of-envelope thought experiment: 11/19 populations would, if adaptive evolution was unopposed and V_A(w) constant, recover from 1/3 reduction of fitness in fewer than 10 generations (see supplements)
+	- but the lack of observable exponential change as posed above suggests that other factors counteract adaptive evolution, e.g., mutation, gene flow...
+
+Interesting stuff. Enjoyed the tie-in to rescue - there is sufficient additive variance, it seems like, in roughly half of these populations to allow for rescue of a 1/3 fitness loss in ~10 generations. Very neat.
+
+Would be curious to hear how Stuart and Ruth suggest to improve their stats. Not sure what to make of the methods used here.
+
+### Hone, J., Duncan, R.P., and Forsyth, D.M. 2010. Estimates of maximum annual population growth rates (r_m) of mammals and their application in wildlife management. Journal of Applied Ecology.
+
+- r_m is the maximum increase in numbers occurring annually in absence of predation or resource limitation
+	- important for many wildlife population models
+- How to estimate? Good way: reduce a population to low densities in ideal conditions
+	- in the absence of these data on hand, could (1) obtain estimates on your own, (2) look for empirical evidence in closely related species, or (3) use an allometric relationship (e.g., r_m ~ body mass)
+		- this latter approach (scaling r_m ~ M) may vary by phylogeny though
+- Estimating from demographic data: could follow from life table data (age-specific survival and fecundity) combined with Lotka-Euler equation
+	- requirements for Lotka-Euler equation rarely met - a two-stage version for adults/juveniles may work
+	- estimating r_m assumes survival approaching 1, in which case r_m is a function of annual fecundity (b) and ages of first and last reproduction (alpha, omega)
+		- (same as two-stage version of Cole 1954)
+		- assuming age of last reproduction (omega) is very large produces an even simpler relationship
+		- inverse relationship between log r_m and log alpha: higher alpha means lower max growth rate
+##### Methods
+- Looking at Duncan et al. (2007) and their 33 estimates of r_m for 17 species
+	- partitioning variance in these datasets into among- and within-species variance (log(r_m from field) = b_0 + b_1 (r_m from Cole's) + between species random effect + within-species random effect
+	- if Cole's equation accurately predicts r_m observed in the field, b_0 = 0, b_1 = 1, and variance terms close to zero
+- Also looking at estimates from Duncan et al. 2007: r_m, alpha, and b (fecundity) available
+	- here: log r_m is response, double-logged b is intercept, log alpha is slope	
+	- this relationship would hold if regression gives estimates similar to theoretically derived slope and intercept
+##### Results
+- Cole's equation on field data: slope very close to 1, intercept very close to zero, high r^2
+	- suggests that Cole's equation can provide unbiased estimates of r_m
+	- most deviation from expectation was among-species, but there was some within species variation
+- Age at first reproduction and annual fecundity:
+	- avg. of 2.03 female young per female per year estimated from data; double log gives ~-0.15 intercept
+	- regression using field data gives slope of -0.99 and intercept of -0.16
+	- using estimates from this equation gives r^2 of 0.87, intercept 0, slope 1.1 when regressed against field data
+		- slight underestimate with large r_m, slight overestimate with small r_m
+##### Discussion
+- This technique shows improvement over Lynch and Fagan's (2009) use of Cole equation (biased) and avoids issues with phylogenetic correlation in relationships between r_m and mass
+
+Hmm maybe not the best ref (bulk of stuff is about estimation) but this is supported in figures. Seems fine - r_max very likely to be above exp(1).
+
+Seems neat seeing that you can (in ideal circumstances) use just ages at reproduction and fecundtiy... although I guess it makes sense. Why can't you do this with plants as well? I should probably read in to some of the theory here, e.g., Lotka-Euler, Cole equation, etc.
+
+
+
+
