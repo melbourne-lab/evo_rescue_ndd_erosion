@@ -279,7 +279,7 @@ ext.r.plot = ext.wr %>%
     ),
     size = 1.5
   ) +
-  labs(x = 'Generation', y = expression(atop('Mean population extrinsic', 'fitness, '~ bar(R[t])))) +
+  labs(x = 'Generation', y = expression(atop('Mean population expected', 'offspring, '~ bar(R[t])))) +
   scale_fill_manual(values = c('black', 'purple')) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_linetype_manual(values = c(1, 2)) +
@@ -299,7 +299,7 @@ ext.wr.plots = plot_grid(ext.w.plot, ext.r.plot,
 save_plot(
   plot_grid(ext.wr.plots, varn.legend, 
             ncol = 1, rel_heights = c(1, .1)),
-  filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_supp_ext_wr.pdf',
+  filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_supp_ext_wr.png',
   base_width = 8, base_height = 6
 )
 
