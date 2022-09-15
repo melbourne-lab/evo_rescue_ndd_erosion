@@ -46,7 +46,7 @@ all.n %>%
   ggplot(aes(x = gen)) +
   geom_segment(
     aes(
-      x = 0, xend = 15,
+      x = 1, xend = 15,
       y = n.pop0, yend = n.pop0
     ),
     linetype = 3,
@@ -97,8 +97,9 @@ all.n %>%
         legend.position = c(0.2, 0.8),
         legend.text = element_text(size = 12),
         strip.background = element_rect(colour = 'black'),
-        strip.text = element_text(size = 12)) +
-  ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_1.pdf',
+        strip.text = element_text(size = 12)) #+
+
+  ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_pop_size.png',
          width = 8, height = 5)
 
 ##### Figure S1
