@@ -475,6 +475,15 @@ geno.full.row = ggplot(epreds, aes(x = 2.75 - gbar, y = estimate)) +
     ),
     size = 0.1
   ) +
+  geom_rug(
+    data = ext.data,
+    inherit.aes = FALSE,
+    aes(
+      x = 2.75 - gbar
+    ),
+    sides = "b",
+    size = 0.1
+  ) +
   labs(x = 'Initial maladaptation', y = '') +
   scale_color_manual(values = c('black', 'purple')) +
   facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
@@ -486,6 +495,8 @@ geno.full.row = ggplot(epreds, aes(x = 2.75 - gbar, y = estimate)) +
         panel.background = element_rect(fill = 'white'),
         plot.margin = margin(b = 0, r = 5, l = 20, unit = 'pt'))
 
+geno.full.row
+
 data.plots.row = plot_grid(size.plot.row, inst.plot.row, 
                            cuml.plot.row, geno.full.row, 
                            labels = c('(A)', '(B)', '(C)', '(D)'),
@@ -494,7 +505,7 @@ data.plots.row = plot_grid(size.plot.row, inst.plot.row,
 data.plots.row
 
 plot_grid(data.plots.row, extinct.legend, ncol = 1, rel_heights = c(1, .1)) %>%
-  save_plot(filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_2.pdf',
+  save_plot(filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_ext_fig.png',
             base_width = 8, base_height = 8)
 
 gbar.slopes = with(
