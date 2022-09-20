@@ -1,15 +1,22 @@
-library(ggplot2)
-library(dplyr)
-library(tidyr)
-library(tidyselect)
+### Functions needed for running simulations
 
-# Auxiliary functions
 
+library(ggplot2) # only used for examining test results
+library(dplyr)   # needed - version 1.0.7 used
+library(tidyr)   # needed for spread/gather - version 1.1.3 used
+library(tidyselect)  # needed for column selecting (alleles) - version 1.1.1 used
+
+### Auxiliary functions
+
+# Used for easily setting column names (couldn't find an easy way of doing this
+# in tidyverse)
 set.names = function(df, name.array) {
   names(df) = name.array
   df
 }
 
+# Used for adding rows to data frame
+# (using pre-allocation here for expedience)
 dim.add = function(df, rows, addition) {
   if (sum(is.na(df$i)) < nrow(addition)) {
     df = df %>%
@@ -23,11 +30,24 @@ dim.add = function(df, rows, addition) {
   return(df)
 }
 
+# Function for turning lists into data frame with trial info added
+# (in retrospect adding trial here is not the best way to do this
+# - would have been better to add a trial column directly after the sim)
+unroller = function(sim.list) {
+  sim.list %>%
+    do.call(what = rbind) %>%
+    mutate(trial = cumsum(c(1, as.numeric(diff(gen) < 0))))
+}
+
+### Main simulation functions
+
+# Wrapper for initializing a population for simulation
 init.sim = function(a = c(1/2, -1/2), params) {
+  
   # Inputs:
   # a - an array of length two (bi-allelic model)
   # each element is a contribution to the genotype
-  # in simplest case, this is -1/2, 1/2
+  # n.b. default is simplest case: -1/2, 1/2
   # params - a data frame of parameters
   
   n.loci = params$n.loci
@@ -87,7 +107,8 @@ init.sim = function(a = c(1/2, -1/2), params) {
   
 }
 
-##### Test of the above:
+##### Tests of the above:
+# (note: not run since early testing - can not guarantee quality of results)
 # 
 # pars = data.frame(n.loci = 20, n.pop0 = 40,
 #                   w.max = 1.2, theta = 2.6,
@@ -130,7 +151,13 @@ init.sim = function(a = c(1/2, -1/2), params) {
 # hist(popn0$r_i)
 # hist(popna$r_i)
 
+# Wrapper for iterating the simulation forward oe timestep/generation
 propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
+  
+  # n.b. defaults are (1) alleles of same magnitude opposing effect and
+  # (2) population should be evolving in each time step
+  # (non-evolving treatment initializes population of same size as population
+  # size in given timestep)
   
   n.loci = params$n.loci
   # number of loci determining the genotype
@@ -206,7 +233,7 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
         # Turn this data frame back into "wide" format
         spread(key = par.locus, value = val) %>%
         ungroup() %>%
-        # Now, calculate breeding value (genotype?), etc.
+        # Now, calculate genotype, etc.
         #   for each offspring
         #   (note: to do this, we need to first remove the 'i' 
         #   column in order to calculate g_i)
@@ -237,6 +264,8 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
 }
 
 ##### Testing:
+# (again: can not guarantee quality of results)
+# (need to run test code above , at least, for this to work)
 # # # Try it out.
 # propagate.sim(a = c(-1/2, 1/2), params = pars, popn = popn0, evolve = FALSE)
 # 
@@ -263,9 +292,14 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
 #               popn = popn0[2:3,])
 # # Good.
 
+# Wrapper function for running simulation (using init and propagate functions
+# above)
 sim = function(a = c(1/2, -1/2), params, init.popn = NULL, evolve = TRUE) {
   
-  # Helpful global parameters.
+  # N.b., defaults are (1) alleles of equal and opposing effect, (2) no initial
+  # population fed in (so init.sim() is called) and (3) populations evolve
+  
+  # Helpful global parameters:
   
   # How long the simulation should run for
   end.time = params$end.time
@@ -273,7 +307,7 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL, evolve = TRUE) {
   init.row = params$init.row
   # How many loci there are for the allele.
   n.loci = params$n.loci
-  # Threshold above which to stop simulation
+  # Threshold above which to stop simulation (used in long-sims)
   size.thresh = ifelse('size.thresh' %in% names(params), params$size.thresh, Inf)
   
   
@@ -331,14 +365,9 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL, evolve = TRUE) {
     }
   }
   
+  # Return population with empty/unused rows filtered out
   return(all.pop %>% filter(!is.na(i)))
   
-}
-
-unroller = function(sim.list) {
-  sim.list %>%
-    do.call(what = rbind) %>%
-    mutate(trial = cumsum(c(1, as.numeric(diff(gen) < 0))))
 }
 
 # # More test code below:
@@ -441,15 +470,4 @@ unroller = function(sim.list) {
 #             gen.varn = 2 * pos.freq * (1 - pos.freq) / 25) %>%
 #   group_by(gen) %>%
 #   summarise(gen.var = sum(gen.varn))
-# 
-# # Not totally sure what this is... all allele frequencies...?
-# sim.test %>%
-#     gather(key = loc.copy, value = val, -c(i, g_i, z_i, w_i, r_i, fem, gen)) %>%
-#     mutate(loc = gsub('[ab]', '', loc.copy) %>% as.numeric()) %>%
-#     group_by(gen, loc) %>%
-#     summarise(n = length(unique(i)),
-#               m = mean(val)) %>%
-#     print(n = 150)
-# 
-# object.size(sim.test)
 # 
