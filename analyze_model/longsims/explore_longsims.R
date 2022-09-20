@@ -771,3 +771,32 @@ merge(geno.res.preds, geno.wes.preds,
         panel.grid.major = element_line(colour = 'gray88'),
         panel.background = element_rect(fill = 'white'),
         strip.background = element_rect(colour = 'black'))
+
+###
+
+all.results = merge(p.rescue, p.wescue %>% select(-gbar),
+      by = c('trial', 'alpha', 'n.pop0', 'low.var'),
+      suffixes = c('.size', '.fitn')) %>%
+  merge(y = all.ext %>% mutate(extinct = ext.gen < 50) %>% select(-ext.gen))
+
+all.results %>%
+  filter(!(is.na(rescue.time.fitn) | is.na(rescue.time.size))) %>%
+  ggplot(aes(x = rescue.time.fitn, y = rescue.time.size, colour = extinct)) +
+  geom_point(position = position_jitter(width = 0.5, height = 0.5)) +
+  scale_color_manual(values = c('black', 'red')) +
+  facet_wrap(factor(n.pop0) + low.var ~ factor(alpha), nrow = 2)
+
+all.results %>%
+  filter(!(is.na(rescue.time.fitn) | is.na(rescue.time.size))) %>%
+  ggplot(aes(x = rescue.time.fitn, y = rescue.time.size, shape = extinct, colour = factor(alpha))) +
+  geom_point(size = 3, position = position_jitter(width = 0.5, height = 0.5)) +
+  scale_shape_manual(values = c('o', 'x')) +
+  scale_color_manual(values = c('black', 'purple')) +
+  facet_wrap(factor(n.pop0) ~ low.var, nrow = 2)
+
+all.results %>%
+  filter(!(is.na(rescue.time.fitn) | is.na(rescue.time.size))) %>%
+  ggplot(aes(x = rescue.time.fitn, y = rescue.time.size, colour = factor(alpha))) +
+  geom_point(size = 3, alpha = 0.2, position = position_jitter(width = 0.5, height = 0.5)) +
+  scale_color_manual(values = c('black', 'purple')) +
+  facet_wrap(factor(n.pop0) ~ low.var, nrow = 2)
