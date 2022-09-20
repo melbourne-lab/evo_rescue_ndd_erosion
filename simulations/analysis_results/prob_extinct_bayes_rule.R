@@ -450,54 +450,60 @@ p.ext.w = all.data %>%
             n.ex = n.w.e[extinct],
             n.sv = n.w.e[!extinct])
 
-# This looks like the best plot thus far
-p.ext.w %>% 
-  ungroup() %>%
-  filter(gen %in% 5, # nr < 100, # note - excludes populations above size 160
-         n.ex + n.sv >= 15) %>%
-  mutate(n.pop0 = factor(ifelse(n.pop0 > 50, 'large', 'small')),
-         low.var = factor(ifelse(low.var, 'low diversity', 'high diversity')),
-         nr = factor(ifelse(nr > 20, '40-79',
-                     ifelse(nr > 10, '20-39',
-                     ifelse(nr > 5,  '10-19',
-                     ifelse(nr > 1,  '05-09',
-                                     '01-04')))))) %>%
-  ggplot(aes(x = wr, y = p.e.w)) +
-  geom_line(
-    aes(
-      group = interaction(gen, alpha, nr),
-      linetype = factor(alpha),
-      colour = factor(nr)
-    ),
-    size = 1.5
-  ) +
-  geom_point(
-    aes(
-      fill = factor(nr),
-      shape = factor(alpha)
-    ),
-    size = 4
-  ) +
-  scale_linetype('Density dependence') +
-  scale_shape_manual(values = c(21, 24), #, 15),
-                     'Density dependence') +
-  scale_color_brewer(palette = 'Spectral',
-                     'Size') +
-  scale_fill_brewer(palette = 'Spectral',
-                    'Size') +
-  facet_wrap( ~ paste(n.pop0, low.var, sep = ', ') , nrow = 1) +
-  labs(x = 'Intrinsic fitness (W)', y = 'Prob. extinct') +
-  theme_bw() +
-  # guides(
-  #   guide_legend(override.aes = list(size = 0.1)) 
-  # ) +
-  theme(
-    legend.position = 'bottom',
-    legend.key.size = unit(2, 'lines'),
-    panel.background = element_rect(fill = 'gray77')
-  ) 
+for (timestep in 2:14) {
+  
+  # This looks like the best plot thus far
+  p.ext.w %>% 
+    ungroup() %>%
+    filter(gen %in% timestep, # nr < 100, # note - excludes populations above size 160
+           n.ex + n.sv >= 10) %>%
+    mutate(n.pop0 = factor(ifelse(n.pop0 > 50, 'large', 'small')),
+           low.var = factor(ifelse(low.var, 'low diversity', 'high diversity')),
+           nr = factor(ifelse(nr > 20, '40-79',
+                              ifelse(nr > 10, '20-39',
+                                     ifelse(nr > 5,  '10-19',
+                                            ifelse(nr > 1,  '05-09',
+                                                   '01-04')))))) %>%
+    ggplot(aes(x = wr, y = p.e.w)) +
+    geom_line(
+      aes(
+        group = interaction(gen, alpha, nr),
+        linetype = factor(alpha),
+        colour = factor(nr)
+      ),
+      size = 1.5
+    ) +
+    geom_point(
+      aes(
+        fill = factor(nr),
+        shape = factor(alpha)
+      ),
+      size = 4
+    ) +
+    scale_linetype('Density dependence') +
+    scale_shape_manual(values = c(21, 24), #, 15),
+                       'Density dependence') +
+    scale_color_brewer(palette = 'Spectral',
+                       'Size') +
+    scale_fill_brewer(palette = 'Spectral',
+                      'Size') +
+    facet_wrap( ~ paste(n.pop0, low.var, sep = ', ') , nrow = 1) +
+    labs(x = 'Intrinsic fitness (W)', y = 'Prob. extinct') +
+    theme_bw() +
+    # guides(
+    #   guide_legend(override.aes = list(size = 0.1)) 
+    # ) +
+    theme(
+      legend.position = 'bottom',
+      legend.key.size = unit(2, 'lines'),
+      panel.background = element_rect(fill = 'gray77')
+    ) 
+  
+  fn = paste0('~/Dropbox/rescue_ndd_paper_2020/figures/p_extinct_w_', timestep, '.pdf')
+  
+  ggsave(fn, width = 10, height = 4)
 
-ggsave('~/Dropbox/rescue_ndd_paper_2020/figures/p_extinct_w.pdf', width = 10, height = 4)
+}
 
 # may want to try the above plot using fill instead of colour,
 # and shapes with a black packground (to make things pop)
