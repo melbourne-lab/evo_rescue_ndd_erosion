@@ -43,6 +43,7 @@ all.n = all.data %>%
          low.var = factor(low.var, labels = c("Low genetic diversity", "High genetic diversity")))
 
 all.n %>%
+  mutate(n0 = factor(n0, levels = levels(n0)[2:1])) %>%
   ggplot(aes(x = gen)) +
   geom_segment(
     aes(
@@ -94,12 +95,12 @@ all.n %>%
         panel.border = element_rect(fill = NA),
         legend.background = element_rect(fill = NA),
         legend.direction = 'horizontal',
-        legend.position = c(0.2, 0.8),
+        legend.position = c(0.2, 0.85),
         legend.text = element_text(size = 12),
         strip.background = element_rect(colour = 'black'),
         strip.text = element_text(size = 12)) #+
 
-  ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_pop_size.png',
+  ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_pop_size_large_first.png',
          width = 8, height = 5)
 
 ##### Figure S1
@@ -179,7 +180,7 @@ ext.n %>%
 #        legend.position = c(0.2, 0.8),
         legend.text = element_text(size = 12),
         strip.background = element_rect(colour = 'black'),
-        strip.text = element_text(size = 12)) +
+        strip.text = element_text(size = 12)) #+
   ggsave('simulations/analysis_results/figure_drafts/draft_figs/fig_s1.pdf',
          width = 8, height = 5)
 
