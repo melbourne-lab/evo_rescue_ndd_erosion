@@ -346,10 +346,11 @@ save_plot(plot_grid(variance.plot, fixation.pos.plot, fixation.neg.plot,
                     labels = c('(A)', '(B)', '(C)'),
                     label_x = c(-0.015, -0.015, -0.015),
                     label_y = c(1, 1.16, 1.16),
+                    label_size = 12,
                     varn.legend, rel_heights = c(1.2, 1, 1, 0.1), ncol = 1), 
           #varn.legend,
           #rel_heights = c(1, 0.1),
-          filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_var_fix.pdf',
+          filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_var_fix.png',
           base_width = 8, base_height = 6)
 
 # Summary stats of above:
