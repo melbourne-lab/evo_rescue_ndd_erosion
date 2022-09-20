@@ -340,8 +340,16 @@ cuml.plot.row = all.extinctions.long %>%
     ),
     alpha = 0.5
   ) +
-  scale_fill_manual(values = c('purple', 'black')) +
+  geom_line(
+    aes(
+      y = p.extinct,
+      group = factor(alpha),
+      colour = factor(alpha)
+    )
+  ) +
   labs(x = 'Generation', y = '') +
+  scale_fill_manual(values = c('purple', 'black')) +
+  scale_colour_manual(values = c('purple', 'black')) +
   facet_wrap( ~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
   theme(legend.position = 'none',        
         strip.text = element_blank(),
@@ -456,7 +464,8 @@ apply(gdiv.posts, 2, function(x) quantile(x, c(0.025, 0.975))) %>% round(2)
 geno.ext.fulls = expand.grid(gbar = (-5:5)/10,
                              alpha = c("di", "ndd"),
                              n.pop0 = c("large", "small"),
-                             low.var = c("low.div", "hi.div"))
+                             low.var = c("low.div", "hi.div")) %>%
+  filter(n.pop0 %in% 'small' | abs(gbar) < 0.35)
 
 epreds = posterior_epred(ext.mod.full, newdata = geno.ext.fulls,
                          seed = 196200, draws = 200) %>%
@@ -500,6 +509,8 @@ geno.full.row
 data.plots.row = plot_grid(size.plot.row, inst.plot.row, 
                            cuml.plot.row, geno.full.row, 
                            labels = c('(A)', '(B)', '(C)', '(D)'),
+                           label_x = c(-0.01, -0.01, -0.01, -0.01),
+                           label_size = 12,
                            nrow = 4)
 
 data.plots.row
