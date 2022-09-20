@@ -267,9 +267,10 @@ cowplot::plot_grid(
   labels = c('(A)', '(B)', '(C)'),
   label_x = c(-0.015, -0.015, -0.015),
   label_y = c(1, 1.12, 1.12),
+  label_size = 12,
   nrow = 3
 ) %>%
-  cowplot::save_plot(filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_vortex.pdf',
+  cowplot::save_plot(filename = 'simulations/analysis_results/figure_drafts/draft_figs/fig_vortex.png',
                      base_width = 8, base_height = 6)
 
 ### Looking at rates by generation instead of tau
