@@ -218,16 +218,16 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
         #   (note - we'll have to remove this later for silly reasons)
         mutate(i = max(popn$i) + 1:nrow(.)) %>%
         # Use some cleverness to segregate alleles:
-        #   create a row for each allele
-        gather(key = alls, value = val, -i) %>%
+        #   create a row for each locus
+        gather(key = locs, value = val, -i) %>%
         #   par.locus gives the parent from whom the locus will descend
-        mutate(par.locus = gsub('\\_[ab]', '', alls)) %>%
+        mutate(par.locus = gsub('\\_[ab]', '', locs)) %>%
         #   for each locus on each chromosome, pick exactly one parental allele
         group_by(i, par.locus) %>%
         sample_n(size = 1) %>%
-        # Remove the unnecessary "parent" column
-        select(-alls) %>%
         ungroup() %>%
+        # Remove the unnecessary allele column
+        select(-locs) %>%
         mutate(par.locus = gsub('^mom', 'a', par.locus),
                par.locus = gsub('^dad', 'b', par.locus)) %>%
         # Turn this data frame back into "wide" format
@@ -332,12 +332,20 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL, evolve = TRUE) {
     # If the population is passed into the function (i.e., brought from an
     # external environment), its trait value and fitness still need to be
     # determined by information from this environment (the global variables).
-    pop0 = init.popn %>%
-      mutate(z_i = rnorm(nrow(.), mean = g_i, sd = params$sig.e),
-             w_i = params$w.max * exp(-(z_i - params$theta)^2 / (2*params$wfitn^2)),
-             r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i * exp(-params$alpha * nrow(.)), 0)),
-             i = 1:nrow(.),
-             gen = 1) %>%
+    pop0 = data.frame(
+      g_i = init.popn %>%
+        select(all_of(names.array)) %>%
+        (function(x) apply(x, 1, sum) / sqrt(n.loci))
+      ) %>%
+      mutate(
+        fem = init.popn$fem,
+        z_i = rnorm(nrow(.), mean = g_i, sd = params$sig.e),
+        w_i = params$w.max * exp(-(z_i - params$theta)^2 / (2*params$wfitn^2)),
+        r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i * exp(-params$alpha * nrow(.)), 0)),
+        i = 1:nrow(.),
+        gen = 1
+      ) %>%
+      cbind(init.popn %>% select(all_of(names.array))) %>%
       select(i, g_i, z_i, w_i, r_i, fem, gen, all_of(names.array))
   } else {                   
     pop0 = init.sim(a, params) 
