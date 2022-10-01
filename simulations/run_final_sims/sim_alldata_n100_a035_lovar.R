@@ -13,7 +13,6 @@ rm(list = ls())
 library(ggplot2)
 library(dplyr)
 library(tidyr)
-library(tidyselect)
 
 ### Load source materials
 
@@ -27,12 +26,12 @@ trials = 4000
 pars = data.frame(
   trial = 1:trials,
   n.pop0 = 100,
-  end.time = 15,
+  end.time = 16,
   init.row = 1e4,
   n.loci = 25,
   w.max = 2,
-  theta = 2.75,
-  wfitn = sqrt(1 / 0.14 / 2),
+  theta = 2.8,
+  wfitn = sqrt(3.5),
   sig.e = sqrt(0.5),
   pos.p = 0.5,
   alpha = 0.0035
@@ -43,23 +42,25 @@ liszt = vector('list', nrow(pars))
 set.seed(2410075)
 
 for (i in 1:nrow(pars)) {
-  pop.init = init.sim(a = c(1/2, -1/2),
-                      params = pars[i,]) %>%
+  
+  pop.init = init.sim(params = pars[i,]) %>%
     mutate_at(paste0('a', 1:6), function(x) -1/2) %>%
     mutate_at(paste0('b', 1:6), function(x) -1/2) %>%
     mutate_at(paste0('a', 7:12), function(x) 1/2) %>%
     mutate_at(paste0('b', 7:12), function(x) 1/2)
   
-  sim.output = sim( a = c(1/2, -1/2),
-                    params = pars[i,],
+  sim.output = sim( params = pars[i,],
                     init.popn = pop.init)
   
   demo.summ = sim.output %>%
     group_by(gen) %>%
-    summarise(n = n(),
-              gbar = mean(g_i),
-              zbar = mean(z_i),
-              wbar = mean(w_i))
+    summarise(
+      n = n(),
+      gbar = mean(g_i),
+      zbar = mean(z_i),
+      wbar = mean(w_i),
+      pfem = mean(fem)
+    )
   
   gene.summ = sim.output %>%
     select(-c(g_i, z_i, w_i, r_i, fem)) %>%
@@ -68,20 +69,26 @@ for (i in 1:nrow(pars)) {
     group_by(gen, locus) %>%
     summarise(p = mean(val > 0)) %>%
     group_by(gen) %>%
-    summarise(p.fix.pos = mean(p == 1),
-              p.fix.neg = mean(p == 0),
-              v = sum(2 * p * (1 - p)) / pars$n.loci[1])
+    summarise(
+      p.fix.pos = mean(p == 1),
+      p.fix.neg = mean(p == 0),
+      v = sum(2 * p * (1 - p)) / pars$n.loci[1]
+    )
   
-  liszt[[i]] = cbind(demo.summ, gene.summ %>% select(-gen)) 
+  liszt[[i]] = cbind(demo.summ, gene.summ %>% select(-gen)) %>%
+    mutate(trial = i)
   
   print(paste0('ndd 100 lo var ', i, ' of ', nrow(pars)))
 }
 
-all.sims = unroller(liszt) %>%
+all.sims = liszt %>%
+  do.call(what = rbind)
   merge(y = pars %>% select(trial, n.pop0, alpha) %>% mutate(low.var = TRUE), by = 'trial') %>%
   group_by(trial)  %>%
-  mutate(ext.gen = max(gen),
-         extinct = !ext.gen %in% pars$end.time[1]) %>%
+  mutate(
+    ext.gen = max(gen),
+    extinct = !ext.gen %in% pars$end.time[1]
+  ) %>%
   ungroup()
 
 write.csv(all.sims, row.names = FALSE,
