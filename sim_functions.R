@@ -4,7 +4,9 @@
 library(ggplot2) # only used for examining test results
 library(dplyr)   # needed - version 1.0.7 used
 library(tidyr)   # needed for spread/gather - version 1.1.3 used
-library(tidyselect)  # needed for column selecting (alleles) - version 1.1.1 used
+
+### Suppress output from summarise()
+options(dplyr.summarise.inform = FALSE)
 
 ### Auxiliary functions
 
@@ -42,7 +44,7 @@ unroller = function(sim.list) {
 ### Main simulation functions
 
 # Wrapper for initializing a population for simulation
-init.sim = function(a = c(1/2, -1/2), params) {
+init.sim = function(params, a = c(-1/2, 1/2)) {
   
   # Inputs:
   # a - an array of length two (bi-allelic model)
@@ -94,13 +96,15 @@ init.sim = function(a = c(1/2, -1/2), params) {
                      ncol = 2 * n.loci) %>%
     data.frame() %>%
     set.names(name.array = all_of(names.array)) %>%
-    mutate(g_i = apply(., 1, sum) / sqrt(n.loci),
-           i = 1:n.pop0,
-           fem = sample(c(TRUE, FALSE), size = n.pop0, replace = TRUE),
-           z_i = rnorm(n.pop0, mean = g_i, sd = sig.e),
-           w_i = w.max * exp(-(z_i - theta)^2 / (2 * wfitn^2)),
-           r_i = rpois(n = n.pop0, lambda = ifelse(fem, 2 * w_i * exp(-alpha * n.pop0), 0)),
-           gen = 1) %>%
+    mutate(
+      g_i = apply(., 1, sum) / sqrt(n.loci),
+      i = 1:n.pop0,
+      fem = sample(c(TRUE, FALSE), size = n.pop0, replace = TRUE),
+      z_i = rnorm(n.pop0, mean = g_i, sd = sig.e),
+      w_i = w.max * exp(-(z_i - theta)^2 / (2 * wfitn^2)),
+      r_i = rpois(n = n.pop0, lambda = ifelse(fem, 2 * w_i * exp(-alpha * n.pop0), 0)),
+      gen = 1
+    ) %>%
     select(i, g_i, z_i, w_i, r_i, fem, gen, all_of(names.array))
   
   return(init.popn)
@@ -152,7 +156,7 @@ init.sim = function(a = c(1/2, -1/2), params) {
 # hist(popna$r_i)
 
 # Wrapper for iterating the simulation forward oe timestep/generation
-propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
+propagate.sim = function(params, a = c(1/2, -1/2), popn, evolve = TRUE) {
   
   # n.b. defaults are (1) alleles of same magnitude opposing effect and
   # (2) population should be evolving in each time step
@@ -195,9 +199,11 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
         popn %>% 
           filter(fem) %>% 
           select(-c(i, g_i, w_i, z_i, fem, gen)) %>%
-          set.names(paste(ifelse(grepl('^[ab]\\d', names(.)), 'mom', ''),
+          set.names(
+            paste(ifelse(grepl('^[ab]\\d', names(.)), 'mom', ''),
                           names(.), 
-                          sep = '_')),
+                          sep = '_')
+          ),
         # Paternal data frame
         # Sample these to get mating pairs, i.e.,
         #   draw from the pool of males once for each female
@@ -205,9 +211,11 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
         # Rename columns to indicate alleles inhereited from dad
         # NOTE: this assumes that each mom mates with only one dad
         popn %>% 
-          sample_n(size = sum(fem), 
-                   weight = as.numeric(!fem) / sum(as.numeric(!fem)),
-                   replace = TRUE) %>%
+          sample_n(
+            size = sum(fem), 
+            weight = as.numeric(!fem) / sum(as.numeric(!fem)),
+            replace = TRUE
+          ) %>%
           select(all_of(names.array)) %>%
           set.names(paste('dad', names(.), sep = '_'))
       ) %>%
@@ -219,7 +227,8 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
         mutate(i = max(popn$i) + 1:nrow(.)) %>%
         # Use some cleverness to segregate alleles:
         #   create a row for each locus
-        gather(key = locs, value = val, -i) %>%
+        # # gather(key = locs, value = val, -i) %>%
+        pivot_longer(-i, names_to = "locs", values_to = "val") %>%
         #   par.locus gives the parent from whom the locus will descend
         mutate(par.locus = gsub('\\_[ab]', '', locs)) %>%
         #   for each locus on each chromosome, pick exactly one parental allele
@@ -228,23 +237,28 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
         ungroup() %>%
         # Remove the unnecessary allele column
         select(-locs) %>%
-        mutate(par.locus = gsub('^mom', 'a', par.locus),
-               par.locus = gsub('^dad', 'b', par.locus)) %>%
+        mutate(
+          par.locus = gsub('^mom', 'a', par.locus),
+          par.locus = gsub('^dad', 'b', par.locus)
+        ) %>%
         # Turn this data frame back into "wide" format
-        spread(key = par.locus, value = val) %>%
+        # # spread(key = par.locus, value = val) %>%
+        pivot_wider(names_from = par.locus, values_from = val) %>%
         ungroup() %>%
         # Now, calculate genotype, etc.
         #   for each offspring
         #   (note: to do this, we need to first remove the 'i' 
         #   column in order to calculate g_i)
         select(-i) %>%
-        mutate(g_i = apply(., 1, sum) / sqrt(n.loci),
-               i = max(popn$i) + 1:nrow(.),
-               fem = sample(c(TRUE, FALSE), size = nrow(.), replace = TRUE),
-               z_i = rnorm(nrow(.), mean = g_i, sd = sig.e),
-               w_i = w.max * exp(-(z_i - theta)^2 / (2*wfitn^2)),
-               r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i * exp(-alpha * nrow(.)), 0)),
-               gen = max(popn$gen) + 1) %>%
+        mutate(
+          g_i = apply(., 1, sum) / sqrt(n.loci),
+          i = max(popn$i) + 1:nrow(.),
+          fem = sample(c(TRUE, FALSE), size = nrow(.), replace = TRUE),
+          z_i = rnorm(nrow(.), mean = g_i, sd = sig.e),
+          w_i = w.max * exp(-(z_i - theta)^2 / (2*wfitn^2)),
+          r_i = rpois(n = nrow(.), lambda = ifelse(fem, 2 * w_i * exp(-alpha * nrow(.)), 0)),
+          gen = max(popn$gen) + 1
+        ) %>%
         select(i, g_i, z_i, w_i, r_i, fem, gen, all_of(names.array))
     } else {
       # If non-evolving, initialize the population again
@@ -294,7 +308,7 @@ propagate.sim = function(a = c(1/2, -1/2), params, popn, evolve = TRUE) {
 
 # Wrapper function for running simulation (using init and propagate functions
 # above)
-sim = function(a = c(1/2, -1/2), params, init.popn = NULL, evolve = TRUE) {
+sim = function(params, a = c(1/2, -1/2), init.popn = NULL, evolve = TRUE) {
   
   # N.b., defaults are (1) alleles of equal and opposing effect, (2) no initial
   # population fed in (so init.sim() is called) and (3) populations evolve
@@ -305,8 +319,8 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL, evolve = TRUE) {
   end.time = params$end.time
   # How many rows the data frame should be initialized with.
   init.row = params$init.row
-  # How many loci there are for the allele.
-  n.loci = params$n.loci
+  # How many loci there are
+  n.loci   = params$n.loci
   # Threshold above which to stop simulation (used in long-sims)
   size.thresh = ifelse('size.thresh' %in% names(params), params$size.thresh, Inf)
   
@@ -314,13 +328,15 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL, evolve = TRUE) {
   # A character (string) array for handy indexing
   names.array = paste0(c('a', 'b'), rep(1:n.loci, each = 2))
   
-  all.pop = data.frame(i = rep(NA, init.row),
-                       g_i = rep(NA, init.row),
-                       z_i = rep(NA, init.row),
-                       w_i = rep(NA, init.row),
-                       r_i = rep(NA, init.row),
-                       fem = rep(NA, init.row),
-                       gen = rep(NA, init.row)) %>%
+  all.pop = data.frame(
+    i = rep(NA, init.row),
+    g_i = rep(NA, init.row),
+    z_i = rep(NA, init.row),
+    w_i = rep(NA, init.row),
+    r_i = rep(NA, init.row),
+    fem = rep(NA, init.row),
+    gen = rep(NA, init.row)
+  ) %>%
     cbind(matrix(NA, 
                  nrow = init.row,
                  ncol = 2 * n.loci) %>%
@@ -348,7 +364,7 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL, evolve = TRUE) {
       cbind(init.popn %>% select(all_of(names.array))) %>%
       select(i, g_i, z_i, w_i, r_i, fem, gen, all_of(names.array))
   } else {                   
-    pop0 = init.sim(a, params) 
+    pop0 = init.sim(params, a) 
   }
   
   all.pop = dim.add(df = all.pop, 
@@ -360,8 +376,8 @@ sim = function(a = c(1/2, -1/2), params, init.popn = NULL, evolve = TRUE) {
   for (time.step in 2:end.time) {
     if(nrow(prev.gen)) {
       if (sum(prev.gen$r_i) < size.thresh) {
-        pop = propagate.sim(a = a,
-                            params = params,
+        pop = propagate.sim(params = params,
+                            a = a,
                             popn = prev.gen,
                             evolve = evolve)
         all.pop = dim.add(df = all.pop,
