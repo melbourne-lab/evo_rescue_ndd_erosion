@@ -82,7 +82,7 @@ for (i in 1:nrow(pars)) {
 }
 
 all.sims = liszt %>%
-  do.call(what = rbind)
+  do.call(what = rbind) %>%
   merge(y = pars %>% select(trial, n.pop0, alpha) %>% mutate(low.var = TRUE), by = 'trial') %>%
   group_by(trial)  %>%
   mutate(
