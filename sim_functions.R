@@ -32,15 +32,6 @@ dim.add = function(df, rows, addition) {
   return(df)
 }
 
-# Function for turning lists into data frame with trial info added
-# (in retrospect adding trial here is not the best way to do this
-# - would have been better to add a trial column directly after the sim)
-unroller = function(sim.list) {
-  sim.list %>%
-    do.call(what = rbind) %>%
-    mutate(trial = cumsum(c(1, as.numeric(diff(gen) < 0))))
-}
-
 ### Main simulation functions
 
 # Wrapper for initializing a population for simulation
