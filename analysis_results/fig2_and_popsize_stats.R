@@ -109,7 +109,7 @@ all.n %>%
     strip.text = element_text(size = 12)
   ) #+
 
-ggsave('simulations/analysis_results/figures/fig_pop_size.png',
+ggsave('analysis_results/figures/fig_pop_size.png',
        width = 8, height = 5)
 
 ### Summary statistics
