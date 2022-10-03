@@ -15,7 +15,9 @@ library(tidyr)
 ### Read in and aggregate data
 
 # All data
-all.data = read.csv('simulations/outputs/alldata_combined.csv')
+all.data = read.csv('simulations/outputs/alldata_combined.csv') %>%
+  # Re-start time at generation 0 (instead of generation 1)
+  mutate(gen = gen - 1)
 
 # Conditioning genetic variance (v) by extinct/extant
 ext.v = all.data %>%
