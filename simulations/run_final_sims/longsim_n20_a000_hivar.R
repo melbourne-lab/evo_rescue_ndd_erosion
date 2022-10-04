@@ -1,7 +1,7 @@
 # Script for simulating population dynamics of an adapting bottlenecked populations.
 # I am running these simulations for 50 generations to get extincton data.
-# In this script: low genetic variation, initially small, density dependent.
-# SN - adapted from simulations/run_final_simulations/sim_alldata_n20_a035_lowvar.R
+# In this script: high genetic variation, initially small, density independent.
+# SN - adapted from simulations/run_final_simulations/longsim/longsim_alldata_n20_a035_lowvar.R
 # adapted and run on March 3 2021
 
 ### Clear namespace
@@ -34,23 +34,16 @@ pars = data.frame(
   wfitn = sqrt(3.5),
   sig.e = sqrt(0.5),
   pos.p = 0.5,
-  alpha = 0.0035
+  alpha = 0
 )
 
 liszt = vector('list', nrow(pars))
 
-set.seed(4222)
+set.seed(505050)
 
 for (i in 1:nrow(pars)) {
   
-  pop.init = init.sim(params = pars[i,]) %>%
-    mutate_at(paste0('a', 1:6), function(x) -1/2) %>%
-    mutate_at(paste0('b', 1:6), function(x) -1/2) %>%
-    mutate_at(paste0('a', 7:12), function(x) 1/2) %>%
-    mutate_at(paste0('b', 7:12), function(x) 1/2)
-  
-  sim.output = sim( params = pars[i,],
-                    init.popn = pop.init)
+  sim.output = sim( params = pars[i,])
   
   demo.summ = sim.output %>%
     group_by(gen) %>%
@@ -80,13 +73,13 @@ for (i in 1:nrow(pars)) {
   liszt[[i]] = cbind(demo.summ, gene.summ %>% select(-gen)) %>%
     mutate(trial = i)
   
-  print(paste0('ndd 20 lo var ', i, ' of ', nrow(pars)))
+  print(paste0('di 20 hi var ', i, ' of ', nrow(pars)))
 }
 
 merge(
   x = do.call(rbind, liszt),
-  y = pars %>% select(trial, n.pop0, alpha) %>% mutate(low.var = TRUE), 
+  y = pars %>% select(trial, n.pop0, alpha) %>% mutate(low.var = FALSE), 
   by = 'trial'
 ) %>%
-  write.csv(file = "simulations/outputs/longsims/longsims_n20_a035_lowvar.csv",
+  write.csv(file = "simulations/outputs/longsims_n20_a000_hivar.csv",
             row.names = FALSE)

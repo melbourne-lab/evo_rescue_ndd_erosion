@@ -1,6 +1,6 @@
 # Script for simulating population dynamics of an adapting bottlenecked populations.
 # I am running these simulations for 50 generations to get extincton data.
-# In this script: high genetic variation, initially small, density independent.
+# In this script: high genetic variation, initially large, density independent.
 # SN - adapted from simulations/run_final_simulations/longsim/longsim_alldata_n20_a035_lowvar.R
 # adapted and run on March 3 2021
 
@@ -26,7 +26,7 @@ pars = data.frame(
   size.thresh = 10000,
   init.row = 1e6,
   end.time = 51,
-  n.pop0 = 20,
+  n.pop0 = 100,
   n.loci = 25,
   trial = 1:trials,
   w.max = 2,
@@ -39,7 +39,7 @@ pars = data.frame(
 
 liszt = vector('list', nrow(pars))
 
-set.seed(505050)
+set.seed(135)
 
 for (i in 1:nrow(pars)) {
   
@@ -73,7 +73,7 @@ for (i in 1:nrow(pars)) {
   liszt[[i]] = cbind(demo.summ, gene.summ %>% select(-gen)) %>%
     mutate(trial = i)
   
-  print(paste0('di 20 hi var ', i, ' of ', nrow(pars)))
+  print(paste0('di 100 hi var ', i, ' of ', nrow(pars)))
 }
 
 merge(
@@ -81,5 +81,5 @@ merge(
   y = pars %>% select(trial, n.pop0, alpha) %>% mutate(low.var = FALSE), 
   by = 'trial'
 ) %>%
-  write.csv(file = "simulations/outputs/longsims/longsims_n20_a000_hivar.csv",
+  write.csv(file = "simulations/outputs/longsims_n100_a000_hivar.csv",
             row.names = FALSE)

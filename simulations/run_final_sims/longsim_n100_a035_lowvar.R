@@ -88,5 +88,5 @@ merge(
   y = pars %>% select(trial, n.pop0, alpha) %>% mutate(low.var = TRUE), 
   by = 'trial'
 ) %>%
-  write.csv(file = "simulations/outputs/longsims/longsims_n100_a035_lowvar.csv",
+  write.csv(file = "simulations/outputs/longsims_n100_a035_lowvar.csv",
             row.names = FALSE)
