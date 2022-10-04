@@ -11,11 +11,9 @@
 rm(list = ls())
 
 ### Load packages
-
 library(ggplot2)
 library(dplyr)
 library(tidyr)
-library(tidyselect)
 
 ### Load source materials
 
@@ -29,7 +27,7 @@ trials = 1000
 pars = data.frame(
   trial = 1:trials,
   n.pop0 = 100,
-  end.time = 15,
+  end.time = 16,
   init.row = 1e4,
   n.loci = 25,
   w.max = 2,
@@ -86,7 +84,7 @@ all.sims = do.call(rbind, liszt) %>%
 
 all.sims %>%
   ggplot(aes(x = gen, y = v, group = trial)) +
-  geom_line(aes(linetype = factor(extinct)))
+  geom_line(aes(linetype = factor(extinct)), size = 0.1)
 
 all.sims %>%
   ggplot(aes(x = gen, y = wbar, group = trial)) +
@@ -94,6 +92,9 @@ all.sims %>%
 
 # Aggregated variance (v) and allele frequency (p)
 vp = all.sims %>%
+  # Re-index generation
+  mutate(gen = gen - 1) %>%
+  # Convert genotypes to allele frequencies
   mutate(p = 1/2 + gbar / (2 * sqrt(pars$n.loci[1]))) %>%
   group_by(gen) %>%
   summarise(
@@ -117,7 +118,7 @@ vp %>%
   ) +
   geom_segment(
     aes(
-      x = 6.5, xend = 6.5,
+      x = 4.5, xend = 4.5,
       y = .4-.0125, yend = 0.5
     ),
     linetype = 2, colour = 'gray55'
@@ -136,8 +137,10 @@ vp %>%
   labs(x = 'Generation', y = 'Mean aditive genetic variance') +
   theme(panel.background = element_blank())
 
-ggsave('analysis_results/figures/fig_I1_incr_variance.png',
+ggsave('analysis_results/fig_I1_incr_variance.png',
        width = 5, height = 5)
+
+### Nothing below this line was included in final analysis
 
 all.sims %>%
   ggplot(aes(x = gen, y = n, group = trial)) +
@@ -164,138 +167,3 @@ all.sims %>%
   geom_point(aes(shape = any.ext), size = 3) +
   scale_shape_manual(values = c(19, 21)) +
   labs(y = 'Proportion of loci at fixation')
-
-### Another (smaller) batch with larger initial size to look at unbaised rates
-
-source('base_model_source/sim_functions.R')
-
-# Define number of trials
-trials = 500
-
-# Define parameters
-pars = data.frame(
-  trial = 1:trials,
-  n.pop0 = 200,
-  end.time = 10,
-  init.row = 1e4,
-  n.loci = 25,
-  w.max = 2,
-  theta = 1.4,
-  wfitn = sqrt(1 / 0.14 / 2),
-  sig.e = sqrt(0.5),
-  pos.p = 0.36,
-  alpha = 0
-)
-
-liszt2 = vector('list', nrow(pars))
-
-set.seed(92105)
-
-for (j in 1:nrow(pars)) {
-  
-  sim.output = sim( a = c(1/2, -1/2),
-                    params = pars[j,])
-  
-  demo.summ = sim.output %>%
-    group_by(gen) %>%
-    summarise(n = n(),
-              gbar = mean(g_i),
-              zbar = mean(z_i),
-              wbar = mean(w_i))
-  
-  gene.summ = sim.output %>%
-    select(-c(g_i, z_i, w_i, r_i, fem)) %>%
-    gather(key = loc.copy, value = val, -c(i, gen)) %>%
-    mutate(locus = gsub('^[ab]', '', loc.copy)) %>%
-    group_by(i, gen, locus) %>%
-    mutate(heter = !sum(val)) %>%
-    group_by(gen, locus) %>%
-    summarise(p = mean(val > 0)) %>%
-    group_by(gen) %>%
-    summarise(p.fix.pos = mean(p == 1),
-              p.fix.neg = mean(p == 0),
-              v = sum(2 * p * (1 - p)) / pars$n.loci[1])
-  
-  liszt2[[j]] = cbind(demo.summ, gene.summ %>% select(-gen)) %>% 
-    mutate(trial = j)
-  
-  print(paste0(j, ' of ', nrow(pars)))
-}
-
-all.sims2 = do.call(liszt2, what = rbind)
-
-all.sims2 %>%
-  distinct(trial, gen) %>%
-  group_by(gen) %>%
-  summarise(n = n())
-# cool - no extinctions at all
-
-all.sims2 %>%
-  group_by(gen) %>%
-  summarise(nbar = mean(n),
-            nvar = var(n)) %>%
-  ggplot(aes(x = gen, y = nbar)) +
-  geom_line()
-
-all.sims2 %>%
-  group_by(gen) %>%
-  summarise(vbar = mean(v),
-            vvar = var(v),
-            pbar = mean(1/2 + gbar / 10)) %>%
-  mutate(vopt    = 2 * pbar * (1 - pbar)) %>%
-  ggplot(aes(x = gen)) +
-  geom_line(
-    aes(
-      y = vbar
-    )
-  ) +
-  geom_ribbon(
-    aes(
-      ymin = vbar - 2 * sqrt(vvar / 500),
-      ymax = vbar + 2 * sqrt(vvar / 500)
-    ),
-    alpha = 0.25
-  ) +
-  geom_line(
-    aes(
-      y = vopt
-    ),
-    colour = 'blue'
-  )
-
-all.sims2 %>%
-  group_by(gen) %>%
-  summarise(vbar = mean(v),
-            vvar = var(v),
-            pbar = mean(1/2 + gbar / 10)) %>%
-  mutate(vopt    = 2 * pbar * (1 - pbar)) %>%
-  ggplot(aes(x = gen)) +
-  geom_line(
-    aes(
-      y = vbar
-    )
-  ) +
-  geom_ribbon(
-    aes(
-      ymin = vbar - 2 * sqrt(vvar / 500),
-      ymax = vbar + 2 * sqrt(vvar / 500)
-    ),
-    alpha = 0.25
-  ) +
-  geom_line(
-    aes(
-      y = vopt
-    ),
-    colour = 'blue'
-  )
-
-all.sims2 %>%
-  group_by(gen) %>%
-  summarise(pos = mean(p.fix.pos),
-            neg = mean(p.fix.neg)) %>%
-  gather(key = allele, value = p, -gen) %>%
-  ggplot(aes(x = gen, y = p, colour = allele)) +
-  geom_line() +
-  geom_point() +
-  labs(y = 'Proportion of loci at fixation')
-# basically zero fixations...
