@@ -10,7 +10,7 @@ library(dplyr)
 library(tidyr)
 
 # Read in data
-all.data = read.csv('simulations/outputs/final_results/alldata_combined.csv')
+all.data = read.csv('simulations/outputs/alldata_combined.csv')
 
 # Get data conditioned on extinction:
 #   - r (log lambda) is log rate of population growth
@@ -68,7 +68,8 @@ tau.r = all.tau %>%
     aes(
       colour = factor(alpha),
       linetype = ext
-    )
+    ),
+    size = 1.25
   ) +
   geom_ribbon(
     aes(
@@ -77,7 +78,7 @@ tau.r = all.tau %>%
       group = interaction(alpha, ext),
       fill = factor(alpha)
     ),
-    alpha = 0.1
+    alpha = 0.2
   ) +
   scale_x_reverse(breaks = (0:4)*3, labels = NULL) +
   scale_color_manual(values = c('black', 'purple')) +
@@ -101,7 +102,8 @@ tau.nu = all.tau %>%
     aes(
       colour = factor(alpha),
       linetype = ext
-    )
+    ),
+    size = 1.25
   ) +
   geom_segment(
     aes(x = 1, xend = 14, y = 0, yend = 0),
@@ -114,7 +116,7 @@ tau.nu = all.tau %>%
       group = interaction(alpha, ext),
       fill = factor(alpha)
     ),
-    alpha = 0.1
+    alpha = 0.2
   ) +
   labs(x = '', y =  expression(atop("Loss of genetic", "variance, " ~ group(langle, nu, rangle)[tau]))) +
   scale_x_reverse(breaks = (0:4)*3, labels = NULL) +
@@ -143,7 +145,8 @@ tau.k = all.tau %>%
     aes(
       colour = factor(alpha),
       linetype = ext
-    )
+    ),
+    size = 1.25
   ) +
   geom_ribbon(
     aes(
@@ -152,7 +155,7 @@ tau.k = all.tau %>%
       group = interaction(alpha, ext),
       fill = factor(alpha)
     ),
-    alpha = 0.1
+    alpha = 0.2
   ) +
   scale_x_reverse(breaks = (0:4)*3) +
   scale_color_manual(values = c('black', 'purple')) +

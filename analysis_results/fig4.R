@@ -66,7 +66,7 @@ variance.plot = ext.v %>%
       group = interaction(n.pop0, low.var, alpha, extinct),
       fill = alpha
     ),
-    alpha = 0.1
+    alpha = 0.2
   ) +
   scale_y_continuous(limits = c(0, 0.5), breaks = (0:5)/10) +
   scale_colour_manual(values = c('black', 'purple')) +
