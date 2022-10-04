@@ -118,7 +118,7 @@ vp %>%
   ) +
   geom_segment(
     aes(
-      x = 4.5, xend = 4.5,
+      x = 3.5, xend = 3.5,
       y = .4-.0125, yend = 0.5
     ),
     linetype = 2, colour = 'gray55'
