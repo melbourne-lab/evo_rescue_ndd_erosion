@@ -102,6 +102,93 @@ p.rescue = merge(
   # (n.b. these rows were removed above)
   mutate(rescued = !is.na(rescue.time))
 
+##### Information for Table 3
+
+# Probabilities of rescue (overall) and proportion of rescues that are
+# instantaneous
+
+p.wescue %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(p.rescue = round(mean(rescued), 2)) %>%
+  arrange(desc(n.pop0, low.var, alpha))
+
+wescue.summary %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(inst.rescue = sum(rescue.time < 2),
+            total.rescue = n(),
+            propn.rescue = round(mean(rescue.time < 2), 2)) %>%
+  arrange(desc(n.pop0, low.var, alpha))
+
+p.rescue %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(p.rescue = round(mean(rescued), 2)) %>%
+  arrange(desc(n.pop0, low.var, alpha))
+
+rescue.summary %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(inst.rescue = sum(rescue.time < 2),
+            total.rescue = n(),
+            propn.rescue = round(mean(rescue.time < 2), 2)) %>%
+  arrange(desc(n.pop0, low.var, alpha))
+
+### Times to rescue 
+
+# Get mean times to fitness-rescue
+wescue.time.means = wescue.summary %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(mean.t = mean(rescue.time)) %>%
+  ungroup() %>%
+  mutate(size = paste("Initially", ifelse(n.pop0 > 50, 'large', 'small')),
+         gdiv = paste(ifelse(low.var, 'Low', 'high'), "diversity"))
+
+wescue.time.means %>%
+  arrange(desc(n.pop0, low.var, alpha)) %>%
+  mutate(mean.t = round(mean.t, 1))
+
+# Get mean times to size-rescue
+rescue.time.means = rescue.summary %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(mean.t = mean(rescue.time)) %>%
+  ungroup() %>%
+  mutate(size = paste("Initially", ifelse(n.pop0 > 50, 'large', 'small')),
+         gdiv = paste(ifelse(low.var, 'Low', 'high'), "diversity"))
+
+rescue.time.means %>%
+  arrange(desc(n.pop0, low.var, alpha)) %>%
+  mutate(mean.t = round(mean.t, 1))
+
+# Comparison of effects of NDD
+wescue.time.means %>%
+  spread(key = alpha, value = mean.t)
+
+rescue.time.means %>%
+  spread(key = alpha, value = mean.t)
+
+### Extinctions after rescue
+
+# Get which populations went extinct
+n.extinct = all.data %>%
+  # Get final generation's record for each population
+  group_by(trial, n.pop0, low.var, alpha)  %>%
+  slice_max(gen) %>%
+  # Add "extinct" denotation
+  mutate(extinct = gen < 50 & n < 5000) %>%
+  select(trial, gen, n, n.pop0, low.var, alpha, extinct)
+
+# Merge extinct populations with the fitness-based rescue list
+# (all.y = FALSE means only rescued populations will be in this data frame)
+merge(wescue.summary, n.extinct, all.y = FALSE) %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(p.extinct = mean(extinct)) %>%
+  arrange(desc(n.pop0, low.var, alpha)) %>%
+  mutate(p.extinct = round(p.extinct, 2))
+
+merge(rescue.summary, n.extinct, all.y = FALSE) %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  summarise(p.extinct = mean(extinct)) %>%
+  arrange(desc(n.pop0, low.var, alpha)) %>%
+  mutate(p.extinct = round(p.extinct, 2))
+
 ### Run statistical models in Rstanarm
 
 ### Wescue (fitness rescue) models
@@ -381,68 +468,9 @@ geno.plot.grid = plot_grid(wes.geno.plot,
 save_plot(geno.plot.grid, base_width = 8, base_height = 5,
           filename = 'analysis_results/figures/fig_f1_p_rescue.png')
 
-### Information for Table 3
+### Time until rescue figure (supporting info)
 
-# Probabilities of rescue (overall) and proportion of rescues that are
-# instantaneous
-
-p.wescue %>%
-  group_by(n.pop0, low.var, alpha) %>%
-  summarise(p.rescue = round(mean(rescued), 2)) %>%
-  arrange(desc(n.pop0, low.var, alpha))
-
-wescue.summary %>%
-  group_by(n.pop0, low.var, alpha) %>%
-  summarise(inst.rescue = sum(rescue.time < 2),
-            total.rescue = n(),
-            propn.rescue = round(mean(rescue.time < 2), 2)) %>%
-  arrange(desc(n.pop0, low.var, alpha))
-
-p.rescue %>%
-  group_by(n.pop0, low.var, alpha) %>%
-  summarise(p.rescue = round(mean(rescued), 2)) %>%
-  arrange(desc(n.pop0, low.var, alpha))
-
-rescue.summary %>%
-  group_by(n.pop0, low.var, alpha) %>%
-  summarise(inst.rescue = sum(rescue.time < 2),
-            total.rescue = n(),
-            propn.rescue = round(mean(rescue.time < 2), 2)) %>%
-  arrange(desc(n.pop0, low.var, alpha))
-
-# Times to rescue 
-
-wescue.time.means = wescue.summary %>%
-  group_by(n.pop0, low.var, alpha) %>%
-  summarise(mean.t = mean(rescue.time)) %>%
-  ungroup() %>%
-  mutate(size = paste("Initially", ifelse(n.pop0 > 50, 'large', 'small')),
-         gdiv = paste(ifelse(low.var, 'Low', 'high'), "diversity"))
-
-wescue.time.means %>%
-  arrange(desc(n.pop0, low.var, alpha)) %>%
-  mutate(mean.t = round(mean.t, 1))
-
-rescue.time.means = rescue.summary %>%
-  group_by(n.pop0, low.var, alpha) %>%
-  summarise(mean.t = mean(rescue.time)) %>%
-  ungroup() %>%
-  mutate(size = paste("Initially", ifelse(n.pop0 > 50, 'large', 'small')),
-         gdiv = paste(ifelse(low.var, 'Low', 'high'), "diversity"))
-
-rescue.time.means %>%
-  arrange(desc(n.pop0, low.var, alpha)) %>%
-  mutate(mean.t = round(mean.t, 1))
-
-# Comparison of effects of NDD
-wescue.time.means %>%
-  spread(key = alpha, value = mean.t)
-
-rescue.time.means %>%
-  spread(key = alpha, value = mean.t)
-
-### Time until rescue
-
+# Time until fitness-rescue histogram
 wescue.time.hist = wescue.summary %>% 
   ungroup() %>%
   mutate(rescue.time = rescue.time - min(rescue.time) + 1) %>%
@@ -474,6 +502,7 @@ wescue.time.hist = wescue.summary %>%
     panel.background = element_blank()
   )
 
+# Time until size-rescue histogram
 rescue.time.hist = rescue.summary %>% 
   ungroup() %>%
   mutate(rescue.time = rescue.time - min(rescue.time) + 1) %>%
@@ -507,6 +536,7 @@ rescue.time.hist = rescue.summary %>%
     panel.background = element_blank()
   )
 
+# Combine histograms
 time.hists = plot_grid(
   wescue.time.hist, rescue.time.hist,
   labels = c("A)", "B)"),
@@ -518,26 +548,3 @@ time.hists
 ggsave('analysis_results/figures/fig_f2_rescue_times.png',
        width = 8, height = 5)
 
-### Get extinctions
-
-n.extinct = all.data %>%
-  # Get final generation's record for each population
-  group_by(trial, n.pop0, low.var, alpha)  %>%
-  slice_max(gen) %>%
-  # Add "extinct" denotation
-  mutate(extinct = gen < 50 & n < 5000) %>%
-  select(trial, gen, n, n.pop0, low.var, alpha, extinct)
-  
-# Merge extinct populations with the fitness-based rescue list
-# (all.y = FALSE means only rescued populations will be in this data frame)
-merge(wescue.summary, n.extinct, all.y = FALSE) %>%
-  group_by(n.pop0, low.var, alpha) %>%
-  summarise(p.extinct = mean(extinct)) %>%
-  arrange(desc(n.pop0, low.var, alpha)) %>%
-  mutate(p.extinct = round(p.extinct, 2))
-
-merge(rescue.summary, n.extinct, all.y = FALSE) %>%
-  group_by(n.pop0, low.var, alpha) %>%
-  summarise(p.extinct = mean(extinct)) %>%
-  arrange(desc(n.pop0, low.var, alpha)) %>%
-  mutate(p.extinct = round(p.extinct, 2))
