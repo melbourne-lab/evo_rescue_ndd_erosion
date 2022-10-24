@@ -13,4 +13,4 @@ all.data =
   )
 
 write.csv(all.data, row.names = FALSE,
-          'simulations/outputs/final_results/alldata_combined.csv')
+          'simulations/outputs/alldata_combined.csv')
