@@ -548,3 +548,41 @@ time.hists
 ggsave('analysis_results/figures/fig_f2_rescue_times.png',
        width = 8, height = 5)
 
+### Session info
+# (as of October 24 2022)
+
+# R version 4.1.0 (2021-05-18)
+# Platform: x86_64-apple-darwin17.0 (64-bit)
+# Running under: macOS Big Sur 11.2.3
+# 
+# Matrix products: default
+# LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+# 
+# locale:
+#   [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+# 
+# attached base packages:
+#   [1] stats     graphics  grDevices utils     datasets  methods   base     
+# 
+# other attached packages:
+#   [1] tidyr_1.1.3     dplyr_1.0.7     cowplot_1.1.1   ggplot2_3.3.4   rstanarm_2.21.1 Rcpp_1.0.7     
+# 
+# loaded via a namespace (and not attached):
+#   [1] splines_4.1.0        jsonlite_1.7.2       gtools_3.9.2         RcppParallel_5.1.4   StanHeaders_2.21.0-7
+# [6] threejs_0.3.3        shiny_1.6.0          stats4_4.1.0         pillar_1.6.1         lattice_0.20-44     
+# [11] glue_1.4.2           digest_0.6.27        promises_1.2.0.1     minqa_1.2.4          colorspace_2.0-2    
+# [16] Matrix_1.3-3         htmltools_0.5.1.1    httpuv_1.6.2         plyr_1.8.6           dygraphs_1.1.1.6    
+# [21] pkgconfig_2.0.3      rstan_2.21.2         purrr_0.3.4          xtable_1.8-4         scales_1.1.1        
+# [26] processx_3.5.2       later_1.3.0          lme4_1.1-27.1        tibble_3.1.2         bayesplot_1.8.1     
+# [31] generics_0.1.0       ellipsis_0.3.2       DT_0.18              withr_2.4.2          shinyjs_2.0.0       
+# [36] cli_2.5.0            survival_3.2-11      magrittr_2.0.1       crayon_1.4.1         mime_0.11           
+# [41] ps_1.6.0             fansi_0.5.0          nlme_3.1-152         MASS_7.3-54          xts_0.12.1          
+# [46] pkgbuild_1.2.0       colourpicker_1.1.0   rsconnect_0.8.24     tools_4.1.0          loo_2.4.1           
+# [51] prettyunits_1.1.1    lifecycle_1.0.0      matrixStats_0.60.1   stringr_1.4.0        V8_3.4.2            
+# [56] munsell_0.5.0        callr_3.7.0          compiler_4.1.0       rlang_0.4.11         nloptr_1.2.2.2      
+# [61] grid_4.1.0           ggridges_0.5.3       rstudioapi_0.13      htmlwidgets_1.5.3    crosstalk_1.1.1     
+# [66] igraph_1.2.6         miniUI_0.1.1.1       base64enc_0.1-3      boot_1.3-28          gtable_0.3.0        
+# [71] codetools_0.2-18     inline_0.3.19        DBI_1.1.1            curl_4.3.2           markdown_1.1        
+# [76] reshape2_1.4.4       R6_2.5.0             gridExtra_2.3        rstantools_2.1.1     zoo_1.8-9           
+# [81] fastmap_1.1.0        utf8_1.2.1           shinystan_2.5.0      shinythemes_1.2.0    stringi_1.7.3       
+# [86] parallel_4.1.0       vctrs_0.3.8          tidyselect_1.1.1    
