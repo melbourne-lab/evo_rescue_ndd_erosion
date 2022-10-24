@@ -1,17 +1,45 @@
 # Allele-specific models of demographic and genetic rescue
 
-Repo forked from original `demgen_allelic` (in melbourne-lab group), intended for upload (dryad) and  for eventual distribution (through github).
+Simulation and analysis code for the manuscript "How density dependence, genetic erosion and the extinction vortex impact evolutionary rescue" by Nordstrom et al. 
 
-Initialized 20 September 2022.
+Requirements:
+- R (version used: 4.1.2)
+- dplyr (1.0.7)
+- tidyr (1.1.13)
+- rstanarm (2.21.1)
 
-Currently in the process of removing old files.
+For figures:
+- ggplot2 (3.3.4)
+- cowplot (1.1.1)
 
-`sim_functions.R` file has been cleaned and moved to repo of root.
+## Repository structure
 
-Final sim scripts have not yet been assessed or cleaned.
-Figure scripts and analysis scripts have not yet been assessed or cleaned.
-	(all changes to figure+analysis scripts will be here, not in current master)
+`sim_functions.R`: Source script for simulation functions and other handy wrappers
 
-Has not been run (on server) to guarantee results work.
+Directory `simulations`:
 
-Have not decided on final repo organization/structure.
+* `simulations/run_final_scripts/` scripts for running simulations used in analysis
+	
+	+ `simulations/run_final_scripts/sim_alldata_n{20/100}_a{000/035}_{hi/low}var.R`: script for running 15-generation simulations with size 20/100, alpha 0/0.0035, high/low genetic diversity
+		
+	+ `simulations/run_final_scripts/longsims_n{20/100}_a{000/035}_{hi/low}var.R`: script for running 50-generation simulations with size 20/100, alpha 0/0.0035, high/low genetic diversity
+		
+	+ `simulations/combine_alldata.R`: short script for concatenating 15-generation simulation output files into one output file
+		
+* `simulations/outputs/` subdir for holding CSV outputs from simulations (used in analysis)
+	
+	+ `simulations/outputs/alldata_n{20/100}_a{000/035}_{hi/low}var.csv`: 15-generation simulation output (size 20/100, alpha 0/0.0035, high/low genetic diversity)
+		
+	+ `simulations/outputs/longsims_n{20/100}_a{000/035}_{hi/low}var.R`: 50-generation simulation output (size 20/100, alpha 0/0.0035, high/low genetic diversity)
+
+Directory `analysis_results`:
+
+* Contains individual scripts labelled to reflect contents (including tables, figures, and supplemental information)
+
+## Contact information
+
+Scott Nordstrom (scottwatsonnordstrom&gmail)
+
+## Changelog
+
+Readme finalized October 24, 2022.
