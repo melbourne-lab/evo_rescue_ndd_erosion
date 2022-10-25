@@ -2356,5 +2356,5 @@ Hmm maybe not the best ref (bulk of stuff is about estimation) but this is suppo
 Seems neat seeing that you can (in ideal circumstances) use just ages at reproduction and fecundtiy... although I guess it makes sense. Why can't you do this with plants as well? I should probably read in to some of the theory here, e.g., Lotka-Euler, Cole equation, etc.
 
 
-- 
--
+
+

@@ -1,26 +1,45 @@
 # Allele-specific models of demographic and genetic rescue
 
-This model is an allele-specific model of evolutionary rescue. Previously, we had been using the quantitative-trait model of Gomulkiewicz and Holt, 1995, for modeling a population adapting to novel conditions. However, this model was not exactly compatible with the genetics of our system, as the weighting of breeding values due to selection on fecundity produced a genetic variance that was not constant over time.
+Simulation and analysis code for the manuscript "How density dependence, genetic erosion and the extinction vortex impact evolutionary rescue" by Nordstrom et al. 
 
-This led to the question, how should genetic variance change over time? One would expect that in the absence of mutation, selection would reduce variance as less fit genotypes disappear from the population. The rate of this disappearance, and the disappearance itself, are hard to characterize.
+Requirements:
+- R (version used: 4.1.2)
+- dplyr (1.0.7)
+- tidyr (1.1.13)
+- rstanarm (2.21.1)
 
-To investigate this I have constructed an allele-specific model of evolving populations of flour beetles. The model features m loci, which combine additively to produce a genotype, which is then used to produce a phenotype. Contributions of each locus are scaled such that, in the limit of large m, breeding values are initially normally distributd (according to the Central Limit Theorem). When individuals mate, alleles are randomly segregated to offspring. Full model write-up coming soon.
+For figures:
+- ggplot2 (3.3.4)
+- cowplot (1.1.1)
 
-### Folder contents
+## Repository structure
 
-Current repo structure
+`sim_functions.R`: Source script for simulation functions and other handy wrappers
 
-- `init_model` directory containing files from initial versions of model constructed in March, 2020
-- `base_model_source` directory containing files to source to run most up-to-date simulation
+Directory `simulations`:
 
-### Major updates
+* `simulations/run_final_scripts/` scripts for running simulations used in analysis
+	
+	+ `simulations/run_final_scripts/sim_alldata_n{20/100}_a{000/035}_{hi/low}var.R`: script for running 15-generation simulations with size 20/100, alpha 0/0.0035, high/low genetic diversity
+		
+	+ `simulations/run_final_scripts/longsims_n{20/100}_a{000/035}_{hi/low}var.R`: script for running 50-generation simulations with size 20/100, alpha 0/0.0035, high/low genetic diversity
+		
+	+ `simulations/combine_alldata.R`: short script for concatenating 15-generation simulation output files into one output file
+		
+* `simulations/outputs/` subdir for holding CSV outputs from simulations (used in analysis)
+	
+	+ `simulations/outputs/alldata_n{20/100}_a{000/035}_{hi/low}var.csv`: 15-generation simulation output (size 20/100, alpha 0/0.0035, high/low genetic diversity)
+		
+	+ `simulations/outputs/longsims_n{20/100}_a{000/035}_{hi/low}var.R`: 50-generation simulation output (size 20/100, alpha 0/0.0035, high/low genetic diversity)
 
-##### April 8, 2020
+Directory `analysis_results`:
 
-Found an error in the original script (`init_model`) in Mendelian segregation. Remedied this by creating `base_model_source` folder with a new script, `sim_functions.R`, for executing the simulations. This new folder also has a script to run on server for generating 1000 trials (at one parameter combo).
+* Contains individual scripts labelled to reflect contents (including tables, figures, and supplemental information)
 
-When updating the model, I also made some minor changes (change column names) and added phenotype column `z_i`. Note that this model doesn't have density dependence yet.
+## Contact information
 
-##### April 15, 2020
+Scott Nordstrom (scottwatsonnordstrom&gmail)
 
-Made a new folder, `analyze_model`, for analysis. In here so far I have some work trying to figure out how allele frequencies change over time and some work looking at how variables (e.g., mean genotype, population size, fixation probabilities) scale with m (the number of loci).
+## Changelog
+
+Readme finalized October 24, 2022.
