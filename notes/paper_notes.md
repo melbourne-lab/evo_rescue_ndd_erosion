@@ -2356,49 +2356,5 @@ Hmm maybe not the best ref (bulk of stuff is about estimation) but this is suppo
 Seems neat seeing that you can (in ideal circumstances) use just ages at reproduction and fecundtiy... although I guess it makes sense. Why can't you do this with plants as well? I should probably read in to some of the theory here, e.g., Lotka-Euler, Cole equation, etc.
 
 
-### Carlson, S.M., Cunningham, C.J., and Westley, P.A.H. 2014. Evolutionary rescue in a changing world. TrEE.
-
-- Evolutionary rescue: "diagnostic feature" is U-shaped trajectory, although this might be obscured by NDD or environmental noise
-	- the U-shaped demographic trajectory could also arise through ecological (non-evolutionary) reasons, e.g., time-lagged density dependence or antagonistic species being more affected by environmental change
-	- rescue must have some rise in the frequency of an adaptive allele(s)
-##### Theory
-- The threshold below which populations are especially vulnerable to extinction: a useful heuristic
-	- more time below the threshold = more danger
-	- closer the threshold is to carrying capacity/initial size = more danger
-	- thus, rate of population decline (approach to the threshold) also matters here
-- Density dependence
-	- Allee effects for positive DD (Stephens et al. 1999?)
-		- but immigration into a net-sink population could be beneficial for avoiding Allee effects
-	- negative DD lowers equilibrium population size (CC) so populations are closer to the carrying capacity
-		- but also possibly some alleviating effects of NDD? increase in fitness from declining population size may be buffering
-		- Stacey and Taper, 1992, found NDD increased persistence time for small populations with dispersal (?)
-- Genetics: standing variation vs./and de novo mutation
-	- standing variation generally good, although it needs the presence of an adaptive allele
-	- mutation rate should increase probability of rescue but only to the extent that genetic diversity is a limiting factor
-- Extrinsic factors
-	- rate or magnitude of environmental change is important and possibly limiting if too strong, particularly compared to the generation time (Lynch and Lande 1993 in a book)
-	- intraspecific competition: NDD should hinder rescue by reducing supply of mutatnts, have no effect if populations are pushed well below carrying capacity, or maybe even help rescue by increasing strength of selection
-	- predation (or other forms of interspecific competition) might help rescue by removing less fit individuals
-##### Empirical (lab) work
-- High standing genetic variation associated with rescue in several systems
-	- need work on mutation rate and genetic architecture
-- two studies (yeast, pathogenic bacterium) conclude that dispersal aids rescue
-	- possibly because these species were clonally reproducing only
-- to date, no evidence that migration load influences rescue odds
-- several studies show that rescue is most likely under gradual change 
-	- Lindsey et al. find in E. coli that mutational trajectories are "distinct" under variable rates of change (?) and that rapid change precludes certain genotypes due to context specificity of certain pathways (e.g., requiring certain environments)
-- history of exposure to past stress or environmental change also appears to influence rescue
-	- reduced level of maladaptation (more genetic variation) from populations with a history of exposure
-- Rare to observe in natural settings, often because demographic data is missing to highlight the U-shape
-##### Future stuff
-- Does short-term rescue mean less likely rescue in the face of novel stressors in the future?
-	- does adaptation to one stressor erode necessary genetic variation and phenotypic diversity that leaves populations more vulnerable to extinction?
-		- (why not run more sims to find out??)
-- metapopulation approaches in sexually reproducing species
-	- dispersal should increase genetic diversity and population size, but density dependence effects and migration load could possibly hinder
-
-Good review but not much that is new. Density dependence picture might be complicated through dispersal... but at least we have a solid result in the absence of dispersal.
-
-Here the hypothesized result of NDD is to lower the CC with some possible buffering. In our model we don't find that the lower CC really matters - the more important result is faster decline to small size.
-
-I kinda like the idea of taking our simulated "rescued" populations and having them run through an opposing environmental shift! Would be cool to see if NDD populations (presumably with less variation) are more likely to go extinct there too. Ah well.
+- 
+-
