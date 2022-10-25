@@ -1,4 +1,4 @@
-# Allele-specific models of demographic and genetic rescue
+# Allele-specific models of evolutionary rescue
 
 Simulation and analysis code for the manuscript "How density dependence, genetic erosion and the extinction vortex impact evolutionary rescue" by Nordstrom et al. 
 
