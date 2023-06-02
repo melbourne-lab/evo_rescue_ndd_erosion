@@ -69,7 +69,7 @@ tau.r = all.tau %>%
       colour = factor(alpha),
       linetype = ext
     ),
-    size = 1.25
+    linewidth = 1.25
   ) +
   geom_ribbon(
     aes(
@@ -84,7 +84,7 @@ tau.r = all.tau %>%
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap(~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
-  labs(x = '', y = expression(atop("Population growth", " rate, " ~ group(langle, r, rangle)[tau]))) +
+  labs(x = '', y = expression(atop("Population growth", " rate, " ~ group(langle, r[tau], rangle)))) +
   theme(legend.position = 'none',
         panel.grid.major = element_line(colour = 'gray88'),
         panel.background = element_rect(fill = 'white'),
@@ -103,7 +103,7 @@ tau.nu = all.tau %>%
       colour = factor(alpha),
       linetype = ext
     ),
-    size = 1.25
+    linewidth = 1.25
   ) +
   geom_segment(
     aes(x = 1, xend = 14, y = 0, yend = 0),
@@ -118,7 +118,7 @@ tau.nu = all.tau %>%
     ),
     alpha = 0.2
   ) +
-  labs(x = '', y =  expression(atop("Loss of genetic", "variance, " ~ group(langle, nu, rangle)[tau]))) +
+  labs(x = '', y =  expression(atop("Loss of genetic", "variance, " ~ group(langle, nu[tau], rangle)))) +
   scale_x_reverse(breaks = (0:4)*3, labels = NULL) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_fill_manual(values = c('black', 'purple')) +
@@ -146,7 +146,7 @@ tau.k = all.tau %>%
       colour = factor(alpha),
       linetype = ext
     ),
-    size = 1.25
+    linewidth = 1.25
   ) +
   geom_ribbon(
     aes(
@@ -162,7 +162,7 @@ tau.k = all.tau %>%
   scale_fill_manual(values = c('black', 'purple')) +
   facet_wrap(~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
   labs(x = expression('Time to extinction, ' ~ tau), 
-       y = expression(atop('Rate of adaptation,', ~ 1-group(langle, k, rangle)[tau]))) +
+       y = expression(atop('Rate of adaptation,', ~ 1-group(langle, k[tau], rangle)))) +
   theme(legend.position = 'none',
         strip.text = element_blank(),
         strip.background = element_blank(),
