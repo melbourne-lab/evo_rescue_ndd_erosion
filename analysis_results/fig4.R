@@ -57,7 +57,7 @@ variance.plot = ext.v %>%
       colour = alpha,
       linetype = extinct
     ),
-    size = 1.25
+    linewidth = 1.25
   ) +
   geom_ribbon(
     aes(
@@ -69,11 +69,11 @@ variance.plot = ext.v %>%
     alpha = 0.2
   ) +
   scale_y_continuous(limits = c(0, 0.5), breaks = (0:5)/10) +
-  scale_colour_manual(values = c('black', 'purple')) +
-  scale_fill_manual(values = c('black', 'purple')) +
-  scale_linetype_manual(values = c(2, 1)) +
-  labs(x = '', 
-       y = expression(paste('Genetic variance, ', group(langle, sigma[a]^2, rangle)[t]))) +
+  scale_colour_manual(values = c('black', 'purple'), '') +
+  scale_fill_manual(values = c('black', 'purple'), '') +
+  scale_linetype_manual(values = c(2, 1), '') +
+  labs(x = 'Generation', 
+       y = expression(paste('Genetic variance, ', group(langle, (sigma[a]^2)[t], rangle)))) +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   theme(panel.background = element_rect(fill = 'white'),
         # panel.grid = element_line('gray88'),
@@ -81,9 +81,16 @@ variance.plot = ext.v %>%
         panel.grid.minor = element_blank(),
         panel.border = element_blank(),
         strip.background = element_rect(colour = 'black'),
-        legend.position = 'none')
+        legend.position = 'top')
 
-# Part (b)
+variance.plot
+
+ggsave('analysis_results/figures/fig_varloss.png',
+       width = 8, height = 3)
+
+### Fixation plots
+
+# Panel (a) - positive fixation
 fixation.pos.plot = ext.fix %>%
   ggplot(aes(x = gen)) +
   geom_line(
@@ -117,13 +124,11 @@ fixation.pos.plot = ext.fix %>%
         panel.border = element_blank(),
         panel.grid.major = element_line(colour = 'gray88'),
         panel.grid.minor = element_blank(),
-        legend.position = 'none',
-        strip.text = element_blank(),
-        strip.background = element_blank())
+        legend.position = 'none')
 # strip.background = element_rect(colour = 'black'),
 # strip.text = element_text(size = 12))
 
-# Part (c)
+# Part (b) - negative fixation
 fixation.neg.plot = ext.fix %>%
   ggplot(aes(x = gen)) +
   geom_line(
@@ -170,7 +175,19 @@ varn.legend = get_legend(
           legend.box.margin = margin(1, 0, 0, 0))
 )
 
-# Combine and export
+# Combine and export fixation-only plot
+
+save_plot(plot_grid(fixation.pos.plot, fixation.neg.plot, 
+                    labels = c('(A)', '(B)'),
+                    label_x = c(0.0125, 0.0125),
+                    label_y = c(0.99, 1.02),
+                    label_size = 12,
+                    varn.legend, rel_heights = c(1, 1, 0.1), ncol = 1),
+          filename = 'analysis_results/figures/fig_fix.png',
+          base_width = 8, base_height = 4)
+
+# For combined plot with all three in the same:
+# (old version)
 save_plot(plot_grid(variance.plot, fixation.pos.plot, fixation.neg.plot, 
                     labels = c('(A)', '(B)', '(C)'),
                     label_x = c(-0.015, -0.015, -0.015),
