@@ -45,6 +45,9 @@ all.tau = all.data %>%
             nuvar = var(varred, na.rm = TRUE),
             n  = n())
 
+# Plots revised to get rid of extant populations
+all.tau = all.tau %>% filter(ext)
+
 # Indices: tau = 0 is the first generation the population is extinct
 # this *includes* a census with a population size of 1 
 # (i.e. N = 1 corresponds to tau = 0).
@@ -55,10 +58,12 @@ all.tau = all.data %>%
 ### Individual panel plots
 
 tau.r = all.tau %>%
-  filter(ext) %>%
   ungroup() %>%
-  mutate(n.pop0  = factor(n.pop0 > 20, labels = c('Small', 'Large')),
-         low.var = factor(low.var, labels = c('High diversity', 'Low diversity'))) %>%
+  mutate(
+    n.pop0  = factor(n.pop0 > 20, labels = c('Small', 'Large')),
+    low.var = factor(low.var, labels = c('High diversity', 'Low diversity')),
+    alpha = factor(alpha > 0, labels = c('Density independent', 'Density dependent'))
+  ) %>%
   ggplot(aes(x = tau, y = rt)) +
   geom_segment(
     aes(x = 1, xend = 14, y = 0, yend = 0),
@@ -81,8 +86,8 @@ tau.r = all.tau %>%
     alpha = 0.2
   ) +
   scale_x_reverse(breaks = (0:4)*3, labels = NULL) +
-  scale_color_manual(values = c('black', 'purple')) +
-  scale_fill_manual(values = c('black', 'purple')) +
+  scale_color_manual(values = c('black', 'purple'), '') +
+  scale_fill_manual(values = c('black', 'purple'), '') +
   facet_wrap(~ paste(n.pop0, low.var, sep = ', '), ncol = 4) +
   labs(x = '', y = expression(atop("Population growth", " rate, " ~ group(langle, r[tau], rangle)))) +
   theme(legend.position = 'none',
@@ -93,7 +98,6 @@ tau.r = all.tau %>%
         strip.background = element_rect(colour = 'black'))
 
 tau.nu = all.tau %>%
-  filter(ext) %>%
   ungroup() %>%
   mutate(n.pop0  = factor(n.pop0 > 20, labels = c('Small', 'Large')),
          low.var = factor(low.var, labels = c('High diversity', 'Low diversity'))) %>%
@@ -133,7 +137,6 @@ tau.nu = all.tau %>%
 
 tau.k = all.tau %>%
   ungroup() %>%
-  filter(ext) %>%
   mutate(n.pop0  = factor(n.pop0 > 20, labels = c('Small', 'Large')),
          low.var = factor(low.var, labels = c('High diversity', 'Low diversity'))) %>%
   ggplot(aes(x = tau, y = 1 - kt)) +
@@ -170,15 +173,19 @@ tau.k = all.tau %>%
         panel.background = element_rect(fill = 'white'),
         plot.margin = margin(t = 0, r = 5, l = 5, unit = 'pt'))
 
+tau.leg = get_legend(tau.r + guides(linetype = 'none') + theme(legend.position = 'top'))
+
 plot_grid(
+  tau.leg, 
   tau.r,
   tau.nu,
   tau.k,
-  labels = c('(A)', '(B)', '(C)'),
-  label_x = c(-0.015, -0.015, -0.015),
-  label_y = c(1, 1.12, 1.12),
+  rel_heights = c(0.2, 1.2, 1, 1),
+  labels = c('', '(A)', '(B)', '(C)'),
+  label_x = c(0, -0.015, -0.015, -0.015),
+  label_y = c(1, 1, 1.12, 1.12),
   label_size = 12,
-  nrow = 3
+  nrow = 4
 ) %>%
   save_plot(filename = 'analysis_results/figures/fig_vortex.png',
             base_width = 8, base_height = 6)
