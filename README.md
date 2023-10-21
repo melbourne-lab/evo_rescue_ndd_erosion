@@ -60,3 +60,5 @@ Revisions for Figure 5 (legend addition) and source code for Beverton-Holt simul
 Code for robustness checks (simulations and figure production) added October 13, 2023.
 
 Readme updated October 14, 2023.
+
+Correct and up-to-date Fig. 2 script (including analytical solutions) added to repo after being mistakenly left out, October 20, 2023.
