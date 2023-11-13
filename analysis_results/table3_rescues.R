@@ -1,6 +1,4 @@
 # Script assessing probability of rescue in long (50-generation) simulations
-# SN - 14 Jan 2022
-# re-run for archiving, 5 Oct 2022
 
 ### Setup
 
@@ -102,7 +100,7 @@ p.rescue = merge(
   # (n.b. these rows were removed above)
   mutate(rescued = !is.na(rescue.time))
 
-##### Information for Table 3
+##### Information for Tables SH1 and SH2s
 
 # Probabilities of rescue (overall) and proportion of rescues that are
 # instantaneous
@@ -466,7 +464,7 @@ geno.plot.grid = plot_grid(wes.geno.plot,
                            nrow = 2)
 
 save_plot(geno.plot.grid, base_width = 8, base_height = 5,
-          filename = 'analysis_results/figures/fig_f1_p_rescue.png')
+          filename = 'analysis_results/figures/fig_h1_p_rescue.png')
 
 ### Time until rescue figure (supporting info)
 
@@ -545,7 +543,7 @@ time.hists = plot_grid(
 
 time.hists
 
-ggsave('analysis_results/figures/fig_f2_rescue_times.png',
+ggsave('analysis_results/figures/fig_h2_rescue_times.png',
        width = 8, height = 5)
 
 ### Session info
