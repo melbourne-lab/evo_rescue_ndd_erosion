@@ -187,7 +187,7 @@ plot_grid(
   label_size = 12,
   nrow = 4
 ) %>%
-  save_plot(filename = 'analysis_results/figures/fig_vortex.png',
+  save_plot(filename = 'analysis_results/figures/fig5_vortex.png',
             base_width = 8, base_height = 6)
 
 ### Summary statistics
