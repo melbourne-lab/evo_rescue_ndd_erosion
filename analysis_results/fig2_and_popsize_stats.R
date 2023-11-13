@@ -115,7 +115,7 @@ alln %>%
   scale_color_manual(values = c('black', 'purple')) +
   facet_wrap(~ n.pop0) +
   scale_y_log10()
-# First visualization
+# First visualization of constant-variance results
 
 alln %>%  
   mutate(alpha = factor(alpha)) %>%
@@ -164,11 +164,12 @@ alln %>%
   scale_linewidth(
     range = c(1, 1/3), 
     breaks = c(0, 1), 
-    labels = c('Simulation', 'Analytical'), 
+    labels = c('Changing diversity', 'Constant diversity'), 
     name = ""
   ) +
   labs(x = 'Generation', y = 'Mean population size') +
   scale_y_log10() +
+  guides(colour = guide_legend(override.aes = list(linewidth = 1))) +
   # facet_wrap(~ paste0(size0, ', ', diver)) +
   facet_wrap(~ paste0(size0, ', ', diver), nrow = 1) +
   theme(
@@ -185,26 +186,26 @@ alln %>%
     strip.text = element_text(size = 12)
   )
 
-ggsave('analysis_results/figures/fig_pop_size_wide.png',
+# Save final figure
+ggsave('analysis_results/figures/fig2_pop_size.png',
        width = 8, height = 3)
 
+### Other summary statistics reported in main text
 
-# ggsave('analysis_results/figures/fig_pop_size.png',
-#        width = 8, height = 8)
+# Minimum expected size, by treatment group:
 
-all.data %>%
-  mutate(gen = gen - 1) %>%
-  group_by(gen, n.pop0, low.var, alpha) %>%
-  filter(n() == 4000) %>%
-  summarise(
-    zbar = mean(2.8 - zbar),
-    zvar = var(2.8 - zbar)
-  ) %>%
-  ggplot(aes(x = gen, y = zbar)) +
-  geom_line(aes(group = alpha, colour = alpha)) +
-  geom_line(
-    data = analytics %>% filter(gen < 5),
-    aes(x = gen, y = zt, group = alpha, colour = alpha),
-    linetype = 2
-  ) +
-  facet_wrap(low.var ~ n.pop0)
+all.n %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  slice_min(order_by = nbar) %>%
+  select(-c(nvar, n.trials)) %>%
+  pivot_wider(names_from = alpha, values_from = c(gen, nbar)) %>%
+  mutate(pop.pcts = `nbar_Density dependent` / `nbar_Density independent`)
+
+# Final expected size, by treatment group:
+
+all.n %>%
+  filter(gen %in% 15) %>%
+  group_by(n.pop0, low.var, alpha) %>%
+  select(-c(nvar, n.trials, gen)) %>%
+  pivot_wider(names_from = alpha, values_from = nbar) %>%
+  mutate(pop.pcts = `Density dependent` / `Density independent`)

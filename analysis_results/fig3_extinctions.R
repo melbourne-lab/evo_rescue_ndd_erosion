@@ -1,8 +1,6 @@
 # Script containing all results pertaining to extinctions in the long (50
 # generation) simulations.
-# Contains code for Figure 2
-# SN - 29 Mar 2021
-# re-run for archiving 4 Oct 2022
+# Contains code for Figure 3
 
 # Load packages
 library(rstanarm)
@@ -354,7 +352,7 @@ extinct.legend = get_legend(
 
 # Export plot
 plot_grid(data.plots.row, extinct.legend, ncol = 1, rel_heights = c(1, .1)) %>%
-  save_plot(filename = 'analysis_results/figures/fig_ext_fig.png',
+  save_plot(filename = 'analysis_results/figures/fig3_extinct.png',
             base_width = 8, base_height = 8)
 
 ### Session info

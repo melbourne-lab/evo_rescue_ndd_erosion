@@ -1,5 +1,6 @@
 # Figure 4, showing mean additive genetic variance and fixation rates for 15
 # generation simulations (conditioned on extinction/survival to end of sim)
+# NOTE: this script also contains code for Fig SI1, showing rates of fixation
 
 # Clear namespace
 rm(list = ls())
@@ -74,6 +75,7 @@ variance.plot = ext.v %>%
   scale_linetype_manual(values = c(2, 1), '') +
   labs(x = 'Generation', 
        y = expression(paste('Genetic variance, ', group(langle, (sigma[a]^2)[t], rangle)))) +
+  guides(linetype = guide_legend(override.aes = list(linewidth = 0.5))) +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   theme(panel.background = element_rect(fill = 'white'),
         # panel.grid = element_line('gray88'),
@@ -85,7 +87,7 @@ variance.plot = ext.v %>%
 
 variance.plot
 
-ggsave('analysis_results/figures/fig_varloss.png',
+ggsave('analysis_results/figures/fig4_varloss.png',
        width = 8, height = 3)
 
 ### Fixation plots
@@ -120,6 +122,7 @@ fixation.pos.plot = ext.fix %>%
          colour = guide_legend('', nrow = 1),
          fill = guide_legend('', nrow = 1)) +
   labs(x = '', y = 'Loci at positive fixation') +
+  guides(linetype = guide_legend(override.aes = list(linewidth = 0.5))) +
   theme(panel.background = element_blank(),
         panel.border = element_blank(),
         panel.grid.major = element_line(colour = 'gray88'),
@@ -158,6 +161,7 @@ fixation.neg.plot = ext.fix %>%
          colour = guide_legend('', nrow = 1),
          fill = guide_legend('', nrow = 1)) +
   labs(x = 'Generation', y = 'Loci at negative fixation') +
+  guides(linetype = guide_legend(override.aes = list(linewidth = 0.5))) +
   theme(panel.background = element_blank(),
         panel.border = element_blank(),
         panel.grid.major = element_line(colour = 'gray88'),
@@ -170,12 +174,12 @@ fixation.neg.plot = ext.fix %>%
 varn.legend = get_legend(
   variance.plot + 
     guides(fill = guide_legend(''), colour = guide_legend(''),
-           linetype = guide_legend('', values = c(1, 3))) +
+           linetype = guide_legend(' ', override.aes = list(linewidth = 0.5), values = c(1, 3))) +
     theme(legend.position = 'bottom',
           legend.box.margin = margin(1, 0, 0, 0))
 )
 
-# Combine and export fixation-only plot
+# Fig SI1: fixations of either allele, broken out by extinct/surviving plot
 
 save_plot(plot_grid(fixation.pos.plot, fixation.neg.plot, 
                     labels = c('(A)', '(B)'),
@@ -183,16 +187,16 @@ save_plot(plot_grid(fixation.pos.plot, fixation.neg.plot,
                     label_y = c(0.99, 1.02),
                     label_size = 12,
                     varn.legend, rel_heights = c(1, 1, 0.1), ncol = 1),
-          filename = 'analysis_results/figures/fig_fix.png',
+          filename = 'analysis_results/figures/fig_i1_fixations.png',
           base_width = 8, base_height = 4)
 
 # For combined plot with all three in the same:
-# (old version)
+# (old version from early version of MS)
 save_plot(plot_grid(variance.plot, fixation.pos.plot, fixation.neg.plot, 
                     labels = c('(A)', '(B)', '(C)'),
                     label_x = c(-0.015, -0.015, -0.015),
                     label_y = c(1, 1.16, 1.16),
                     label_size = 12,
                     varn.legend, rel_heights = c(1.2, 1, 1, 0.1), ncol = 1),
-          filename = 'analysis_results/figures/fig_var_fix.png',
+          filename = 'analysis_results/figures/fig_4_orig_var_fix.png',
           base_width = 8, base_height = 6)
