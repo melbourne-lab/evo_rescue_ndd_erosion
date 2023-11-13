@@ -2,6 +2,9 @@
 #   - state variables conditioned on extinction/survival at end of simulation
 #   - state variables conditioned on survival/generation of extinction
 
+# NOTE: Fig. SI1 (fixation rates conditioned on survival/extinction) are in
+# script `fig4_variaiton_loss.R` (these were originally combined with figure 4)
+
 library(ggplot2)
 library(cowplot)
 library(dplyr)
@@ -10,7 +13,7 @@ library(tidyr)
 # Load in all simulation data
 all.data = read.csv('simulations/outputs/alldata_combined.csv')
 
-### Fig G1: population size
+### Fig SI4: population size
 
 # Summarise data by param combo, generation, extinction status
 # n.b. need to add zeros for extinct populations
@@ -76,6 +79,7 @@ ext.n %>%
   scale_y_log10(breaks = c(0.1, 1, 10, 100, 1000),
                 labels = c(0.1, 1, 10, 100, 1000)) +
   labs(x = 'Generation', y = 'Population size') +
+  guides(linetype = guide_legend(override.aes = list(linewidth = 0.5))) +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   theme(panel.background = element_blank(),
         panel.border = element_blank(),
@@ -83,10 +87,10 @@ ext.n %>%
         panel.grid.minor = element_blank(),
         legend.position = 'bottom')
 
-ggsave('analysis_results/figures/fig_g1_pop_size_by_extinction.png',
+ggsave('analysis_results/figures/fig_i4_pop_size_by_extinction.png',
        width = 8, height = 4)
 
-### Fig. G2: Conditioning mean genotype and phenotype on extinction ()
+### Fig. SI2: Conditioning mean genotype and phenotype on extinction
 
 ext.gz = all.data %>%
   # Rescale generation to start at zero instead of one
@@ -127,6 +131,7 @@ ext.g.plot = ext.gz %>%
     size = 1.5
   ) +
   labs(x = '', y = expression('Mean population genotype, ' ~ bar(g[t]))) +
+  guides(linetype = guide_legend(override.aes = list(linewidth = 0.5))) +
   scale_linetype_manual(values = c(1, 2)) +
   scale_fill_manual(values = c('black', 'purple')) +
   scale_color_manual(values = c('black', 'purple')) +
@@ -166,6 +171,7 @@ ext.z.plot = ext.gz %>%
   scale_fill_manual(values = c('black', 'purple')) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_linetype_manual(values = c(1, 2)) +
+  guides(linetype = guide_legend(override.aes = list(linewidth = 0.5))) +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   theme(panel.background = element_blank(),
         panel.border = element_blank(),
@@ -180,7 +186,7 @@ ext.z.plot = ext.gz %>%
 ext.gz.legend = get_legend(
   ext.z.plot + 
     guides(fill = guide_legend(''), colour = guide_legend(''),
-           linetype = guide_legend(' ', values = c(1, 3))) +
+           linetype = guide_legend(' ', override.aes = list(linewidth = 0.5), values = c(1, 3))) +
     theme(legend.position = 'bottom',
           legend.box.margin = margin(1, 0, 0, 0))
 )
@@ -192,11 +198,11 @@ ext.gz.plots = plot_grid(ext.g.plot, ext.z.plot,
 save_plot(
   plot_grid(ext.gz.plots, ext.gz.legend, 
             ncol = 1, rel_heights = c(1, .1)),
-  filename = 'analysis_results/figures/fig_g2_geno_pheno_by_extinction.png',
+  filename = 'analysis_results/figures/fig_i1_geno_pheno_by_extinction.png',
   base_width = 8, base_height = 6
 )
 
-### Conditioning mean intrinsic fitness W on extinction
+### Fig. SI3: Conditioning mean intrinsic fitness W on extinction
 
 ext.wr = all.data %>%
   # Rescale generations to start at zero instead of one
@@ -241,6 +247,7 @@ ext.w.plot = ext.wr %>%
   scale_linetype_manual(values = c(1, 2)) +
   scale_fill_manual(values = c('black', 'purple')) +
   scale_color_manual(values = c('black', 'purple')) +
+  guides(linetype = guide_legend(override.aes = list(linewidth = 0.5))) +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   theme(panel.background = element_blank(),
         panel.border = element_blank(),
@@ -275,6 +282,7 @@ ext.r.plot = ext.wr %>%
   scale_fill_manual(values = c('black', 'purple')) +
   scale_color_manual(values = c('black', 'purple')) +
   scale_linetype_manual(values = c(1, 2)) +
+  guides(linetype = guide_legend(override.aes = list(linewidth = 0.5))) +
   facet_wrap( ~ paste(n0, low.var, sep = ', '), ncol = 4) +
   theme(panel.background = element_blank(),
         panel.border = element_blank(),
@@ -291,7 +299,7 @@ ext.wr.plots = plot_grid(ext.w.plot, ext.r.plot,
 save_plot(
   plot_grid(ext.wr.plots, ext.gz.legend, 
             ncol = 1, rel_heights = c(1, .1)),
-  filename = 'analysis_results/figures/fig_g3_fitness_by_extinction.png',
+  filename = 'analysis_results/figures/fig_i3_fitness_by_extinction.png',
   base_width = 8, base_height = 6
 )
 
@@ -342,7 +350,7 @@ gen.cond = all.data %>%
 
 head(gen.cond)
 
-### Population size plot
+### Fig. SJ1: Population size plot
 
 gen.cond %>%
   mutate(
@@ -382,10 +390,10 @@ gen.cond %>%
     strip.background = element_rect(colour = 'black')
   )
 
-ggsave('analysis_results/figures/fig_h1_pop_size_by_extinction_generation.png',
+ggsave('analysis_results/figures/fig_j1_pop_size_by_extinction_generation.png',
        width = 8, height = 6)
 
-### Genotype
+### Fig. SJ2: Genotype
 
 gen.cond %>%
   mutate(
@@ -415,10 +423,10 @@ gen.cond %>%
     strip.background = element_rect(colour = 'black')
   )
 
-ggsave('analysis_results/figures/fig_h2_geno_by_extinction_generation.png',
+ggsave('analysis_results/figures/fig_j2_geno_by_extinction_generation.png',
        width = 8, height = 6)
 
-### Intrinsic fitness (W)
+### Fig. SJ3: Intrinsic fitness (W)
 
 gen.cond %>%
   mutate(
@@ -448,10 +456,10 @@ gen.cond %>%
     strip.background = element_rect(colour = 'black')
   )
 
-ggsave('analysis_results/figures/fig_h3_fitness_by_extinction_generation.png',
+ggsave('analysis_results/figures/fig_j3_fitness_by_extinction_generation.png',
        width = 8, height = 6)
 
-### Genetic variation
+### Fig. SJ4: Genetic variation
 
 gen.cond %>%
   mutate(
@@ -490,10 +498,10 @@ gen.cond %>%
     strip.background = element_rect(colour = 'black')
   )
 
-ggsave('analysis_results/figures/fig_h4_gen_var_by_extinction_generation.png',
+ggsave('analysis_results/figures/fig_j4_gen_var_by_extinction_generation.png',
        width = 8, height = 6)
 
-### Fixation of alleles (positive)
+### Fig. SJ5: Fixation of alleles (positive)
 
 gen.cond %>%
   mutate(
@@ -523,10 +531,10 @@ gen.cond %>%
     strip.background = element_rect(colour = 'black')
   )
 
-ggsave('analysis_results/figures/fig_h5_pos_fixations_by_extinction_generation.png',
+ggsave('analysis_results/figures/fig_j5_pos_fixations_by_extinction_generation.png',
        width = 8, height = 6)
 
-### Fixation of alleles (negative)
+### Fig. SJ6: Fixation of alleles (negative)
 
 gen.cond %>%
   mutate(
@@ -556,5 +564,5 @@ gen.cond %>%
     strip.background = element_rect(colour = 'black')
   )
 
-ggsave('analysis_results/figures/fig_h6_neg_fixations_by_extinction_generation.png',
+ggsave('analysis_results/figures/fig_j6_neg_fixations_by_extinction_generation.png',
        width = 8, height = 6)
