@@ -62,3 +62,6 @@ Code for robustness checks (simulations and figure production) added October 13,
 Readme updated October 14, 2023.
 
 Correct and up-to-date Fig. 2 script (including analytical solutions) added to repo after being mistakenly left out, October 20, 2023.
+
+Tidy up comments, update filenames for figures (and in some cases, Rscripts) to reflect proper names in ESM, add a Readme to the `analysis_results` subdirectory. All added November 13 2023.
+
